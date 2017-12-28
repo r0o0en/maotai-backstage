@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>会员列表</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		
+		<meta http-equiv="Expires" content="0">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-control" content="no-cache">
+		<meta http-equiv="Cache" content="no-cache">
+		
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+		<!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+	</head>
+
+	<body>
+		<blockquote class="layui-elem-quote layui-text">
+		   
+		</blockquote>
+		
+		<form class="layui-form">
+			<div class="layui-form-item layui-form-height-auto">
+				<!--<label class="layui-form-label"></label>-->
+				<div class="layui-input-inline">
+			        <select name="seekType">
+			          <option value="">搜索类型</option>
+			          <option value="userName">会员账号</option>
+			          <option value="trueName">会员昵称</option>
+			          <option value="mobile">手机号码</option>
+			        </select>
+			   </div>
+				<div class="layui-input-inline">
+			    	<input type="text" name="seekVal" placeholder="相关数据" class="layui-input">
+			    </div>
+			    
+			    <div class="layui-input-inline">
+			        <input type="text" class="layui-input" name="beginTime" id="dateStart"  placeholder="起始注册时间" >
+			    </div>
+			    <div class="layui-input-inline">
+			        <input type="text" class="layui-input" name="endTime"  id="dateEnd"  placeholder="结束注册时间" >
+			    </div>
+			    <div class="layui-input-inline">
+			        <select name="rank" class="select-rank">
+			          <option value="">请选择会员级别</option>
+			        </select>
+			    </div>
+			    
+			    
+			    <!-- 提交 -->
+			    <div class="layui-input-inline">
+					<button type="submit" class="layui-btn" lay-submit="" lay-filter="seek">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				
+			</div>
+		</form>
+		
+		<table class="layui-hide" id="list"  lay-filter="listDemo" ></table>
+		
+		<!--表格操作按钮-->
+		<script type="text/html" id="templet-active">
+		  <a class="layui-btn  layui-btn-xs" lay-event="edit" href="register.html?id={{d.id}}">编辑</a>
+		  <!--<a class="layui-btn layui-btn-xs {{d.canCash ==1 ? 'layui-btn-danger':''}}" lay-event="canCash">{{d.canCash ==1 ? '禁止提现':'允许提现'}}</a>-->
+		  <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>-->
+		</script>
+		
+		<!--允许提现-->
+		<script type="text/html" id="templet-canCash">
+			<a class="layui-btn layui-btn-xs {{d.canCash ==1 ? '':'layui-btn-danger'}}" lay-event="canCash">{{d.canCash ==1 ? '是':'否'}}</a>
+			<!--<span class="{{d.canCash ==1 ? 'cl-blue':'cl-red'}}">{{d.canCash ==1 ? '是':'否'}}</span>-->
+			<!--<a class="layui-btn layui-btn-xs {{d.canCash ==1 ? 'layui-btn-danger':''}}" lay-event="canCash">{{d.canCash ==1 ? '禁止':'运行'}}</a>-->
+			<!--<input type="checkbox" name="canCash" value="{{d.canCash}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo" {{ d.canCash == 1 ? 'checked' : '' }}>-->
+		  	
+		</script>
+		<!--会员星级-->
+		<script type="text/html" id="templet-ceoRank">
+			{{#
+				var name = '游客';
+				var dj = d.rank;
+				console.log(d,dj);
+				if(menberGrade){
+					$.each(menberGrade,function(i,e){
+						$.each(Object.keys(e),function(j,v){
+							if(v==dj){
+								name = e[v];
+							}
+						})
+					})
+				}
+				return name ;
+			}}
+		</script>
+		<!--会员职级-->
+		<script type="text/html" id="templet-identity">
+			{{#
+				var d = d.identity;
+				if(menberPosition){
+					$.each(menberPosition,function(i,e){
+						if(d == i){
+							d = e;
+							return false;
+						}
+					})
+				}
+				return d ;
+			}}
+		</script>
+		<!--推荐人-->
+		<script type="text/html" id="templet-pid">
+			{{# return  d.pid == 0 ? "" : ("【"+ d.pid +"】"+ d.pidMobile) }}
+		</script>
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			//获取会员列表
+			var url_getMemberList = getAjaxOrigin() + '/api/admin/user/query'
+			//修改会员、新增会员
+			var url_newMenber = getAjaxOrigin() + '/api/admin/user/addOrMod';
+			//删除会员
+			var url_deleteMember = getAjaxOrigin() + '/api/admin/user/query'
+			
+			// 存储会员星级/级别
+			var menberGrade ;
+			getMenberGrade(function(data){
+				menberGrade =  data;
+				listTable.reload();
+				var str = '<option value="">请选择会员级别</option>';
+				$.each(data, function(i,e) {
+					$.each(Object.keys(e),function(j,v){
+						str += '<option value="'+v+'">'+e[v]+'</option>';
+					})
+				});
+				$('.select-rank').html(str);
+				form.render('select');
+			});
+			// 存储会员职级
+//			var menberPosition;
+//			getMenberPosition(function(data){
+//				menberPosition =  data;
+//				listTable.reload();
+//			});
+			
+			layui.use([], function() {
+				//开始时间
+				laydate.render({
+				    elem: '#dateStart'
+				});
+				//结束时间
+				laydate.render({
+				    elem: '#dateEnd'
+				});
+				//获取职级列表
+				
+				
+				var table = layui.table;
+			
+				listTable = table.render({
+				    elem: '#list'
+				    ,url: url_getMemberList
+				    ,page: true //开启分页
+				    ,request: {
+//					  pageName: 'pageNow' //页码的参数名称，默认：page
+//					  ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+					}  
+					,response: {
+						statusCode: 200 //成功的状态码，默认：0
+					} 
+				    ,cols: [[
+//				      {type:'checkbox'}//开启复选
+				      {field:'id', width:80,title: 'ID', sort: true}
+				      ,{field:'userName', width:120,  title: '会员账号'}
+				      ,{field:'trueName', width:100,  title: '会员昵称'}
+				      ,{field:'ceoRank', width:100, title: '会员级别',templet:'#templet-ceoRank'}
+//				      ,{field:'identity', width:100, title: '会员职级',templet:'#templet-identity'}
+				      ,{field:'canCash', width:80, title: '允许提现',templet:'#templet-canCash'}
+//				      ,{field:'',width:100,  title: '注册类型'}
+//				      ,{field:'pid', width:200,   title: '推荐人',templet:'<div>【{{d.pid}}】{{d.pidMobile}}</div>'}
+				      ,{field:'pid', width:160,   title: '推荐人',templet:'#templet-pid'}
+				      ,{field:'balance', width:120,  title: '余额'}
+				      ,{field:'integral', width:120,  title: '积分'}
+				      ,{field:'foodStamps', width:120,  title: '粮票'}
+//				      ,{field:'state', width:80, title: '状态',templet:'<div>{{["未激活","已激活","冻结"][d.state]}}</div>'}
+//				      ,{field:'sex',  title: '性别',templet:'<div>{{["","男","女"][d.sex]}}</div>'}
+				      ,{field:'regTime', width:120,  title: '注册时间',templet:'<div>{{ parseDate(d.regTime) }}</div>'}
+				      ,{field:'mobile', width:120,  title: '手机号'}
+				      ,{field:'', width:100,  title: '操作',templet:'#templet-active'}
+				    ]]
+				    
+				});
+				//监听表格复选框选择
+//				table.on('checkbox(demo)', function(obj){
+//				   console.log(obj)
+//				});
+				//监听列表工具条
+				table.on('tool(listDemo)', function(obj){
+				    var data = obj.data;
+				    if(obj.event == 'canCash'){
+				    	//提现
+				    	ajax({
+				    		type:'get',
+				    		info:'更改提现状态',
+				    		url:url_newMenber,
+				    		data:{
+				    			id:data.id,
+				    			canCash: data.canCash == 1 ? 0 :1 
+				    		},
+				    		success:function(d){
+				    			listTable.reload({where:getSeekForm()});
+				    		}
+				    	})
+				    }else if(obj.event == 'edit'){
+				    	//编辑操作 
+				    	openPage('编辑会员','pages/member/register.html?id='+data.id+'&canCash'+data.canCash);
+				    }
+				});
+				
+				//监听提交
+				form.on('submit(seek)', function(data){
+					var field = data.field;
+					if(field.beginTime){
+//						field.beginTime = Date.parse(new Date(field.beginTime));
+						field.beginTime = restoreDate(field.beginTime);
+					}
+					if(field.endTime){
+//						field.endTime = Date.parse(new Date(field.endTime));
+						field.endTime = restoreDateEnd(field.endTime);
+					}
+					//拼接相关数据
+					if(field.seekType){
+						field[field.seekType] = field.seekVal;						
+					}
+					delete field.seekType;
+					delete field.seekVal;
+					//执行重载
+				   	table.reload('list', {
+					  where: field
+					});
+					return false;
+				});
+			})
+
+		</script>
+
+	</body>
+
+</html>

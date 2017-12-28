@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>商品列表</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Pragma" content="no-cache" />
+
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+	</head>
+
+	<body>
+		<blockquote class="layui-elem-quote layui-text">
+		   <a href="goods-edit.html" onclick="openPage('新增商品','pages/goodsManagement/goods-edit.html')" class="layui-btn" >添加商品</a>
+		   <a onclick="newOrder()" class="layui-btn layui-btn-normal" >线下录单</a>
+		</blockquote>
+		
+		<form class="layui-form" >
+			<div class="layui-form-item layui-form-height-auto">
+			    
+			    <div class="layui-input-inline">
+			        <select name="categoryId">
+			        	
+			        </select>
+			    </div>
+
+				<div class="layui-input-inline">
+			    	<input type="text" name="goodsName" placeholder="商品名称" class="layui-input">
+			    </div>
+			    
+			    <!-- 提交 -->
+			    <div class="layui-input-inline">
+					<button class="layui-btn" lay-submit lay-filter="seek">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				
+			</div>
+		</form>
+		<table class="layui-hide" id="list" lay-filter="listDemo"></table>
+		
+		<!--表格操作按钮-->
+		<script type="text/html" id="barDemo">
+		  <!--<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>-->
+		  <a class="layui-btn layui-btn-xs" lay-event="edit" onclick='openPage("编辑商品","pages/goodsManagement/goods-edit.html?id={{d.id}}")' href="goods-edit.html?id={{d.id}}">修改</a>
+		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="newOrder">录单</a>
+		</script>
+		
+		<!--表格渲染商品分类模板-->
+		<script type="text/html" id="templet-goods-class">
+			{{# 
+				var a = '暂无【'+ d.categoryId +'】';
+				for(var i=0;i<goodsclasslist.length;i++){
+					if(goodsclasslist[i].id == d.categoryId){
+						return goodsclasslist[i].categoryName;
+					}
+				}
+				return a;
+			}}
+		</script>
+		
+		<!--memo 商品说明-->
+		<script type="text/html" id="memo">
+			{{# d.memo = HtmlUtil.htmlDecode(d.memo) ;return d.memo;}}
+		</script>
+		
+		<script type="text/html" id="templetNewOrder">
+			{{# console.log(d);}}
+			<form class="layui-form templet-new-order" style="padding: 10px;overflow-y: hidden;">
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>会员账号</label>
+					<div class="layui-input-block">
+						<input type="tel" name="mobile" lay-verify="required|phone" placeholder="会员账号" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>商品ID&nbsp;&nbsp;&nbsp;</label>
+					<div class="layui-input-block">
+						<input type="tel" name="goodsId" lay-verify="required" {{ d.id ? 'disabled value=" '+ d.id +'"' : '' }} placeholder="商品ID" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>订单描述</label>
+					<div class="layui-input-block">
+						<textarea name="memo" lay-verify="required" placeholder="订单描述" class="layui-textarea"></textarea>
+					</div>
+				</div>
+				<!-- 提交 -->
+				<div class="layui-form-item text-center">				
+					<a class="layui-btn recharge" lay-submit lay-filter="submit_newOrder">立即提交</a>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				<br />
+				<br />
+			</form>
+			
+		</script>
+		
+
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script>
+			//删除商品
+			var url_deleteGoods = getAjaxOrigin() + '/api/admin/goods/goods/del';
+			//获取商品列表
+			var url_getGoodsList = getAjaxOrigin() + '/api/admin/goods/goods/query';
+			//获取商品分类列表
+			var  url_getGoodsClassList = getAjaxOrigin() + '/api/admin/goods/category/query';
+			//获取所有商品分类
+			var  url_getGoodsClassAll = getAjaxOrigin() + '/api/admin/goods/category/list';
+			//录单
+			var url_newOrder = getAjaxOrigin() + '/api/admin/order/offlineDealOrder';
+			
+			//存储 商品分类列表
+			var goodsclasslist = [];
+			layui.use([], function() {
+				//开始时间
+				laydate.render({
+				    elem: '#dateStart'
+				});
+				//结束时间
+				laydate.render({
+				    elem: '#datend'
+				});			
+				//获取商品分类列表
+				ajax({
+					type:'get'
+//					,data:{page:1}
+					,url:url_getGoodsClassAll
+					,success:function(data){
+						var lis = '<option value="">全部</option>';
+						goodsclasslist = data.data;
+						data.data.forEach(function (val,i,arr) {
+							lis +='<option value="'+val.id+'">'+val.categoryName+'</option>';
+						});
+						$('select[name="categoryId"]').html(lis);
+						//重新渲染
+						form.render('select');
+						listTable.reload();
+						//清空
+						lis=null;
+					}
+				})
+				
+				//列表加载
+				listTable = table.render({
+				    elem: '#list'
+				    ,url: url_getGoodsList
+				    ,method:'get'
+				    ,where:{
+				    }
+				    ,response: {
+					  statusCode: 200 //成功的状态码，默认：0
+					}
+				    ,page:true
+				    ,cols: [[
+//				      {type:'checkbox'},//开启复选
+					  {field:'id', width:80,title: 'ID'}
+//					  {field:'goodsId',  title: '商品ID'}
+					  ,{field:'goodsPics', width:100,  title: '商品图片',templet:'<div><img class="goods-img" src="{{getImgurl(d.goodsPics)[0]}}" /></div>'}
+				      ,{field:'goodsName', minWidth:200,  title: '商品名称'}
+				      ,{field:'categoryId', width:100,  title: '分类',templet:'#templet-goods-class'}
+				      ,{field:'addTime', minWidth:120,  title: '添加时间',templet:'<div>{{ parseDate(d.addTime)  }}</div>'}
+				      ,{field:'editTime', minWidth:120, title: '修改时间',templet:'<div>{{ parseDate(d.editTime) }}</div>'}
+//				      ,{field:'sort',  title: '商品排序',sort:true}
+//				      ,{field:'isRec',  title: '首页推荐'}
+//				      ,{field:'memo',  title: '说明',templet:"#memo"}
+					  ,{field:'price', width:120,  title: '售价'}
+				      ,{field:'marketPrice', width:120,  title: '市场价'}
+				      ,{field:'packagePrice', width:120,  title: '价格'}
+				      ,{field:'stock', width:120,  title: '库存'}
+				      ,{field:'pv', width:80,  title: '商品PV'}
+				      ,{field:'status', width:80,  title: '上/下架',templet:'<div>{{["下架","上架"][d.status]}}</div>'}
+//				      ,{field:'goodsOption',  title: '规格和属性'}
+//				      ,{field:'optionTitle',  title: '规格标题'}
+//				      ,{field:'hasOption',  title: '启用规格'}
+//				      ,{field:'weight',  title: '重量'}
+//				      ,{field:'goodsSn',  title: '编码'}
+//				      ,{field:'productSn',  title: '条码'}
+//				      ,{field:'buyNum',  title: '购买数量'}
+//				      ,{field:'type',  title: '商品类型'}
+//				      ,{field:'bdType',  title: '报单产品类型'}
+//				      ,{field:'buyType',  title: '所属区域',templet:'<div>{{["现金","积分"][d.buyType]}}</div>'}
+				      ,{field:'', minWidth:120,  title: '操作',style:"text-align:left;",templet:'#barDemo'}
+				    ]]
+				});
+				
+				//监听提交
+				form.on('submit(seek)', function(data){
+					event.preventDefault();
+					var field = data.field;
+					if(!field.goodsName){
+						delete field.goodsName;
+					}
+					//执行重载
+				   	listTable.reload({
+					  where: field
+					});
+				});
+				
+				
+				//监听列表工具条
+				table.on('tool(listDemo)', function(obj){
+				    var data = obj.data;
+				    if(obj.event == 'delete'){
+				    	//删除
+				    	deleteGoods(data);
+				    }else if(obj.event == 'edit'){
+				    	//编辑操作 
+//				    	alterAddGoods(data);
+				    }else if(obj.event == 'newOrder'){
+				    	//录单操作 
+				    	newOrder(data);
+				    }
+				});	
+			})
+			function alterAddGoods(data) {}
+			function deleteGoods(data){
+				//删除
+				layer.open({
+				    	content:'真的删除分类【'+data.goodsName+'】么'
+				    	,btn:['删除','取消']
+				    	,yes:function(index,layero){
+				    			ajax({
+				    				type:'get'
+				    				,info:'删除商品分类'
+				    				,infosuccess:true
+				    				,url:url_deleteGoods
+				    				,data:{
+				    					id:data.id
+				    				}
+				    				,success:function(){
+				    					listTable.reload();
+				    				}
+				    			})
+				    			layer.close(index);	
+				    		}
+				});
+			}
+			
+			function newOrder(data) {
+				layer.open({
+					title:'录单',
+					type:"1",
+//					content:templetNewOrder.innerHTML,
+					content:function(){
+						var getTpl = templetNewOrder.innerHTML,
+							str ='';
+						laytpl(getTpl).render(data||{}, function(html){
+							str = html;
+						});
+						return str;
+					}(),
+					btn:[],
+					id:'newOrderWp',
+					yes:function(i,o){
+					},
+					success:function(i,o){
+						form.render('select');
+					}
+				})
+			}
+			form.on('submit(submit_newOrder)', function(data){
+				event.preventDefault();
+				event.stopPropagation();
+				var field = data.field;
+				console.log(field);
+				ajax({
+					ifno: '线下录单',
+					type:'get',
+					url: url_newOrder,
+					data: field,
+					success: function(d) {
+						layer.msg('录单成功！');
+						layer.close($(data.form).parents('.layui-layer').attr('times'));
+					}
+				});
+			})
+		</script>
+
+	</body>
+
+</html>

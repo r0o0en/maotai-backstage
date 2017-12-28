@@ -1,0 +1,226 @@
+html,body,.layui-layout-admin{
+    min-width: 900px;
+}
+/*
+  首页 如果 没有固定顶部、底部， 就给 body、left占据顶部、底部面积 
+ * */
+.hide{
+    display: none;
+}
+.layui-header{    
+//  position: relative;z-index: 1;
+}
+.layui-layout-admin .layui-body{
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+}
+.layui-layout-admin .layui-side{
+  z-index: 2;
+  top: 0;
+}
+.layui-header:not(.hide){
+    &~.layui-side,
+    &~.layui-body{
+        top: 60px;
+    }
+}
+.layui-footer:not(.hide){
+    &~.layui-body{
+        top: 44px;     
+    }
+}
+
+
+///* 顶部 */
+//.layui-layout-admin .layui-header {
+//background-color: #fff;
+////.layui-layout-admin .layui-logo,
+////.layui-nav .layui-nav-item{
+////    line-height: 70px;
+////}
+//.layui-nav .layui-nav-item a{
+//    color: #999;
+//    &:hover{
+//      color: #000;
+//    }
+//}
+//.layui-nav .layui-nav-more{
+//  border-color: #C2C2C2 transparent transparent;
+//  &.layui-nav-mored{
+//      border-color: transparent transparent #C2C2C2;    
+//  }
+//}
+//.layui-logo{
+//  font-size: 26px;
+//  color: #333;
+//}
+//.layui-nav-img{
+//    width: 40px;
+//    height: 40px;
+//}
+//.layui-layout-left .layui-nav-bar{display: none;}
+//.layui-layout-right .layui-nav-bar{top: 60px !important;background-color: #393D49;}
+//}
+//.admin-side-toggle, .admin-side-full {
+////  position: absolute;
+////  left: 200px;
+////  top: 25%;
+////  z-index: 19940201;
+// margin-right: 10px;
+//  display: inline-block;
+//  cursor: pointer;
+//  color: white;
+//  text-align: center;
+//  width: 30px;
+//  height: 30px;
+//  background-color: #1AA094;
+//  line-height: 30px;
+//  &:hover{
+//      background-color: #5FB878;
+//  }
+//}
+//
+//
+///* index.html  左栏目列表样式*/
+//.layui-side{
+//  &,.layui-nav{
+//    background-color: #393D49;
+////    border-color: #393D49;    
+//  }
+//  .layui-nav-child{
+//    background-color: #393D49 !important;  
+//    a{
+//        padding-left: 30px;
+//    }
+//  }
+//  i{margin-right: 10px;}
+//  /*一级导航栏选中*/
+//  .layui-nav-itemed{
+//      background-color: #2B2E37!important;
+//      color: #fff !important;
+//  }
+//  .layui-nav-item{
+//    a{}
+//  }
+//  .layui-nav-tree .layui-nav-item a:hover{
+//      background-color: #4E5465;
+//  }
+// 
+//}
+//
+//
+///*
+// iframe 区域样式
+// * */
+//.layui-body{
+//border-top: 6px solid #1AA094;
+//border-left: solid 2px #1AA094;
+//.layui-tab{
+//   position: absolute;top: 0;left: 0;right: 0;bottom: 0;
+//   margin: 0;
+//}
+//.layui-tab-content{
+//  padding: 0;
+//  position: absolute;top: 40px;left: 0;right: 0;bottom: 0;
+//    
+//}
+//.layui-tab-item,.layui-tab-item iframe{
+//  width: 100%;
+//  border: 0;
+//  height: 100%;
+//}
+//
+////选项卡
+//.layui-tab-brief>.layui-tab-title{
+//    border-bottom-color: #1AA094;
+//    li:after{
+//        content: none;
+//    }
+//    i{
+//        margin-right: 10px;
+//    }
+//    .layui-this{
+//      color: white;
+//      background-color: #1AA094;
+//    }
+//}
+//}
+
+
+
+/*
+ 顶部栏
+ * */
+.layui-header{
+    .layui-logo{
+        
+    }
+  .layui-layout-left{
+      .layui-nav-bar{display: none;}
+      .layui-nav-item>span{
+         margin-right: 10px;
+          display: inline-block;
+          cursor: pointer;
+          text-align: center;
+          width: 30px;
+          height: 30px;
+          color: white;
+          background-color: #1AA094;
+      //  color: #23262E;
+      //  background-color: white;
+          line-height: 30px;
+          &:hover{
+              background-color: #5FB878;
+          }
+      }
+  }   
+}
+
+/*
+ 左侧导航
+ * */
+.layui-side,
+.layui-body .layui-tab-title{
+   i{margin-right: 10px;}
+}
+.layui-side{
+    .layui-nav-child a{ padding-left: 30px;cursor: pointer;}
+    .layui-nav-itemed>a{
+        background-color: #4E5465!important;
+        color: #fff!important;
+    }
+    .layui-nav-tree .layui-nav-item a:hover{
+//          background-color: #2B2E37;
+    }    
+}
+
+/*
+   iframe 区域样式
+   * */
+.layui-body{
+    overflow-y: hidden;
+    background-color: white;
+    .layui-tab{
+        position: absolute;top: 0;left: 0;right: 0;bottom: 0;
+        margin: 0;
+    }
+    .layui-tab-title{
+        display: block;
+        z-index: 3;
+        background-color: white;
+    }
+    .layui-tab-content{
+        padding: 0;
+        position: absolute;top: 40px;left: 0;right: 0;bottom: 0;
+    }
+    .layui-tab-item{
+//      padding: 20px;
+    }
+    .layui-tab-item,.layui-tab-item iframe{
+        width: 100%;
+        border: 0;
+        height: 100%;
+    }
+}
+

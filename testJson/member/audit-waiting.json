@@ -1,0 +1,19 @@
+{
+    "code": 200,
+    "msg": "",
+    "count": 1000,
+    "data": [
+        {
+            "id": 10010,
+            "username": "user-10",
+            "sex": "女",
+            "city": "城市-10",
+            "sign": "签名-10",
+            "experience": 1016,
+            "logins": 182,
+            "wealth": 71294671,
+            "classify": "诗人",
+            "score": 34
+        }
+    ]
+}

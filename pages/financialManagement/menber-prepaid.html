@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>会员充值记录</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Pragma" content="no-cache" />
+
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+		<!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+	</head>
+
+	<body>
+		<blockquote class="layui-elem-quote layui-text">
+		   <button class="layui-btn" onclick="goRecharge()">充值</button>
+		</blockquote>
+		
+		<form class="layui-form" >
+			<div class="layui-form-item layui-form-height-auto">
+				
+				<div class="layui-input-inline">
+			        <select name="seekType">
+			          <option value="">请选择搜索项</option>
+			          <option value="userName">会员账号</option>
+			          <option value="trueName">会员昵称</option>
+			        </select>
+			    </div>
+				<div class="layui-input-inline">
+			    	<input type="text" name="seekVal" placeholder="相关数据" class="layui-input">
+			    </div>
+			   
+			    
+			    <div class="layui-input-inline">
+			        <input type="text" name="beginTime" id="dateStart" class="layui-input" placeholder="开始时间" >
+			    </div>
+			    <div class="layui-input-inline">
+			        <input type="text" name="endTime" id="dateEnd" class="layui-input"  placeholder="结束时间" >
+			    </div>
+			    
+			    
+			    <!-- 提交 -->
+			    <div class="layui-input-inline">
+					<button class="layui-btn" lay-submit lay-filter="seek">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				
+			</div>
+		</form>
+		
+		
+		<table class="layui-hide" id="list"></table>
+		<!--表格操作按钮-->
+		<script type="text/html" id="barDemo">
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改</a><br />
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改等级</a>
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改推荐人</a><br />
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改职级</a>
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">设置为默认推荐人</a>
+		</script>
+		<!--充值-->
+		<script type="text/html" id="templetRecharge">
+			<form class="layui-form templet-recharge" style="padding: 10px;overflow-y: hidden;">
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>会员账号</label>
+					<div class="layui-input-block">
+						<input type="tel" name="phone" lay-verify="required|phone" placeholder="会员账号" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>充值金额</label>
+					<div class="layui-input-block">
+						<input type="tel" name="amount" lay-verify="required|price" placeholder="充值金额" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>充值类型</label>
+					<div class="layui-input-block">
+						<select name='type' lay-verify="required" placeholder="充值类型">
+							<option value="0">余额</option>
+	                        <option value="1">积分</option>
+	                        <option value="2">粮票</option>
+						</select>
+					</div>
+				</div>
+				<br />
+				<!-- 提交 -->
+				<div class="layui-form-item text-center">				
+					<a class="layui-btn recharge" lay-submit lay-filter="recharge">立即提交</a>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				<br />
+				<br />
+			</form>
+		</script>
+
+
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			//会员充值接口POST 
+			var url_recharge = getAjaxOrigin() + '/api/finance/recharge/add'
+			
+			layui.use([], function() {
+				//开始时间
+				laydate.render({
+				    elem: '#dateStart'
+				});
+				//结束时间
+				laydate.render({
+				    elem: '#dateEnd'
+				});
+				table.render({
+				    elem: '#list'
+				    ,url:  getAjaxOrigin() + '/api/finance/recharge/query'
+				    ,method:'post'
+				    ,response: {
+					  statusCode: 200 //成功的状态码，默认：0
+					}
+				    ,page:true
+				    ,cols: [[
+//				       {field:'id',  title: 'ID'}
+				      {field:'userId',width:80,title: '用户ID'}//充值人id
+				      ,{field:'rechargeSn',  title: '充值单号'}
+				      ,{field:'userName',  title: '会员账号'}
+				      ,{field:'trueName',  title: '会员昵称'}
+				      ,{field:'money',  title: '充值金额'}
+				      ,{field:'moneyType',  title: '充值金额类型',templet:'<div>{{moneyType[d.moneyType]}}</div>'}
+				      ,{field:'rechargeType',  title: '充值类型',templet:'<div>{{rechargeType[d.rechargeType]}}</div>'}
+				      ,{field:'status', title: '审核状态',templet:'<div>{{auditStatus[d.status]}}</div>'}
+				      ,{field:'addTime',  title: '充值时间',templet:'<div>{{ parseDate(d.addTime) }}</div>'}
+				      ,{field:'checkTime',  title: '处理时间',templet:'<div>{{ parseDate(d.checkTime) }}</div>'}
+				      ,{field:'memo',  title: '备注'}
+				    ]]
+				});
+				
+				
+				//监听提交
+				form.on('submit(seek)', function(data){
+					var field = data.field;
+					if(field.beginTime){
+//						field.beginTime = Date.parse(new Date(field.beginTime));
+						field.beginTime = restoreDate(field.beginTime);
+					}
+					if(field.endTime){
+//						field.endTime = Date.parse(new Date(field.endTime));
+						field.endTime = restoreDateEnd(field.endTime);
+					}
+					//拼接相关数据
+					if(field.seekType){
+						field[field.seekType] = field.seekVal;						
+					}
+					delete field.seekType;
+					delete field.seekVal;
+					//执行重载
+				   	table.reload('list', {
+					  where: field
+					});
+					return false;
+				});
+			})
+
+			
+			//充值
+			function goRecharge(){
+				layer.open({
+					title:'充值',
+					type:"1",
+					content:templetRecharge.innerHTML,
+					btn:[],
+					id:'recharge',
+					yes:function(i,o){
+					},
+					success:function(i,o){
+						form.render('select');
+					}
+				})
+			}
+			form.on('submit(recharge)', function(data){
+				event.preventDefault();
+				event.stopPropagation();
+				var field = data.field;
+				console.log(data);
+				ajax({
+					ifno:'会员充值',
+					url:url_recharge,
+					data:field,
+					success:function(d){
+						layer.close($(data.form).parents('.layui-layer').attr('times'));
+					}
+				});
+			})	
+		</script>
+
+	</body>
+
+</html>

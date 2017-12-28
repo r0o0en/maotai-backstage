@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>奖金参数设置</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Pragma" content="no-cache" />
+
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+	</head>
+
+	<body>
+		<table class="layui-hide" id="list" lay-filter="filter"></table>
+		<form class="layui-form" action="">
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button type="submit" class="layui-btn" lay-submit="" lay-filter="seek">立即提交</button>
+					<!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+				</div>
+			</div>
+		</form>
+		
+		<!--表格操作按钮-->
+		<script type="text/html" id="barDemo">
+		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="save">保存</a>
+		</script>
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			layui.use(['table'], function() {
+				var table = layui.table;
+				var arr = [];
+
+				//获取会员等级
+				var url = getAjaxOrigin() + '/api/admin/config/queryMemberLevel';
+				ajax({
+					info:"获取会员等级",
+					infosuccess:false,
+					url:url,
+					sync:false,
+					data:{methodType:1},
+					type:"get",
+					success:function(result){
+						if(result.code == 200){
+							var memArr = result.data;
+							for(var i = 0; i < memArr.length; i ++){
+								var mem =  memArr[i];
+								for(var k in mem) {
+									var memObj = {};
+									memObj.rank = k;
+									memObj.rankName = mem[k];
+									arr.push(memObj);
+								}
+							}
+							//获取后台数据
+							var objData = null;
+							url = getAjaxOrigin() + '/api/admin/platformManage/bonusSetting/list';
+							ajax({
+								info:"获取后台数据",
+								infosuccess:false,
+								url:url,
+								sync:false,
+								type:"get",
+								success:function(result){
+									if(result.code == 200){
+										objData = result.data;
+										if(objData != null){
+											//数据组合
+											if(objData.length > 0){
+												for(var i = 0; i < objData.length; i ++){
+													for(var k = 0; k < arr.length; k ++){
+														if(objData[i].rank == arr[k].rank){
+															arr[k].id = objData[i].id;
+															arr[k].pv = objData[i].pv;
+															arr[k].amount = objData[i].amount;
+															arr[k].configureFoodStamps = objData[i].configureFoodStamps;
+															arr[k].recoFoodStamps = objData[i].recoFoodStamps;
+															arr[k].recommendOne = objData[i].recommendOne;
+															arr[k].recommendTwo = objData[i].recommendTwo;
+															arr[k].rebate = objData[i].rebate;
+															arr[k].devoteAwardHlOne = objData[i].devoteAwardHlOne;
+															arr[k].devoteAwardHlTwo = objData[i].devoteAwardHlTwo;
+															arr[k].devoteAwardLhOne = objData[i].devoteAwardLhOne;
+															arr[k].devoteAwardLhTwo = objData[i].devoteAwardLhTwo;
+														}
+													}
+												}
+											}
+
+											//列表加载
+											table.render({
+												elem: '#list'
+												,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+												,page: false //开启分页
+												,limit:30
+												,cols: [[
+												  {field:'rankName',  title: '级别'}
+												  ,{field:'pv', title: 'PV', edit:'text'}
+												  ,{field:'amount', title: '入会金额', edit:'text'}
+												  ,{field:'configureFoodStamps', title: '赠送粮票', edit:'text'}
+												  ,{field:'recoFoodStamps', title: '推荐增加比例', edit:'text'}
+												  ,{field:'recommendOne', title: '一代推荐奖', edit:'text'}
+												  ,{field:'recommendTwo', title: '二代推荐奖', edit:'text'}
+												  ,{field:'rebate', title: '折扣奖', edit:'text'}
+												  ,{field:'devoteAwardHlOne', title: '贡献奖高推低包含平级一级', edit:'text'}
+												  ,{field:'devoteAwardHlTwo', title: '贡献奖高推低包含平级二级', edit:'text'}
+												  ,{field:'devoteAwardLhOne', title: '贡献奖低推高一级', edit:'text'}
+												  ,{field:'devoteAwardLhTwo', title: '贡献奖低推高二级', edit:'text'}
+												  ,{field:'',  title: '操作',templet:'#barDemo'}
+												]]
+												,data:arr								
+											});
+										}else{
+											//列表加载
+											table.render({
+												elem: '#list'
+												,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+												,page: false //开启分页
+												,limit:30
+												,cols: [[
+												  {field:'rankName',  title: '级别'}
+												  ,{field:'pv', title: 'PV', edit:'text'}
+												  ,{field:'amount', title: '入会金额', edit:'text'}
+												  ,{field:'configureFoodStamps', title: '赠送粮票', edit:'text'}
+												  ,{field:'recoFoodStamps', title: '推荐增加比例', edit:'text'}
+												  ,{field:'recommendOne', title: '一代推荐奖', edit:'text'}
+												  ,{field:'recommendTwo', title: '二代推荐奖', edit:'text'}
+												  ,{field:'rebate', title: '折扣奖', edit:'text'}
+												  ,{field:'devoteAwardHlOne', title: '贡献奖高推低包含平级一级', edit:'text'}
+												  ,{field:'devoteAwardHlTwo', title: '贡献奖高推低包含平级二级', edit:'text'}
+												  ,{field:'devoteAwardLhOne', title: '贡献奖低推高包含平级一级', edit:'text'}
+												  ,{field:'devoteAwardLhTwo', title: '贡献奖低推高包含平级二级', edit:'text'}
+												  ,{field:'',  title: '操作',templet:'#barDemo'}
+												]]
+												,data:arr								
+											});
+										}
+									}	
+								}
+							});
+							
+						}
+					}
+				});
+				
+				
+
+				//例 后台数据模型  进行渲染
+				var dataArr = [{
+					  "rankId":1  //唯一区分ID  可以是记录ID 也可以是会员等级ID
+				      ,"rankName": "游客"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    },
+					{
+					  "rankId":2
+				      ,"rankName": "会员A"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    },
+					{
+					  "rankId":3
+				      ,"rankName": "会员B"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    },
+					{
+					  "rankId":4
+				      ,"rankName": "会员C"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    },
+					{
+					  "rankId":5
+				      ,"rankName": "会员D"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    },
+					{
+					  "rankId":6
+				      ,"rankName": "会员E"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    },
+					{
+					  "rankId":7
+				      ,"rankName": "经销商"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    },
+					{
+					  "rankId":8
+				      ,"rankName": "镇经销商"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    },
+					{
+					  "rankId":9
+				      ,"rank": " 区县经销商"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    },
+					{
+					  "rankId":10
+				      ,"rankName": "市经销商"
+				      ,"pv": "100"
+				      ,"amount": "100"
+				      ,"configureFoodStamps": "20"
+				      ,"recoFoodStamps": "20"
+				      ,"recommendOne": "1"
+				      ,"recommendTwo": "1"
+				      ,"rebate": "1"
+				      ,"devoteAwardHlOne": "1"
+				      ,"devoteAwardHlTwo": "1"
+				      ,"devoteAwardLhOne": "1"
+				      ,"devoteAwardLhTwo": "1"
+				    }];
+				
+				//表格监听器  当发生数据更改 更新数组中对应数据
+				table.on('edit(filter)', function(obj){ //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+					for(var i = 0; i < arr.length; i ++){
+						var o = arr[i];
+						if(o.rank == obj.data.rank){
+							arr[i] = obj.data;
+						}
+					}
+				});
+				
+				//监听提交
+				form.on('submit(seek)', function(data){
+					var dataJson = JSON.stringify(arr);
+					var url = getAjaxOrigin() + '/api/admin/platformManage/bonusSetting/addOrMod';	
+					ajax({
+						info:"提交数据到后台",
+						infosuccess:false,
+						url:url,
+						sync:false,
+						type:"post",
+						/**
+						header: {
+							'Content-Type': 'application/json;charset=utf-8 ',
+						},
+						**/
+						data:{dataJson:dataJson},
+						dataType:'json',
+						success:function(result){
+							if(result.code == 200){
+								layer.msg('操作成功');
+								parent.window.location.href="bonus-parameter-settings.html";
+							}	
+						}
+					});
+					return false;
+				});
+				
+				//监听列表工具条
+				table.on('tool(filter)', function(obj){
+				    var data = obj.data;
+				    var array = new Array();
+				    array.push(data);
+				    var dataJson = JSON.stringify(array);
+					var url = getAjaxOrigin() + '/api/admin/platformManage/bonusSetting/addOrMod';	
+					ajax({
+						info:"提交数据到后台",
+						infosuccess:false,
+						url:url,
+						sync:false,
+						type:"post",
+						/**
+						header: {
+							'Content-Type': 'application/json;charset=utf-8 ',
+						},
+						**/
+						data:{dataJson:dataJson},
+						dataType:'json',
+						success:function(result){
+							if(result.code == 200){
+								layer.msg('操作成功');
+								parent.window.location.href="bonus-parameter-settings.html";
+							}	
+						}
+					});
+				    return false;
+				});	
+			})
+		</script>
+
+	</body>
+
+</html>

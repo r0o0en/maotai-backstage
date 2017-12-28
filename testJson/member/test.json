@@ -1,0 +1,20 @@
+{
+    "code": 200,
+    "count": 7,
+"msg":"",
+    "data": [
+        {
+            "addTime": 1513234028,
+            "checkTime": 1513234028,
+            "id": 7,
+            "money": 1000,
+            "moneyType": 2,
+            "rechargeSn": "MoF2hfL2Ll8shdDD",
+            "rechargeType": 0,
+            "status": 1,
+            "trueName": "小花",
+            "userId": 98,
+            "userName": "18374849897"
+        }
+    ]
+}

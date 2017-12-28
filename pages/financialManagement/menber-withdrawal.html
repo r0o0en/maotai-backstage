@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>会员提现</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Pragma" content="no-cache" />
+
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+	</head>
+
+	<body>
+		<blockquote class="layui-elem-quote layui-text">
+		   <a href="" target="_blank">操作提示</a>
+		</blockquote>
+		
+		<form class="layui-form" >
+			<div class="layui-form-item layui-form-height-auto">
+			    
+			    <div class="layui-input-inline">
+			        <select name="seekType">
+			        	<option value="">搜索类型</option>
+			        	<option value="userName">会员账号</option>
+			        	<option value="trueName">会员昵称(暂时无效)</option>
+			        </select>
+			    </div>
+				<div class="layui-input-inline">
+			    	<input type="text" name="seekVal" placeholder="相关数据" class="layui-input">
+			    </div>
+			    
+			    <div class="layui-input-inline">
+			        <input type="text" name="beginTime" id="dateStart" class="layui-input" placeholder="开始时间" >
+			    </div>
+			    <div class="layui-input-inline">
+			        <input type="text" name="endTime" id="dateEnd" class="layui-input"  placeholder="结束时间" >
+			    </div>
+			    
+			    <div class="layui-input-inline">
+			        <select name="state">
+			          <option value="">提现状态</option>
+			          <option value="0">默认</option>
+			          <option value="1">完成</option>
+			          <option value="2">拒绝</option>
+			        </select>
+			    </div>
+			    
+			    <!-- 提交 -->
+			    <div class="layui-input-inline">
+					<button class="layui-btn" lay-submit lay-filter="seek">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				
+			</div>
+		</form>
+		
+		
+		<table class="layui-hide" id="list" lay-filter="listDemo"></table>
+		
+		<!--表格操作按钮-->
+		<script type="text/html" id="templet-active">
+		  <!--<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改</a><br />
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改等级</a>
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改推荐人</a><br />
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改职级</a>
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">设置为默认推荐人</a>-->
+		  
+		</script>
+		
+		<!--支付状态/操作按钮-->
+		<script type="text/html" id="templet-paymentState">
+		  {{# if(d.paymentState==0){ }}
+		  	<a class="layui-btn layui-btn-xs" lay-event="pay">支付</a>
+		  	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">拒绝</a><br />
+		  {{# }else if(d.paymentState==1){ }}
+		  		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="default">初始化</a>
+		  	  <span class="cl-blue">已支付</span>
+		  {{# }else if(d.paymentState==2){ }}
+		  		<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="default">初始化</a>
+		  		<span class="cl-red">已拒绝</span>
+		  {{# }  }}
+		</script>
+
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			//处理会员提现状态  POST  state : 1 支付完成 2 拒绝
+			var  set_memberCashType = getAjaxOrigin() + '/api/finance/withdrawals/mod';
+			
+			layui.use([], function() {
+				//开始时间
+				laydate.render({
+				    elem: '#dateStart'
+				});
+				//结束时间
+				laydate.render({
+				    elem: '#dateEnd'
+				});
+					
+				listTable = table.render({
+				    elem: '#list'
+				    ,url:  getAjaxOrigin() + '/api/finance/withdrawals/query'
+				    ,method:'post'
+				    ,where:{}
+				    ,response: {
+					  statusCode: 200 //成功的状态码，默认：0
+					}
+					,page:true
+				    ,cols: [[
+//				      {type:'checkbox'},//开启复选
+					  {field:'id',title: 'ID',width:50}
+				      ,{field:'cashSn',  title: '提现单号',width:180}
+				      ,{field:'userId',  title: '充值人ID',width:60}
+				      ,{field:'userName',  title: '会员账号',width:150}
+				      ,{field:'amount',  title: '金额',width:100}
+				      ,{field:'fee',  title: '提现手续费',width:80}
+//				      ,{field:'mobile',  title: '手机号',width:100}
+				      ,{field:'bankName',  title: '收款银行',width:100}
+				      ,{field:'bankNo',  title: '收款账号',width:180}
+				      ,{field:'bankUser',  title: '开户人姓名',width:100}
+				      ,{field:'bankAddress',  title: '银行地址',width:200}
+				      ,{field:'branchName',  title: '分支机构名称',width:200}
+				      ,{field:'addTime',  title: '添加时间',width:120,templet:'<div>{{ parseDate(d.addTime) }}</div>'}
+				      ,{field:'paymentTime',  title: '付款时间',width:120,templet:'<div>{{ parseDate(d.paymentTime)}}</div>'}
+//				      ,{field:'paymentState',  title: '提现支付状态',width:80,templet:'<div>{{["默认","支付完成","拒绝"][d.paymentState]}}</div>'}
+				      ,{field:'paymentState',  title: '提现支付状态',width:80,templet:'#templet-paymentState'}
+				      ,{field:'paymentAdmin',  title: '支付管理员',width:100}
+//				      ,{field:'type',  title: '提现类型',width:80,templet:'<div>{{["预存款","佣金"][d.type]}}</div>'}
+//				      ,{field:'',  title: '操作',width:80,templet:'#templet-active'}
+				    ]]
+				});
+				
+				//监听列表工具条
+				table.on('tool(listDemo)', function(obj){
+				    var data = obj.data;
+				    if(obj.event == 'pay'){
+				    	//支付  ["默认","支付完成","拒绝"]
+				    	payOrReject(data,1);
+				    }else if(obj.event == 'reject'){
+				    	//拒绝支付 
+				    	payOrReject(data,2);
+				    }else if(obj.event == 'default'){
+				    	payOrReject(data,0);
+				    }
+				});	
+				
+				//监听提交
+				form.on('submit(seek)', function(data){
+					var field = data.field;
+					if(field.beginTime){
+//						field.beginTime = Date.parse(new Date(field.beginTime));
+						field.beginTime = restoreDate(field.beginTime);
+					}
+					if(field.endTime){
+//						field.endTime = Date.parse(new Date(field.endTime));
+						field.endTime = restoreDateEnd(field.endTime);
+					}
+					//拼接相关数据
+					if(field.seekType){
+						field[field.seekType] = field.seekVal;						
+					}
+					delete field.seekType;
+					delete field.seekVal;
+					//执行重载
+				   	table.reload('list', {
+					  where: field
+					});
+					return false;
+				});
+				
+				function payOrReject(data,i){ //["默认","支付完成","拒绝"]
+				console.log(data,i);
+					if(i === 2){
+						var str = "确认要拒绝"+data.bankUser+'的提现请求嘛？';
+					}else if(i === 1){
+						var str = "确认要完成"+data.bankUser+'的提现状态嘛？';
+					}else{
+						var str = "确认要初始化"+data.bankUser+'的提现状态嘛？';
+					}
+					layer.open({
+				    	content:str
+				    	,btn:['确认','取消']
+				    	,yes:function(index,layero){
+				    		ajax({
+				    			type:'post'
+				    			,info:'更改提现状态'
+				    			,infosuccess:true
+				    			,url:set_memberCashType
+				    			,data:{
+				    				id:data.id,
+				    				state:i
+				    			}
+				    			,success:function(){
+				    				listTable.reload({where:getSeekForm()});
+				    			}
+				    		})
+				    		layer.close(index);	
+				    	}
+					});
+					
+				}
+				
+
+				
+				
+			})
+		</script>
+
+	</body>
+
+</html>

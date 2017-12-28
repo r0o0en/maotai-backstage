@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>财务明细</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Pragma" content="no-cache" />
+
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+	</head>
+
+	<body>
+		<blockquote class="layui-elem-quote layui-text">
+		   <a href="" target="_blank">操作提示</a>
+		</blockquote>
+		
+		<form class="layui-form" >
+			<div class="layui-form-item layui-form-height-auto">
+				
+				<div class="layui-input-inline">
+			        <select name="seekType">
+			          <option value="orderId">订单ID</option>
+			          <option value="userId">用户ID</option>
+			        </select>
+			    </div>
+				<div class="layui-input-inline">
+			    	<input type="text" name="seekVal" placeholder="相关数据" class="layui-input">
+			    </div>
+				
+			    <div class="layui-input-inline">
+			        <input type="text" name="beginTime" id="dateStart" class="layui-input" placeholder="开始时间" >
+			    </div>
+			    <div class="layui-input-inline">
+			        <input type="text" name="endTime" id="dateEnd" class="layui-input"  placeholder="结束时间" >
+			    </div>
+			    
+			    <div class="layui-input-inline">
+			        <select name="type">
+			            <option value="">全部</option>
+                        <option value="1">余额提现</option>
+                        <option value="2">余额奖金</option>
+                        <option value="3">余额充值</option>
+                        <option value="4">余额购物</option>
+                        <option value="12">积分奖金</option>
+                        <option value="13">积分充值</option>
+                        <option value="14">积分购物</option>
+                        <option value="20">购物赠送粮票</option>
+                        <option value="21">推荐赠送粮票</option>
+                        <option value="23">粮票充值</option>
+			        </select>
+			    </div>
+			    
+			    <!-- 提交 -->
+			    <div class="layui-input-inline">
+					<button class="layui-btn" lay-submit lay-filter="seek">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				
+			</div>
+		</form>
+		
+		
+		<table class="layui-hide" id="list"></table>
+		
+		<!--表格操作按钮-->
+		<script type="text/html" id="barDemo">
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改</a><br />
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改等级</a>
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改推荐人</a><br />
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">修改职级</a>
+		  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">设置为默认推荐人</a>
+		</script>
+		
+
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			layui.use([], function() {
+				//开始时间
+				laydate.render({
+				    elem: '#dateStart'
+				});
+				//结束时间
+				laydate.render({
+				    elem: '#dateEnd'
+				});
+				
+				table.render({
+				    elem: '#list'
+				    ,url:  getAjaxOrigin() + '/api/finance/bonus/query'
+				    ,method:'post'
+				    ,where:{}
+				    ,response: {
+					  statusCode: 200 //成功的状态码，默认：0
+					}
+				    ,page:true
+				    ,cols: [[
+//				      {type:'checkbox'},//开启复选
+//					  {field:'id',  title: 'ID'}
+				      {field:'userId',  title: '用户ID'}
+				      ,{field:'orderId',  title: '订单ID'}
+				      ,{field:'money',  title: '金额'}
+				      ,{field:'bonusType',  title: '收入支出的类型',templet:'<div>{{bonusType[d.bonusType]}}</div>'}
+				      ,{field:'frezzeState',  title: '是否冻结',templet:'<div>{{frezzeState[d.frezzeState]}}</div>'}
+				      ,{field:'memo',  title: '说明'}
+				      ,{field:'moneyType',  title: '钱包类型',templet:'<div>{{moneyType[d.frezzeState]}}</div>'}
+				      ,{field:'addTime',  title: '添加时间',templet:'<div>{{ parseDate(d.addTime) }}</div>'}
+//				      ,{field:'paymentTime',  title: '付款时间',templet:'<div>{{ parseDate(d.paymentTime) }}</div>'}
+//				      ,{field:' ',  title: 'dai'}
+//				      ,{field:'fromId',  title: '来源的用户ID'}
+//				      ,{field:'isOut',  title: '收入还是支出',templet:'<div>{{["收入","支出"][d.isOut]}}</div>'}
+//				      ,{field:'rate',  title: '比例'}
+//				      ,{field:'userName',  title: '会员账号'}
+//				      ,{field:'bankName',  title: '收款银行'}
+//				      ,{field:'bankNo',  title: '收款账号'}
+//				      ,{field:'bankUser',  title: '开户人姓名'}
+//				      ,{field:'bankAddress',  title: '银行地址'}
+//				      ,{field:'bankAddress',  title: '银行地址'}
+//				      ,{field:'addTime',  title: '添加时间',templet:'<div>{{ new Date(d.addTime).format("yyyy-MM-dd hh:mm:ss") }}</div>'}
+//				      ,{field:'paymentState',  title: '提现支付状态',templet:'<div>{{["默认","支付完成","拒绝"][d.paymentState]}}</div>'}
+//				      ,{field:'paymentAdmin',  title: '支付管理员'}
+//				      ,{field:'type',  title: '提现类型',templet:'<div>{{["预存款","佣金"][d.type]}}</div>'}
+//				      ,{field:'fee',  title: '提现手续费'}
+//				      ,{field:'mobile',  title: '手机号'}
+//				      ,{field:'branchName',  title: '分支机构名称'}
+				     
+				    ]]
+				});
+				
+				
+				//监听提交
+				form.on('submit(seek)', function(data){
+					var field = data.field;
+					if(field.beginTime){
+//						field.beginTime = Date.parse(new Date(field.beginTime));
+						field.beginTime = restoreDate(field.beginTime);
+					}
+					if(field.endTime){
+//						field.endTime = Date.parse(new Date(field.endTime));
+						field.endTime = restoreDateEnd(field.endTime);
+					}
+					//拼接相关数据
+					if(field.seekType){
+						field[field.seekType] = field.seekVal;						
+					}
+					delete field.seekType;
+					delete field.seekVal;
+					//执行重载
+				   	table.reload('list', {
+					  where: field
+					});
+					return false;
+				});
+				
+				
+
+				
+				
+			})
+		</script>
+
+	</body>
+
+</html>

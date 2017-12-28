@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>订单管理</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Pragma" content="no-cache" />
+
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+		<style type="text/css">
+			td {
+				vertical-align: top;
+			}
+			
+			.goods-list {
+				padding: 0;
+				margin: 0;
+				list-style: none;
+				max-height: 240px;
+				overflow-y: auto;
+			}
+			
+			.goods-list li {
+				padding: 5px 10px;
+			}
+			
+			.goods-list li+li {
+				border-top: 1px solid #E6E6E6;
+			}
+			
+			.goods-list img {
+				display: block;
+				width: 50px;
+				height: 50px;
+				float: left;
+				margin-right: 10px;
+			}
+			
+			.goods-list p {
+				color: #000;
+				text-align: left;
+				line-height: 25px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			
+			.goods-list p+p {
+				text-align: right;
+			}
+			
+			.goods-list .money {
+				color: #FF0000;
+			}
+			
+			.goods-list .money+* {
+				color: #007DDB;
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<div class="layui-tab" lay-filter="order">
+  			<ul class="layui-tab-title">
+  				<li lay-id='list' class="layui-this">订单列表</li>
+  				<li lay-id='details'>订单详情</li>
+  			</ul>
+  			<div class="layui-tab-content">
+  				<div class="layui-tab-item layui-show">
+					<form class="layui-form">
+						<div class="layui-form-item layui-form-height-auto">
+			
+							<div class="layui-input-inline">
+								<select name="seekType">
+									<option value="">搜索类型</option>
+									<!--<option value="id">id</option>-->
+									<option value="orderSn">订单编号</option>
+									<option value="userId">用户ID</option>
+								</select>
+							</div>
+							<div class="layui-input-inline">
+								<input type="text" name="seekVal" placeholder="相关数据" class="layui-input">
+							</div>
+							
+							<div class="layui-input-inline">
+						        <input type="text" name="beginTime" id="dateStart" class="layui-input" placeholder="开始时间" >
+						    </div>
+						    <div class="layui-input-inline">
+						        <input type="text" name="endTime" id="dateEnd" class="layui-input"  placeholder="结束时间" >
+						    </div>
+							
+							<div class="layui-input-inline">
+								<select name="status">
+									<option value="">订单状态</option>
+									<option value="0">待付款</option>
+									<option value="1">待发货</option>
+									<option value="2">待收货</option>
+									<option value="3">已完成</option>
+									<option value="4">取消订单</option>
+									<!--<option value="5">退货</option>-->
+								</select>
+							</div>
+							<!-- 提交 -->
+							<div class="layui-input-inline">
+								<button class="layui-btn" lay-submit lay-filter="seek">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							</div>
+			
+						</div>
+					</form>
+					<table class="layui-hide" id="list" lay-filter="listDemo"></table>
+  				</div>
+    			<div class="layui-tab-item">
+    				<div id="detailsOrderWp">
+    					
+    				</div>
+    			</div>
+  			</div>
+  		</div>
+		
+		<!--操作按钮-->
+		<script type="text/html" id="orderActive">
+			
+			{{# if(d.status == 0){ }} 
+				<a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">取消</a>
+				<a class="layui-btn layui-btn-sm " lay-event="payment">付款</a>
+			{{# }else if(d.status == 1){ }}
+				<a class="layui-btn layui-btn-sm " lay-event="delivery">发货</a>
+			{{# }else if(d.status == 2){ }}
+				<a class="layui-btn layui-btn-sm " lay-event="comfirm">收货</a>
+			{{# } }}
+			<a class="layui-btn layui-btn-sm layui-btn-primary" lay-event="details">查看详情</a>
+		</script>
+		
+		<!--商品列表-->
+		<script type="text/html" id="goodsList">
+			{{# var str = '
+			<ul class="goods-list">'; $.each(d.goodsList,function(i,e){str += '
+				<li class="layui-clear">'; str += '<img src="' + getImgurl(e.goodsPic)[0] +'">'; str += '
+					<p>'+ e.goodsName +'</p>'; str += '
+					<p><span class="money">'+e.price+'</span> <span> x '+e.total+'</span></p>'; str += '</li>'; }); str += '</ul>'; return str; }}
+		</script>
+		
+		<!--订单状态-->
+		<script type="text/html" id="orderType">
+			<!--var arr_order_type = ['待付款','待发货','待收货','已完成','订单已取消','已退货'];-->
+			<p>{{arr_order_type[d.status]}}</p>
+		</script>
+
+		<!--收货地址-->
+		<script type="text/html" id="address">
+			{{# var ad = JSON.parse(d.address); return ad.realname + ' '+ ad.mobile+ '<br/>' + ad.provinceText + ad.cityText + ad.areaText + ad.address }}
+		</script>
+
+		<!--根据订单状态显示对应的 操作时间-->
+		<script type="text/html" id="activeTime">
+			{{# var str = '下单：'+ parseDate(d.addTime); 
+				if(!!d.payTime){ 
+					str += '<br/>付款：'+ parseDate(d.payTime); 
+				} if(!!d.deliveryTime){
+					 str += '<br/>发货：'+ parseDate(d.deliveryTime); 
+				} if(!!d.comfirmTime){
+					 str += '<br/>收货：'+ parseDate(d.comfirmTime); 
+				} if(!!d.cancelTime){
+					 str += '<br/>取消：'+ parseDate(d.cancelTime); 
+				} 
+				return str; 
+			}}
+		</script>
+		<!--发货弹窗-->
+		<script type="text/html" id="templetDelivery">
+			<form class="layui-form templet-recharge" style="padding: 10px;overflow-y: hidden;">
+				<input type="hidden" id="orderId" name="orderId" value=""  placeholder="订单ID"/>
+				<input type="hidden" id="userId" name="userId" value=""  placeholder="用户ID"/>
+				<input type="hidden" id="deliveryCode" name="deliveryCode" value="" placeholder="快递公司代码">
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>快递公司</label>
+					<div class="layui-input-block">
+						<select name='deliveryName' lay-filter="selectDelivery" lay-verify="required"  placeholder="充值类型">							
+							<option value="" >请选择快递公司</option>
+							<option value="顺丰快递" data-deliveryCode="sf">顺丰快递</option>
+	                        <option value="中通快递" data-deliveryCode="zt">中通快递</option>
+	                        <option value="圆通快递" data-deliveryCode="yt">圆通快递</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>快递单号</label>
+					<div class="layui-input-block">
+						<input type="tel" name="deliverySn" lay-verify="required" placeholder="快递单号" class="layui-input">
+					</div>
+				</div>
+				
+				<br />
+				<!-- 提交 -->
+				<div class="layui-form-item text-center">				
+					<a class="layui-btn recharge" lay-submit lay-filter="delivery">立即提交</a>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				<br />
+				<br />
+			</form>
+		</script>
+		
+		<!--订单详情-->
+		<script type="text/html" id="templateDetails">
+			{{# console.log(d);}}
+			{{# var str = '<ul class="goods-list" style="max-height:none;">'; 
+				$.each(d.goodsList,function(i,e){ 
+					str += '<li class="layui-clear">'; 
+					str += '<img src="' + getImgurl(e.goodsPic)[0] +'">'; 
+					str += '<p>'+ e.goodsName +'</p>'; 
+					str += '<p><span class="money">'+e.price+'</span> <span> x '+e.total+'</span></p>'; 
+					str += '</li>'; 
+				}); 
+				str += '</ul>';
+			}}
+			<table class="layui-table">
+				<tr><td>订单编号：</td><td>{{d.orderSn}}</td></tr>
+				<tr><td>用户ID：</td><td>{{d.userId}}</td></tr>
+				<tr><td>实际付款：</td><td>{{d.orderAmount}}</td></tr>
+				{{#
+					var ad = JSON.parse(d.address);
+					ad  = ad.realname + ' '+ ad.mobile+ '<br/>' + ad.provinceText + ad.cityText + ad.areaText + ad.address; 
+				}}
+				<tr><td>收货人信息：</td><td>{{ad}}</td></tr>
+				<tr><td>订单状态：</td><td>{{d.status}}</td></tr>
+				<tr><td>支付方式：</td><td>{{d.payType}}</td></tr>
+				<tr><td>添加时间：</td><td>{{parseDate(d.addTime)}}</td></tr>
+				<tr><td>支付时间：</td><td>{{parseDate(d.payTime)}}</td></tr>
+				<tr><td>发货时间：</td><td>{{parseDate(d.deliveryTime)}}</td></tr>
+				<tr><td>收货时间：</td><td>{{parseDate(d.comfirmTime)}}</td></tr>
+				<tr><td>取消时间：</td><td>{{parseDate(d.cancelTime)}}</td></tr>
+				<tr><td>支付方式：</td><td>{{arr_pay_type[d.payType]}}</td></tr>
+				<tr><td>配送方式：</td><td>{{ d.deliveryName + d.deliveryCode + "<br/>" + d.deliverySn }}</td></tr>
+				<tr><td>订单留言：</td><td>{{d.memo}}</td></tr>
+				<tr><td>支付信息：</td><td>{{d.payInfo}}</td></tr>
+				<tr><td>现金支付金额：</td><td>{{d.xjAmount||''}}</td></tr>
+				<tr><td>积分支付金额：</td><td>{{d.jfAmount||''}}</td></tr>
+				<tr><td>赠送粮票：</td><td>{{d.stamp||''}}</td></tr>
+				<tr><td>购买商品:</td><td>{{str}}</td></tr>
+				<!--<tr><td>快递公司：</td><td>{{d.deliveryName}}</td></tr>
+				<tr><td>快递公司代码：</td><td>{{d.deliveryCode}}</td></tr>
+				<tr><td>快递单号：</td><td>{{d.deliverySn}}</td></tr>-->
+				<!--<tr><td>剩余支付金额：</td><td>{{d.payAmount}}</td></tr>
+				<tr><td>余额支付金额：</td><td>{{d.balanceAmount}}</td></tr>
+				<tr><td>购物人姓名：</td><td>{{d.buyerRealname}}</td></tr>-->
+			</table>
+		</script>
+		
+
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
+
+		<script>
+			//获取订单列表
+			var url_getOrderList = getAjaxOrigin() + '/api/admin/order/orderList';
+			//取消订单
+			var url_deleteOrder = getAjaxOrigin() + '/api/admin/order/orderCancel';
+			//订单发货
+			var url_paymentOrder = getAjaxOrigin() + '/api/admin/order/orderObligation';
+			//订单发货
+			var url_deliveryOrder = getAjaxOrigin() + '/api/admin/order/orderAwaitingDelivery';
+			//订单收货
+			var url_comfirmOrder = getAjaxOrigin() + '/api/admin/order/orderWaitForReceiving';
+			
+			//订单状态
+			var arr_order_type = ['待付款', '待发货', '待收货', '完成', '订单已取消', '退货'];
+			var arr_order_type_class = ['', 'cl-00c', 'cl-blue', 'cl-green', 'cl-orange', 'cl-red'];
+			//支付方式
+			var arr_pay_type = ['余额支付', '支付宝','未知'];
+
+			layui.use([], function() {
+				//开始时间
+				laydate.render({
+					elem: '#dateStart'
+				});
+				//结束时间
+				laydate.render({
+					elem: '#dateEnd'
+				});
+				//列表加载
+				listTable = table.render({
+					elem: '#list',
+					url: url_getOrderList,
+					method: 'get',
+					where: {},
+					response: {
+						statusCode: 200 //成功的状态码，默认：0
+					},
+					request: {
+//						pageName: 'pageNow' //页码的参数名称，默认：page
+//						,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+					},
+					height: "700px",
+					page: true,
+					cols: [[
+							//				      {type:'checkbox'},//开启复选
+							{width:80,field:'id', title: 'ID'},
+							{width: 200,field: 'orderSn',title: '订单编号'}
+							,{width: 400,field: '',title: '购买商品',templet: '#goodsList'}
+							,{width: 100,field: 'orderAmount',title: '订单金额'}
+							,{width: 100,field: 'payType',title: '支付方式',templet: '<div>{{ arr_pay_type[d.payType]}}</div>'}
+							,{width:100,field:'status',  title: '订单状态',templet:'<div><span class="{{arr_order_type_class[d.status]}}">{{arr_order_type[d.status]}}</span></div>'}							
+//							, {width: 200,field: 'userId',title: '用户ID'}
+							,{width:300,field:'address',  title: '收货人信息',templet:'#address'}
+//							,{width: 200,field: 'deliveryName',title: '配送方式',templet: '<div>{{ d.deliveryName + d.deliveryCode + "<br/>" + d.deliverySn }}</div>'}
+//							,{width:100,field:'memo',  title: '备注'}
+//							,{width: 200,field: 'status',title: '订单状态',templet: '#orderType'}
+							
+							, {width: 220,field: '',title: '操作时间',templet: '#activeTime'}
+							, {width: 200,field: '',title: '操作',templet: '#orderActive',style:'text-align:left;'}
+							//					  ,{width:180,field:'addTime',  title: '添加时间',templet:'<div>{{ parseDate(d.addTime)}}</div>'}
+							//					  ,{width:180,field:'payTime',  title: '支付时间',templet:'<div>{{ new Date(d.payTime*1000).format("yyyy-MM-dd hh:mm:ss") }}</div>'}
+							//					  ,{width:180,field:'deliveryTime',  title: '发货时间',templet:'<div>{{ new Date(d.deliveryTime*1000).format("yyyy-MM-dd hh:mm:ss") }}</div>'}
+							//					  ,{width:180,field:'comfirmTime',  title: '收货时间',templet:'<div>{{ new Date(d.comfirmTime*1000).format("yyyy-MM-dd hh:mm:ss") }}</div>'}
+							//					  ,{width:180,field:'cancelTime',  title: '取消时间',templet:'<div>{{ new Date(d.cancelTime*1000).format("yyyy-MM-dd hh:mm:ss") }}</div>'}
+							
+												  
+							//					  ,{width:100,field:'orderType',  title: '订单类型'}
+							//					  ,{width:100,field:'deliveryName',  title: '快递公司'}
+							//					  ,{width:100,field:'deliveryCode',  title: '快递公司代码'}
+							//					  ,{width:100,field:'payAmount',  title: '剩余支付金额'}
+							//					  ,{width:100,field:'balanceAmount',  title: '余额支付金额'}
+							//					  ,{width:200,field:'deliverySn',  title: '快递单号'}
+							//					  ,{width:120,field:'buyerRealname',  title: '购物人姓名'}
+							//					  ,{width:300,field:'memo',  title: '订单留言'}
+							//					  ,{width:100,field:'payInfo',  title: '支付信息'}
+							//					  ,{width:100,field:'xjAmount',  title: '现金支付金额'}
+							//					  ,{width:100,field:'jfAmount',  title: '积分支付金额'}
+							//					  ,{width:100,field:'stamp',  title: '赠送粮票'}
+
+						]
+					]
+				});
+
+				//监听提交
+				form.on('submit(seek)', function(data) {
+					event.preventDefault();
+					var field = data.field;
+					//拼接相关数据
+					if(field.seekType) {
+						field[field.seekType] = field.seekVal;
+					}
+					if(field.timeType) {
+						field[field.timeType] = field.time;
+						delete field.timeType;
+						delete field.time;
+					}
+					eachNullEmpty(field);
+					//执行重载
+					listTable.reload({
+						where: field
+					});
+				});
+				//监听列表工具条
+				table.on('tool(listDemo)', function(obj) {
+					var data = obj.data;
+					if(obj.event == 'delete') {
+						//取消订单
+						deleteOrder(data);
+					} else if(obj.event == 'payment') {
+						//付款
+						paymentOrder(data);
+					} else if(obj.event == 'delivery') {
+						//发货 
+						deliveryOrder(data);
+					} else if(obj.event == 'comfirm') {
+						//收货
+						comfirmOrder(data);
+					} else if(obj.event == 'returns') {
+						//退货
+						returnsOrder(data);
+					} else if(obj.event == 'details') {
+						//查看详情
+						detailsOrder(data);
+					}
+				});
+			})
+
+			function deleteOrder(data) {
+				//取消
+				layer.open({
+					content: '真的取消订单【' + data.orderSn + '】么?',
+					btn: ['确认', '取消'],
+					yes: function(index, layero) {
+						ajax({
+							type: 'get',
+							info: '取消订单',
+							infosuccess: true,
+							url: url_deleteOrder,
+							data: {
+								orderId: data.id,
+								userId: data.userId
+							},
+							success: function() {
+								listTable.reload();
+							}
+						})
+						layer.close(index);
+					}
+				});
+			}
+			function paymentOrder(data) {
+				//付款
+				layer.open({
+					content: '确认订单【' + data.orderSn + '】付款?',
+					btn: ['确认', '取消'],
+					yes: function(index, layero) {
+						ajax({
+							type: 'get',
+							info: '订单付款',
+							infosuccess: true,
+							url: url_paymentOrder,
+							data: {
+								orderId: data.id,
+								userId: data.userId
+							},
+							success: function() {
+								listTable.reload();
+							}
+						})
+						layer.close(index);
+					}
+				});
+			}
+			function comfirmOrder(data) {
+				//确认收款
+				layer.open({
+					content: '确认订单【' + data.orderSn + '】收货?',
+					btn: ['确认', '取消'],
+					yes: function(index, layero) {
+						ajax({
+							type: 'get',
+							info: '订单收货',
+							infosuccess: true,
+							url: url_comfirmOrder,
+							data: {
+								orderId: data.id,
+								userId: data.userId
+							},
+							success: function() {
+								listTable.reload();
+							}
+						})
+						layer.close(index);
+					}
+				});
+			}
+			function deleteOrder(data) {
+				//取消
+				layer.open({
+					content: '确认订单【' + data.orderSn + '】已收货?',
+					btn: ['确认', '取消'],
+					yes: function(index, layero) {
+						ajax({
+							type: 'get',
+							info: '确认订单已收货',
+							infosuccess: true,
+							url: url_deleteOrder,
+							data: {
+								orderId: data.id,
+								userId: data.userId
+							},
+							success: function() {
+								listTable.reload();
+							}
+						})
+						layer.close(index);
+					}
+				});
+			}
+			function deliveryOrder(data) {
+				//确认发货弹窗
+				layer.open({
+					title:'确认发货',
+					type:"1",
+					content:templetDelivery.innerHTML,
+					btn:[],
+					id:'recharge',
+					yes:function(i,o){},
+					success:function(i,o){
+						form.render('select');
+						$('#orderId').val(data.id);
+						$('#userId').val(data.userId);
+					}
+				})
+			}
+			//确认发货表单
+			form.on('submit(delivery)', function(data){
+				event.preventDefault();
+				event.stopPropagation();
+				var field = data.field;
+				console.log(field);
+				ajax({
+					ifno:'确认发货',
+					type:"get",
+					url:url_deliveryOrder,
+					data:field,
+					success:function(d){
+						layer.close($(data.form).parents('.layui-layer').attr('times'));
+						listTable.reload();
+					}
+				});
+			})	
+			//发货输入表单 监听 下拉
+			form.on('select(selectDelivery)', function(data){
+				var opt = $(data.elem).parents('form').find('option[value="'+data.value+'"]');
+				$('#deliveryCode').val(opt.attr('data-deliveryCode'));
+//			  console.log(data.elem); //得到select原始DOM对象
+//			  console.log(data.value); //得到被选中的值
+//			  console.log(data.othis); //得到美化后的DOM对象
+			});
+			
+			function detailsOrder(data) {
+				element.tabChange('order', 'details');
+				//查看详情
+				var templet = templateDetails.innerHTML,
+					view = $('#detailsOrderWp')[0];
+				laytpl(templet).render(data, function(html){
+					view.innerHTML = html;
+				});
+			}
+			//监听选项卡切换
+			element.on('tab(order)', function(data){
+				  console.log(this,data); //当前Tab标题所在的原始DOM元素
+				  console.log(data.index); //得到当前Tab的所在下标
+				  console.log(data.elem); //得到当前的Tab大容器
+				if( $(this).attr('lay-id') == "details" ){//进入详情页
+				  	
+				}else {//退出详情页
+				  	$('#detailsOrderWp').empty();
+				}
+				
+			});
+			
+			
+		</script>
+
+	</body>
+
+</html>

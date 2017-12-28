@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>商品分类列表</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Pragma" content="no-cache" />
+
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+
+		<!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+	</head>
+
+	<body>
+		<blockquote class="layui-elem-quote layui-text">
+		   <a href="" target="_blank">操作提示</a>
+		</blockquote>
+		<ul class="layui-tab-title">
+		    <li class=""><a href="classify-new.html" onclick="openPage('./pages/goodsManagement/classify-new.html')">添加分类</a></li>
+		    <li class="layui-this"><a onclick="openPage('./pages/goodsManagement/classify-list.html')">分类列表</a></li>
+		</ul>
+		
+		<table class="layui-hide" id="list"></table>
+		
+		<table class="layui-table goods-classify-list">
+		  <colgroup>
+		    <col>
+		    <col>
+		    <col width="150">
+		    <col width="200">
+		    <col>
+		  </colgroup>
+		  <thead>
+		    <tr>
+		      <td></td>
+		      <th>分类名称</th>
+		      <th>排序号</th>
+		      <th>状态</th>
+		      <th>操作</th>
+		    </tr> 
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <td></td>
+		      <td>
+		      	<div class="layui-input-inline">
+		      		<input class="layui-input"/>
+		      	</div>
+		      	<a class="layui-btn layui-btn-sm">添加二级分类</a>
+		      </td>
+		      <td>100</td>
+		      <td>正常</td>
+		      <td><a class="layui-btn layui-btn-danger layui-btn-sm">删除</a></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td>
+		      	<div class="layui-input-inline grade-two">
+		      		<input class="layui-input"/>
+		      	</div>
+		      </td>
+		      <td><input type="tel" placeholder="排序号"/></td>
+		      <td>正常</td>
+		      <td><a class="layui-btn layui-btn-danger layui-btn-sm">删除</a></td>
+		    </tr>
+		    <tr>
+		      <td></td>
+		      <td>
+		      	<div class="layui-input-inline grade-two">
+		      		<input class="layui-input"/>
+		      	</div>
+		      </td>
+		      <td><input type="tel" placeholder="排序号"/></td>
+		      <td>正常</td>
+		      <td><a class="layui-btn layui-btn-danger layui-btn-sm">删除</a></td>
+		    </tr>
+		  </tbody>
+		  <tbody>
+		    <tr>
+		      <td></td>
+		      <td>
+		      	<div class="layui-input-inline">
+		      		<input class="layui-input"/>
+		      	</div>
+		      	<a class="layui-btn layui-btn-sm">添加二级分类</a>
+		      </td>
+		      <td><input type="tel" placeholder="排序号"/></td>
+		      <td>正常</td>
+		      <td><a class="layui-btn layui-btn-danger layui-btn-sm">删除</a></td>
+		    </tr>
+		    <tr>
+		    	<td></td>
+		      <td>
+		      	<div class="layui-input-inline grade-two">
+		      		<input class="layui-input"/>
+		      	</div>
+		      </td>
+		      <td><input type="tel" placeholder="排序号"/></td>
+		      <td>正常</td>
+		      <td><a class="layui-btn layui-btn-danger layui-btn-sm">删除</a></td>
+		    </tr>
+		    <tr>
+		    	<td></td>
+		      <td>
+		      	<div class="layui-input-inline grade-two">
+		      		<input class="layui-input"/>
+		      	</div>
+		      </td>
+		      <td><input type="tel" placeholder="排序号"/></td>
+		      <td>正常</td>
+		      <td><a class="layui-btn layui-btn-danger layui-btn-sm">删除</a></td>
+		    </tr>
+		  </tbody>
+		  
+		</table>
+		
+		
+		
+
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			layui.use([], function() {
+				table.render({
+				    elem: '#list'
+				    ,url:  getAjaxOrigin() + '/api/admin/goods/category/query'
+				    ,method:'get'
+				    ,where:{
+				    	state:0
+				    }
+				    ,response: {
+					  statusCode: 200 //成功的状态码，默认：0
+					}
+				    ,request: {
+					  pageName: 'pageNow' //页码的参数名称，默认：page
+					  ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+					}  
+				    ,page:{
+				    	
+				    }
+				    ,cols: [[
+//				      {type:'checkbox'},//开启复选
+					  {field:'id',  title: 'ID'}
+					  
+//				      ,{field:'category',  title: '分类'}
+//				      ,{field:'goodsName',  title: '商品名称'}
+////				      ,{field:'goodsPics',  title: '商品图片'}
+//				      ,{field:'addTime',  title: '添加时间',templet:'<div>{{ new Date(d.addTime).format("yyyy-MM-dd hh:mm:ss") }}</div>'}
+//				      ,{field:'editTime',  title: '添加时间',templet:'<div>{{ new Date(d.editTime).format("yyyy-MM-dd hh:mm:ss") }}</div>'}
+////				      ,{field:'sort',  title: '商品排序',sort:true}
+//				      ,{field:'isRec',  title: '首页推荐'}
+////				      ,{field:'memo',  title: '说明',templet:"#memo"}
+//				      ,{field:'marketPrice',  title: '市场价'}
+//				      ,{field:'price',  title: '售价'}
+//				      ,{field:'stock',  title: '库存'}
+//				      ,{field:'status',  title: '上/下架',templet:'<div>{{d.type}}</div>'}
+//				      ,{field:'goodsOption',  title: '规格和属性'}
+//				      ,{field:'optionTitle',  title: '规格标题'}
+//				      ,{field:'hasOption',  title: '启用规格'}
+//				      ,{field:'weight',  title: '重量'}
+//				      ,{field:'goodsSn',  title: '编码'}
+//				      ,{field:'productSn',  title: '条码'}
+//				      ,{field:'buyNum',  title: '购买数量'}
+//				      ,{field:'type',  title: '商品类型'}
+//				      ,{field:'goodsId',  title: '商品ID'}
+//				      ,{field:'packagePrice',  title: '价格'}
+//				      ,{field:'bdType',  title: '报单产品类型'}
+//				      ,{field:'buyType',  title: '所属区域',templet:'<div>{{["现金","积分"][d.buyType]}}</div>'}
+
+				     
+				    ]]
+				});
+			})
+		</script>
+
+	</body>
+
+</html>

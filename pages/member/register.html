@@ -1,0 +1,395 @@
+	<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>新增会员</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Pragma" content="no-cache" />
+
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+		<!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+	</head>
+
+	<body>
+		          
+		<!--<blockquote class="layui-elem-quote layui-text">注册新会员</blockquote>-->
+		
+
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+			<legend>注册新会员</legend>
+		</fieldset>
+
+		<form class="layui-form" action="">
+			<div class="layui-form-item">
+				<label class="layui-form-label"><sup>*</sup>会员账号</label>
+				<div class="layui-input-block">
+					<input type="tel" name="userName" lay-verify="required|phone" placeholder="请输入会员账号" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><sup>*</sup>会员昵称</label>
+				<div class="layui-input-block">
+					<input type="title" name="trueName" lay-verify="required|name" placeholder="请输入昵称或姓名" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label"><sup>*</sup>一级密码</label>
+					<div class="layui-input-inline">
+						<input type="password" value="123456"  name="pwd" lay-verify="required|pass" class="layui-input">
+					</div>
+					<div class="layui-input-inline">
+						<div class="layui-form-mid layui-word-aux">默认密码123456</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label"><sup>*</sup>确认密码</label>
+					<div class="layui-input-inline">
+						<input type="password" value="123456" name="pass_two" lay-verify="required|pass" class="layui-input">
+					</div>
+				</div>
+			</div>
+
+			<!--<div class="layui-form-item">
+				<label class="layui-form-label"><sup>*</sup>会员等级</label>
+				<div class="layui-input-block">
+					<select name="ceoRank" lay-verify="required">
+					</select>
+				</div>
+			</div>-->
+			
+			<!--<div class="layui-form-item">
+				<label class="layui-form-label"><sup>*</sup>会员职级</label>
+				<div class="layui-input-block">
+					<select name="identity" lay-verify="required">
+					</select>
+				</div>
+			</div>-->
+			<div class="layui-form-item">
+				<label class="layui-form-label">推荐人</label>
+				<div class="layui-input-block">
+					<div class="layui-input-inline">
+						<input type="tel" name="pusername"  placeholder="请输入推荐人编号" class="layui-input">
+					</div>
+					<div class="layui-input-inline"><input type="hidden" name="pid" class="layui-input" /></div>
+					
+				</div>
+			</div>
+			<div class="layui-form-item">
+			    <label class="layui-form-label"><sup>*</sup>是否提现</label>
+			    <div class="layui-input-block">
+			      <input type="radio" name="canCash" value="1" title="是" checked>
+			      <input type="radio" name="canCash" value="0" title="否">
+			    </div>
+			</div>
+			<!--<div class="layui-form-item">
+			    <label class="layui-form-label"><sup>*</sup>报单商品</label>
+			    <div class="layui-input-block">
+			    	<table class="layui-hide" id="list" lay-filter="listDemo"></table>
+			    </div>
+			</div>-->
+			<br /><hr /><br />
+			<div class="layui-form-item">
+			    <label class="layui-form-label"><sup>*</sup>省市区</label>
+			    <div class="layui-input-inline">
+			      <select lay-filter="province" class="province" name="province" lay-verify="required">
+			        <option value="">请选择省</option>
+			        <option value="2">请选择省</option>
+			        <option value="3">请选择省</option>
+			      </select>
+			    </div>
+			    <div class="layui-input-inline" >
+			      <select lay-filter="city" class="city" name="city" lay-verify="required">
+			        <option value="">请选择市</option>
+			      </select>
+			    </div>
+			    <div class="layui-input-inline" >
+			      <select lay-filter="area" class="area" name="area" lay-verify="required">
+			        <option value="">请选择县/区</option>
+			      </select>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			    <label class="layui-form-label"><sup>*</sup>性别</label>
+			    <div class="layui-input-block">
+			      <input type="radio" name="sex" value="1" title="男" checked>
+			      <input type="radio" name="sex" value="2" title="女">
+			    </div>
+			</div>
+			<br /><hr /><br />
+			
+			<!--<div class="layui-form-item">
+				<label class="layui-form-label"><sup>*</sup>联系人</label>
+				<div class="layui-input-block">
+					<input type="tel" name="contact-name" lay-verify="required|name" placeholder="请输入联系人" class="layui-input">
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label"><sup>*</sup>手机号码</label>
+				<div class="layui-input-block">
+					<input type="tel" name="mobile" lay-verify="required|phone" placeholder="请输入手机号码" class="layui-input">
+				</div>
+			</div>-->
+			<div class="layui-form-item">
+			    <label class="layui-form-label"><sup>*</sup>收货地址</label>
+			    <div class="layui-input-inline">
+			      <select lay-filter="addProvince" class="addProvince" name="addProvince" lay-verify="required">
+			      </select>
+			    </div>
+			    <div class="layui-input-inline" >
+			      <select lay-filter="addCity" class="addCity" name="addCity" lay-verify="required">
+			      </select>
+			    </div>
+			    <div class="layui-input-inline" >
+			      <select lay-filter="addArea" class="addArea" name="addArea" lay-verify="required">
+			      </select>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><sup>*</sup>详细地址</label>
+				<div class="layui-input-block">
+					<input type="tel" name="address" lay-verify="required" placeholder="请输入详细地址" class="layui-input">
+				</div>
+			</div>
+			
+			
+			<!-- 提交 -->
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<a href="menber-list.html" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</a>
+					<!--<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>-->
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+		
+		<!--表格渲染商品分类模板-->
+		<script type="text/html" id="templet-goods-class">
+			{{# 
+				var a = '暂无【'+ d.categoryId +'】';
+				for(var i=0;i<goodsclasslist.length;i++){
+					if(goodsclasslist[i].id == d.categoryId){
+						return goodsclasslist[i].categoryName;
+					}
+				}
+				return a;
+			}}
+		</script>
+
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/core.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/sha256.min.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			//修改会员、新增会员
+			var url_newMenber = getAjaxOrigin() + '/api/admin/user/addOrMod';
+			//修改会员、新增会员
+			var url_menberIsTrue = getAjaxOrigin() + '/api/admin/user/findUserInfo';
+			//获取会员列表
+			var url_getMemberList = getAjaxOrigin() + '/api/admin/user/query'
+			//判断推荐人是否存在 GET 
+			var url_judgeReferrer = getAjaxOrigin() + '/api/admin/user/isReferrer';
+			//获取商品列表
+			var url_getGoodsList = getAjaxOrigin() + '/api/admin/goods/goods/query';
+			
+			layui.use([], function() {
+				//获取url ? 带参
+				var urldata = getQueryData();
+				//判断 编辑/新增
+				if(urldata.id){//带有商品，视为编辑
+					console.log('带有商品，视为编辑');
+					ajax({
+						info:'获取被编辑会员信息',
+						url:url_getMemberList,
+						data:{
+							id:urldata.id,
+							page:1,
+						},
+						type:'get',
+						success:function(data){
+							var d = data.data[0];
+							//改变其他表格
+							alertMenberForm(d);
+						}
+					})
+				}else{
+					//获取会员等级列表
+					getMenberGradeOption($('select[name="ceoRank"]'));
+					//获取职级列表
+//					getMenberPositionOption($('select[name="identity"]'));
+					//获取省份
+					ProvinceSan();
+					//收货地址选择
+					ProvinceSanAdd();
+					
+				}
+				
+				//监听提交
+				form.on('submit(formDemo)', function(data){
+					event.preventDefault();
+					var d = data.field;
+					if(d.pwd!=d.pass_two){
+						layer.msg('两次密码不想等')
+						return false;
+					}else{						
+						d.pwd = sha256(d.pwd);
+						delete d.pass_two;
+					}
+					if(!judge_userName){
+						layer.msg("该账号已注册");
+						return false;
+					}
+					if(!judge_inviter){
+						layer.msg("不存在邀请人");
+						return false;
+					}
+					ajax({
+						url:url_newMenber
+						,type:'get'
+						,info:'注册会员'
+						,data:d
+						,success:function(data){
+							layer.msg("注册成功");
+//							openPage('会员列表','pages/member/member-list.html');
+//							CloseWebPage();
+						}
+					})
+				    return false;
+				});
+				
+				//判断会员账号
+				var judge_userName = true;
+				$('input[name="userName"]').on('change',function (e) {
+					var _this = $(this);
+					var val = $(this).val();
+					if(val.length<=0){
+						_this.css({'borderColor':'#D2D2D2'});
+						judge_inviter = true;
+						return false;
+					}
+					ajax({
+						info:'判断账号是否已注册',
+						type:'get',
+						data:{userName:val},
+						url:url_menberIsTrue,
+						success:function(data){
+							if(data.data){
+								layer.msg("该账号已注册");
+								_this.css({'borderColor':'#ff0000'});
+								judge_userName = false;							
+							}else{
+								_this.css({'borderColor':'#007DDB'});
+								judge_userName = true;		
+							}
+						}
+						
+					})
+				})
+				
+				//判断邀请人
+				var judge_inviter = true;
+				$('input[name="pusername"]').on('change',function (e) {
+					var _this = $(this);
+					var val = $(this).val();
+					if(val.length<=0){
+						_this.next('input').val('');
+						_this.css({'borderColor':'#D2D2D2'});
+						judge_inviter = true;
+						return false;
+					}
+					ajax({
+						info:'判断邀请人是否穿在',
+						type:'get',
+						data:{userName:val},
+						url:url_judgeReferrer,
+						success:function(data){
+							if(data.data){
+								$('input[name="pid"]').val(data.data.id);
+								_this.css({'borderColor':'#D2D2D2'});
+								judge_inviter = true;
+							}else{
+								layer.msg("不存在邀请人");
+								$('input[name="pid"]').val('');
+								_this.css({'borderColor':'#ff0000'});
+								judge_inviter = false;
+							}
+						}
+						
+					})
+				})
+				
+				function alertMenberForm(d) {
+					$('legend').text('编辑【'+d.id+'】');
+					
+					//创建被编辑会员id input
+					$('form').prepend('<input type="hidden" name="id" value="'+d.id+'"/>');
+					//获取省份 传入默认值
+					ProvinceSan({p:d.province,c:d.city,a:d.area,})					
+					//会员账号
+					$('input[name="userName"]').attr({'value':d.userName,"disabled":"disabled"});
+					//会员昵称
+					$('input[name="trueName"]').attr({'value':d.trueName,'disabled':"disabled"});
+					//获取会员等级列表
+					getMenberGradeOption($('select[name="ceoRank"]').attr('disabled','disabled'),d.ceoRank);
+					//职级列表
+					getMenberPositionOption($('select[name="identity"]').attr({'disabled':"disabled"}),d.identity);
+					//收货地址选择  
+					ProvinceSanAdd({
+						p:d.addProvince,
+						c:d.addCity,
+						a:d.addArea,
+						noEvent:true
+					});
+					//详细地址
+					$('input[name="address"]').attr({'value':d.address,'disabled':"disabled"});
+					//推荐人
+					$('input[name="pusername"]').attr({'value':d.pidMobile,'disabled':"disabled"});
+					$('input[name="pid"]').attr({'type':'tel','value':d.pid,'disabled':"disabled"});
+					//去掉单选的默认
+					$('input[type="radio"]').removeAttr('checked');
+					//是否提现
+					$('input[name="canCash"][value="'+d.canCash+'"]').attr('checked','checked').prop('checked','checked');
+					//男女
+					$('input[name="sex"][value="'+d.sex+'"]').attr('checked','checked').prop('checked','checked');
+					//刷新单选按钮
+					form.render('radio');
+					//添加mobile框
+					$('input[name="sex"]').parents('.layui-form-item').after('<div class="layui-form-item"><label class="layui-form-label"><sup>*</sup>手机号码</label><div class="layui-input-block"><input type="tel" name="mobile" value="'+(d.mobile||'')+'" lay-verify="required|phone" placeholder="请输入手机号码" class="layui-input"></div></div>');
+					//去掉密码
+					$('input[type="password"]').parents('.layui-form-item').remove();
+					//去掉推荐人
+//					$('input[name="pusername"]').parents('.layui-form-item').remove();
+					//去掉职级列表
+//					$('select[name="identity"]').parents('.layui-form-item').remove();
+
+					//去掉 收货地址选择  
+//					$('.addProvince').parents('.layui-form-item').remove();
+//					$('input[name="address"]').parents('.layui-form-item').remove();
+					
+				}
+				
+			})
+		</script>
+
+	</body>
+
+</html>
