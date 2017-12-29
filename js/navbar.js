@@ -75,7 +75,10 @@ if(typeof layui == 'object'){
 /*
  iframe 打开页面
  * */
-function openPage(name,url) {
+function openPage(name,url,eve) {
+	var e = eve || window.event;
+	e.preventDefault();
+	console.log(name,url,eve);
 	if(!!top.indexOpenPage) {
 		event.preventDefault();
 		if(top.indexOpenPage instanceof Function || typeof top.indexOpenPage == 'function') {			

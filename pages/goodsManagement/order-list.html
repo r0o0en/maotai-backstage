@@ -156,13 +156,12 @@
 		
 		<!--订单状态-->
 		<script type="text/html" id="orderType">
-			<!--var arr_order_type = ['待付款','待发货','待收货','已完成','订单已取消','已退货'];-->
-			<p>{{arr_order_type[d.status]}}</p>
+			<p>{{shipments_type[d.status]}}</p>
 		</script>
 
 		<!--收货地址-->
 		<script type="text/html" id="address">
-			{{# var ad = JSON.parse(d.address); return ad.realname + ' '+ ad.mobile+ '<br/>' + ad.provinceText + ad.cityText + ad.areaText + ad.address }}
+			{{# var ad = d.addressModel || JSON.parse(d.address); return ad.realname + ' '+ ad.mobile+ '<br/>' + ad.provinceText + ad.cityText + ad.areaText + ad.address }}
 		</script>
 
 		<!--根据订单状态显示对应的 操作时间-->
@@ -233,7 +232,7 @@
 				<tr><td>用户ID：</td><td>{{d.userId}}</td></tr>
 				<tr><td>实际付款：</td><td>{{d.orderAmount}}</td></tr>
 				{{#
-					var ad = JSON.parse(d.address);
+					var ad = d.addressModel || JSON.parse(d.address);
 					ad  = ad.realname + ' '+ ad.mobile+ '<br/>' + ad.provinceText + ad.cityText + ad.areaText + ad.address; 
 				}}
 				<tr><td>收货人信息：</td><td>{{ad}}</td></tr>
@@ -280,11 +279,8 @@
 			var url_comfirmOrder = getAjaxOrigin() + '/api/admin/order/orderWaitForReceiving';
 			
 			//订单状态
-			var arr_order_type = ['待付款', '待发货', '待收货', '完成', '订单已取消', '退货'];
+			var shipments_type = ['待付款', '待发货', '待收货', '完成', '订单已取消', '退货'];
 			var arr_order_type_class = ['', 'cl-00c', 'cl-blue', 'cl-green', 'cl-orange', 'cl-red'];
-			//支付方式
-			var arr_pay_type = ['余额支付', '支付宝','未知'];
-
 			layui.use([], function() {
 				//开始时间
 				laydate.render({
@@ -316,7 +312,7 @@
 							,{width: 400,field: '',title: '购买商品',templet: '#goodsList'}
 							,{width: 100,field: 'orderAmount',title: '订单金额'}
 							,{width: 100,field: 'payType',title: '支付方式',templet: '<div>{{ arr_pay_type[d.payType]}}</div>'}
-							,{width:100,field:'status',  title: '订单状态',templet:'<div><span class="{{arr_order_type_class[d.status]}}">{{arr_order_type[d.status]}}</span></div>'}							
+							,{width:100,field:'status',  title: '订单状态',templet:'<div><span class="{{arr_order_type_class[d.status]}}">{{shipments_type[d.status]}}</span></div>'}							
 //							, {width: 200,field: 'userId',title: '用户ID'}
 							,{width:300,field:'address',  title: '收货人信息',templet:'#address'}
 //							,{width: 200,field: 'deliveryName',title: '配送方式',templet: '<div>{{ d.deliveryName + d.deliveryCode + "<br/>" + d.deliverySn }}</div>'}

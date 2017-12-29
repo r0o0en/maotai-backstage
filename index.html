@@ -155,20 +155,24 @@
 		</div>
 		<!-- 结构主体 end-->
 
-		<script id="navs-template" type="text/html">
-			<li class="layui-nav-item layui-nav-itemed">
-				<a class="" href="javascript:;"><i class="fa fa-cubes" aria-hidden="true" data-icon="fa-cubes"></i>{{d.name}}</a>
-				{{# if(!!d.childs&&d.childs.length>0){ }}
+		<script id="templateNavs" type="text/html">
+			{{# for(var i=0;i<d.length;i++){ }}
+			{{# var item = d[i]; }}
+			<li class="layui-nav-item {{ i==0 ? 'layui-nav-itemed' : '' }}">
+				<a class="" href="javascript:;"><i class="fa fa-cubes" aria-hidden="true" data-icon="fa-cubes"></i>{{item.name}}</a>
+				{{# if(!!item.childs&&item.childs.length>0){ }}
 				<dl class="layui-nav-child">
-					{{#  layui.each(d.childs, function(index, item){ }}
+					{{#  layui.each(item.childs,function(j,v){}}
 					<dd>
-						
-						<a onclick="openPage({{item.url}},{{item.name}})"><i class="layui-icon">&#xe68e;</i>{{item.name}}</a>
+						<a href="{{v.url}}" onclick='openPage("{{v.name}}","{{v.url}}",event)' ><i class="layui-icon">&#xe68e;</i>{{v.name}}</a>
 					</dd>
-					{{#  } }} 
+					{{#  }); }} 
 				</dl>
 				{{#  } }}
+				
+				
 			</li>
+			{{# } }}
 		</script>
 
 
@@ -179,27 +183,16 @@
 		
 		
 		<script>
-			layui.use(['laytpl'],function () {
-				//渲染 菜单模板
-				var list = $('#navs');
-				var liststr = '';
-				navs.forEach(function (val,i,arr) {
-					//layui-nav-itemed
-					liststr += '<li class="layui-nav-item">';
-					liststr += '<a class="" href="javascript:;"><i class="fa fa-cubes" aria-hidden="true" data-icon="fa-cubes"></i>'+val.name+'</a>'
-					if(!!val.childs &&val.childs.length>0){
-						liststr += '<dl class="layui-nav-child">';
-						val.childs.forEach(function (v,j) {
-							liststr += '<dd>';
-							liststr += "<a href='"+v.url+"' onclick='openPage(\""+v.name+"\",\""+v.url+"\")'><i class='layui-icon'>&#xe68e;</i>"+ v.name +"</a>"
-							liststr += '</dd>';
-						});
-						liststr += '<dl>';
-					}
-					liststr += '</li>';
+			layui.use([],function () {
+//				//渲染 菜单模板
+				var getTpl = templateNavs.innerHTML
+					,view = document.getElementById('navs');
+				laytpl(getTpl).render(navs, function(html){
+					view.innerHTML = html;
+					layui.element.render('nav');
 				});
-				list.append(liststr);
-				layui.element.render('nav');
+				
+				
 				
 				//左导航收缩
 			    $('.admin-side-toggle').on('click', function () {

@@ -16,17 +16,6 @@ window.getAjaxOrigin = function(){//返回请求接口的 origin
 	}
 	return fun;
 }();
-
-function getOrigin() { //返回项目所在的 origin
-	return location.origin;
-}
-function loginPage(){//跳转登录页
-	if(/(index)\.html/ig.test(location.pathname)){
-		location.href = './login.html';		
-	}else{
-		location.href = '../../login.html';
-	}
-}
 /*
  登录验证
  * */
@@ -184,6 +173,11 @@ var  navs = [
 /*
  各种参数
  * */
+//支付方式
+var arr_pay_type = ['未支付','余额支付', '积分支付','粮票支付'];
+arr_pay_type[11]='支付宝';
+//发货状态
+var shipments_type = ['待付款', '待发货', '待收货', '完成', '订单已取消', '退货'];
 //审核状态 
 var auditStatus = ["未审核","审核通过","拒绝"];
 //是否冻结

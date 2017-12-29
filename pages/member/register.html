@@ -356,11 +356,12 @@
 					ProvinceSanAdd({
 						p:d.addProvince,
 						c:d.addCity,
-						a:d.addArea,
-						noEvent:true
+						a:d.addArea
+//						,noEvent:true
 					});
 					//详细地址
-					$('input[name="address"]').attr({'value':d.address,'disabled':"disabled"});
+//					$('input[name="address"]').attr({'value':d.address,'disabled':"disabled"});
+					$('input[name="address"]').attr({'value':d.address});
 					//推荐人
 					$('input[name="pusername"]').attr({'value':d.pidMobile,'disabled':"disabled"});
 					$('input[name="pid"]').attr({'type':'tel','value':d.pid,'disabled':"disabled"});
