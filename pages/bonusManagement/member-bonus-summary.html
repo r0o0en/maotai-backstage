@@ -123,7 +123,6 @@
 				
 				//监听提交
 				form.on('submit(seek)', function(data){
-					//event.preventDefault();
 					var field = data.field;
 					if(field.beginTime.length>0){
 						field.beginTime = Date.parse(new Date(field.beginTime))/1000;

@@ -23,7 +23,6 @@
 		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
 		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
 		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
-		<!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 	</head>
 
 	<body>
@@ -72,7 +71,7 @@
 		
 		<!--表格操作按钮-->
 		<script type="text/html" id="templet-active">
-		  <a class="layui-btn  layui-btn-xs" lay-event="edit" href="register.html?id={{d.id}}">编辑</a>
+		  <a class="layui-btn  layui-btn-xs" lay-event="edit" href="register.html?id={{d.id}}" onclick="openPage('编辑会员','pages/member/register.html?id={{d.id}}',event)">编辑</a>
 		  <!--<a class="layui-btn layui-btn-xs {{d.canCash ==1 ? 'layui-btn-danger':''}}" lay-event="canCash">{{d.canCash ==1 ? '禁止提现':'允许提现'}}</a>-->
 		  <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>-->
 		</script>
@@ -225,7 +224,7 @@
 				    	})
 				    }else if(obj.event == 'edit'){
 				    	//编辑操作 
-				    	openPage('编辑会员','pages/member/register.html?id='+data.id+'&canCash'+data.canCash);
+//				    	openPage('编辑会员','pages/member/register.html?id='+data.id+'&canCash'+data.canCash);
 				    }
 				});
 				

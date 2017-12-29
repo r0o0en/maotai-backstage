@@ -285,9 +285,9 @@
 						$('.upload-succeed').append('<li class="layui-upload-list"><img src="'+e+'" class="layui-upload-img"><p><a class="layui-btn layui-btn-danger layui-btn-xs demo-delete">删除</a></p></li>')
 					})
 					//编辑器内容
-					console.log(data.memo);
-					console.log(HtmlUtil.htmlDecode(data.memo));
-					console.log(ue.setContent);
+//					console.log(data.memo);
+//					console.log(HtmlUtil.htmlDecode(data.memo));
+//					console.log(ue.setContent);
 					ue.ready(function() {
 					    ue.setContent(HtmlUtil.htmlDecode(data.memo), true);
 					});
@@ -361,7 +361,6 @@
 
 				//监听提交
 				form.on('submit(formSubmit)', function(data) {
-					event.preventDefault();
 					var d = data.field;
 					//获取上传成功列表,拼接字符串
 					var imgstr = '';
@@ -387,10 +386,11 @@
 								$('.upload-image-list.upload-succeed').empty();
 								$('button[type="reset"]').trigger('click');
 								openPage('商品列表','pages/goodsManagement/goods-list.html');
-//								CloseWebPage();
+								setTimeout(function () {									
+									CloseWebPage();
+								},100);
 							}
 					})
-						
 					return false;
 				});
 

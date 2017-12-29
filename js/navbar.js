@@ -80,13 +80,13 @@ function openPage(name,url,eve) {
 	e.preventDefault();
 	console.log(name,url,eve);
 	if(!!top.indexOpenPage) {
-		event.preventDefault();
 		if(top.indexOpenPage instanceof Function || typeof top.indexOpenPage == 'function') {			
 			top.indexOpenPage(name,url);
 		}
 	} else {
-		location.href = getOrigin() + '/' +workspace +'/' + url;
 		console.error(url, '没有父级窗口可用,请配置 href=url');
+		var topage = getOrigin() + '/' +workspace +'/' + url;
+		location.href = topage;
 	}
 }
 if(/\/index\.html$/ig.test(location.pathname) && document.querySelector('#home')) {
@@ -121,6 +121,7 @@ if(/\/index\.html$/ig.test(location.pathname) && document.querySelector('#home')
 			}
 		}
 		if(judge) {
+			console.log('打开新iframe');
 			//已打开的页面中没有
 			var thispage = {
 				name: name,
@@ -138,35 +139,49 @@ if(/\/index\.html$/ig.test(location.pathname) && document.querySelector('#home')
 			});
 			ul.children().last().click();
 		} else {
+			console.log('替换旧iframe');
 			ul.children().filter('[lay-id="' + thispage.id + '"]').click();
 			//一打开的页面中有
 			if(thispage.url != url) {
 				$('#' + thispage.id).attr('src', url);
 			}
 		}
+		console.log(keys);
 	}
 	window.closeIframe = function(url){
-		$('iframe').each(function (i,e) {
-			console.log($(e).attr('src') ,$(e).attr('src') == url);
+		$('iframe').each(function (i,e) {//循环删除选项卡
 			if($(e).attr('src') == url){
 				element.tabDelete('' + tabfilter + '',$(e).attr('id'));
 			} 
 		})
-	}
-	//监听tab 删除
-//	layui.use(['element'],function(){
-		layui.element.on('tabDelete(' + tabfilter + ')', function(data) {
-			var id = $(this).parent().attr('lay-id');
-			for(var i = 0; i < keys.length; i++) {
-				if(keys[i].id == id) {
-					keys.splice(i, 1);
-					break;
-				}
+		//循环删除 url 在 keys中的存储
+		var path = '';
+		if(/\?/g.test(url)) {
+			path = url.split(/\?/g)[0];
+		} else {
+			path = url.match(/[\d\D]+\.html/ig)[0];
+		}
+		$.each(keys, function(i,e) {
+			if(e.url == url || e.path == path){
+				keys.splice(i,1);	
 			}
 		});
-//	})
+		console.log(keys);
+	}
+	//监听tab 删除
+	layui.element.on('tabDelete(' + tabfilter + ')', function(data) {
+		var id = $(this).parent().attr('lay-id');
+		console.log('监听关闭iframe id',id);
+		for(var i = 0; i < keys.length; i++) {
+			if(keys[i].id == id) {
+				keys.splice(i, 1);
+				break;
+			}
+		}
+		console.log(keys);
+	});
 }else{
-	window.closeIframe = function(url){};
+//	window.closeIframe = function(url){};
 }
 
 function ajax(opt) {
@@ -373,8 +388,8 @@ function getImgurl(str) {
 }
 
 function CloseWebPage(){
-  console.log(parent.closeIframe);
  if(!!parent.closeIframe){
+ 	console.log('关闭页面链接',(location.pathname + location.search).replace('/'+workspace+'/',''));
  	parent.closeIframe((location.pathname + location.search).replace('/'+workspace+'/',''));
  	return false;
  }

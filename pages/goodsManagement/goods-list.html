@@ -23,7 +23,7 @@
 	
 	<body>
 		<blockquote class="layui-elem-quote layui-text">
-		   <a href="goods-edit.html" onclick="openPage('新增商品','pages/goodsManagement/goods-edit.html')" class="layui-btn" >添加商品</a>
+		   <a href="goods-edit.html" onclick="openPage('新增商品','pages/goodsManagement/goods-edit.html',event)" class="layui-btn" >添加商品</a>
 		   <a onclick="newOrder()" class="layui-btn layui-btn-normal" >线下录单</a>
 		</blockquote>
 		
@@ -53,7 +53,7 @@
 		<!--表格操作按钮-->
 		<script type="text/html" id="barDemo">
 		  <!--<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>-->
-		  <a class="layui-btn layui-btn-xs" lay-event="edit" onclick='openPage("编辑商品","pages/goodsManagement/goods-edit.html?id={{d.id}}")' href="goods-edit.html?id={{d.id}}">修改</a>
+		  <a class="layui-btn layui-btn-xs" lay-event="edit" onclick='openPage("编辑商品","pages/goodsManagement/goods-edit.html?id={{d.id}}",event)' href="goods-edit.html?id={{d.id}}">修改</a>
 		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
 		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="newOrder">录单</a>
 		</script>

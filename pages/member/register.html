@@ -26,11 +26,10 @@
 		          
 		<!--<blockquote class="layui-elem-quote layui-text">注册新会员</blockquote>-->
 		
-
 		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
 			<legend>注册新会员</legend>
+			<span class="layui-btn" onclick="setTimeout(function () {CloseWebPage();},100);">CloseWebPage</span>
 		</fieldset>
-
 		<form class="layui-form" action="">
 			<div class="layui-form-item">
 				<label class="layui-form-label"><sup>*</sup>会员账号</label>
@@ -245,14 +244,15 @@
 				
 				//监听提交
 				form.on('submit(formDemo)', function(data){
-					event.preventDefault();
 					var d = data.field;
-					if(d.pwd!=d.pass_two){
-						layer.msg('两次密码不想等')
-						return false;
-					}else{						
-						d.pwd = sha256(d.pwd);
-						delete d.pass_two;
+					if(!!!urldata.id){
+						if(d.pwd!=d.pass_two){
+							layer.msg('两次密码不想等')
+							return false;
+						}else{						
+							d.pwd = sha256(d.pwd);
+							delete d.pass_two;
+						}						
 					}
 					if(!judge_userName){
 						layer.msg("该账号已注册");
@@ -262,15 +262,18 @@
 						layer.msg("不存在邀请人");
 						return false;
 					}
+					console.log(d);
 					ajax({
 						url:url_newMenber
 						,type:'get'
 						,info:'注册会员'
 						,data:d
 						,success:function(data){
-							layer.msg("注册成功");
-//							openPage('会员列表','pages/member/member-list.html');
-//							CloseWebPage();
+							layer.msg("注册/修改成功");
+							openPage('会员列表','pages/member/member-list.html');
+							setTimeout(function () {
+								CloseWebPage();								
+							},100);
 						}
 					})
 				    return false;
@@ -347,7 +350,7 @@
 					//会员账号
 					$('input[name="userName"]').attr({'value':d.userName,"disabled":"disabled"});
 					//会员昵称
-					$('input[name="trueName"]').attr({'value':d.trueName,'disabled':"disabled"});
+					$('input[name="trueName"]').attr({'value':d.trueName});
 					//获取会员等级列表
 					getMenberGradeOption($('select[name="ceoRank"]').attr('disabled','disabled'),d.ceoRank);
 					//职级列表

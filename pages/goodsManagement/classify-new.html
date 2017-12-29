@@ -168,7 +168,6 @@
 				
 				//监听提交
 				form.on('submit(formDemo)', function(data) {
-					event.preventDefault();
 					var d = data.field;
 					if(d.icon.length<=0){
 						layer.msg('请选择上传图片');
@@ -191,7 +190,6 @@
 							listTable.reload();
 						}
 					})
-
 					return false;
 				});
 			

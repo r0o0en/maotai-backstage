@@ -16,6 +16,17 @@ window.getAjaxOrigin = function(){//返回请求接口的 origin
 	}
 	return fun;
 }();
+function getOrigin() {//返回项目所在的 origin
+	return location.origin;
+}
+function loginPage(){//跳转登录页
+	if(/(index)\.html/ig.test(location.pathname)){
+		location.href = './login.html';		
+	}else{
+		location.href = '../../login.html';
+	}
+}
+
 /*
  登录验证
  * */
@@ -61,7 +72,7 @@ function toLoginPage(info) {//登录过期，1s自动跳转登录页/按钮立�
 	Cookies.set(tokenname,'',{expires:0});
 	setTimeout(function() {
 		parent.window.loginPage();
-	}, 1500);
+	}, 1000);
 	console.log('toLoginPage【yes】：',info);
 	toLoginPage = function(info){
 		console.log('toLoginPage【no】：',info);

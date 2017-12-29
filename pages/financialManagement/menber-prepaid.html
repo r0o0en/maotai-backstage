@@ -190,10 +190,7 @@
 				})
 			}
 			form.on('submit(recharge)', function(data){
-				event.preventDefault();
-				event.stopPropagation();
 				var field = data.field;
-				console.log(data);
 				ajax({
 					ifno:'会员充值',
 					url:url_recharge,
@@ -202,6 +199,7 @@
 						layer.close($(data.form).parents('.layui-layer').attr('times'));
 					}
 				});
+				return false;
 			})	
 		</script>
 
