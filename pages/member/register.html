@@ -323,7 +323,8 @@
 					var _this = $(this);
 					var val = $(this).val();
 					if(val.length<=0){
-						_this.next('input').val('');
+						//_this.next('input').val('');
+						$('input[name="pid"]').val('');
 						_this.css({'borderColor':'#D2D2D2'});
 						judge_inviter = true;
 						return false;
@@ -379,8 +380,9 @@
 					//收货人姓名
 					$('input[name="realname"]').attr({'value':d.realname});
 					//推荐人
-					$('input[name="pusername"]').attr({'value':d.pidMobile,'disabled':"disabled"});
-					$('input[name="pid"]').attr({'type':'tel','value':d.pid,'disabled':"disabled"});
+					$('input[name="pusername"]').attr({'value':d.pidMobile});
+//					$('input[name="pid"]').attr({'type':'tel','value':d.pid});
+					$('input[name="pid"]').attr({'value':d.pid});
 					//去掉单选的默认
 					$('input[type="radio"]').removeAttr('checked');
 					//是否提现
