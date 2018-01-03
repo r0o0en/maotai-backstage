@@ -87,13 +87,15 @@
 		<!--旧的等级-->
 		<script type="text/html" id="templet-oldRank">
 			{{#
-				var name = '游客';
+				var name = '';
 				var dj = d.oldRank;
-				if(menberGrade){
+				if(dj>0 && dj<=10 ){
+					name = '会员';	
+				}else if( dj>10 && menberGrade){
 					$.each(menberGrade,function(i,e){
 						$.each(Object.keys(e),function(j,v){
 							if(v==dj){
-								name = e[v] +'【'+dj+'】';
+								name = e[v] ;
 							}
 						})
 					})
@@ -104,13 +106,15 @@
 		<!--新的等级-->
 		<script type="text/html" id="templet-newRank">
 			{{#
-				var name = '游客';
+				var name = '';
 				var dj = d.newRank;
-				if(menberGrade){
+				if(dj>0 && dj<=10 ){
+					name = '会员';	
+				}else if( dj>10 && menberGrade){
 					$.each(menberGrade,function(i,e){
 						$.each(Object.keys(e),function(j,v){
 							if(v==dj){
-								name = e[v] +'【'+dj+'】';
+								name = e[v] ;
 							}
 						})
 					})

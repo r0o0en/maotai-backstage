@@ -87,9 +87,11 @@
 		<!--会员星级-->
 		<script type="text/html" id="templet-ceoRank">
 			{{#
-				var name = '游客';
+				var name = '';
 				var dj = d.rank;
-				if(menberGrade){
+				if(dj>0 && dj<=10 ){
+					name = '会员';	
+				}else if( dj>10 && menberGrade){
 					$.each(menberGrade,function(i,e){
 						$.each(Object.keys(e),function(j,v){
 							if(v==dj){

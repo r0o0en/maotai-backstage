@@ -169,7 +169,6 @@ function ProvinceSan(val) { //省市三级联动   省、市、区默认值{p:va
 		//	  console.log(data.othis); //得到美化后的DOM对象
 		//	  var c = $(data.elem).parents('.layui-form-item').find('select.city');
 		if(c.length > 0) {
-			layer.msg(data.value);
 			if(data.value) {
 				getCityOption(c, data.value);
 			} else {
@@ -196,6 +195,9 @@ function getMenberGrade(fun) { //获取会员等级
 		type: 'get',
 		info: '获取会员等级列表',
 		url: url_menberGrade,
+		data:{
+			methodType:1
+		},
 		success: function(data) {
 			if(fun && typeof fun == 'function') {
 				fun(data.data, data);

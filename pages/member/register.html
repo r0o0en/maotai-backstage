@@ -28,7 +28,6 @@
 		
 		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
 			<legend>注册新会员</legend>
-			<span class="layui-btn" onclick="setTimeout(function () {CloseWebPage();},100);">CloseWebPage</span>
 		</fieldset>
 		<form class="layui-form" action="">
 			<div class="layui-form-item">
@@ -103,7 +102,7 @@
 			    </div>
 			</div>-->
 			<br /><hr /><br />
-			<div class="layui-form-item">
+			<!--<div class="layui-form-item">
 			    <label class="layui-form-label"><sup>*</sup>省市区</label>
 			    <div class="layui-input-inline">
 			      <select lay-filter="province" class="province" name="province" lay-verify="required">
@@ -122,7 +121,7 @@
 			        <option value="">请选择县/区</option>
 			      </select>
 			    </div>
-			</div>
+			</div>-->
 			<div class="layui-form-item">
 			    <label class="layui-form-label"><sup>*</sup>性别</label>
 			    <div class="layui-input-block">
@@ -145,6 +144,17 @@
 					<input type="tel" name="mobile" lay-verify="required|phone" placeholder="请输入手机号码" class="layui-input">
 				</div>
 			</div>-->
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label"><sup>*</sup>收件姓名</label>
+				<div class="layui-input-inline">
+					<input type="title" name="realname" lay-verify="required|name" placeholder="请输入收件人姓名" class="layui-input">
+				</div>
+				<label class="layui-form-label"><sup>*</sup>联系号码</label>
+				<div class="layui-input-inline">
+					<input type="tel" name="realMobile" lay-verify="required|phone" placeholder="请输入收件人手机号" class="layui-input">
+				</div>
+			</div>
 			<div class="layui-form-item">
 			    <label class="layui-form-label"><sup>*</sup>收货地址</label>
 			    <div class="layui-input-inline">
@@ -262,7 +272,6 @@
 						layer.msg("不存在邀请人");
 						return false;
 					}
-					console.log(d);
 					ajax({
 						url:url_newMenber
 						,type:'get'
@@ -348,13 +357,14 @@
 					//获取省份 传入默认值
 					ProvinceSan({p:d.province,c:d.city,a:d.area,})					
 					//会员账号
-					$('input[name="userName"]').attr({'value':d.userName,"disabled":"disabled"});
+//					$('input[name="userName"]').attr({'value':d.userName,"disabled":"disabled"});
+					$('input[name="userName"]').attr({'value':d.userName});
 					//会员昵称
 					$('input[name="trueName"]').attr({'value':d.trueName});
 					//获取会员等级列表
 					getMenberGradeOption($('select[name="ceoRank"]').attr('disabled','disabled'),d.ceoRank);
 					//职级列表
-					getMenberPositionOption($('select[name="identity"]').attr({'disabled':"disabled"}),d.identity);
+//					getMenberPositionOption($('select[name="identity"]').attr({'disabled':"disabled"}),d.identity);
 					//收货地址选择  
 					ProvinceSanAdd({
 						p:d.addProvince,
@@ -365,6 +375,10 @@
 					//详细地址
 //					$('input[name="address"]').attr({'value':d.address,'disabled':"disabled"});
 					$('input[name="address"]').attr({'value':d.address});
+					//收货人手机号
+					$('input[name="realMobile"]').attr({'value':d.realMobile});
+					//收货人姓名
+					$('input[name="realname"]').attr({'value':d.realname});
 					//推荐人
 					$('input[name="pusername"]').attr({'value':d.pidMobile,'disabled':"disabled"});
 					$('input[name="pid"]').attr({'type':'tel','value':d.pid,'disabled':"disabled"});
@@ -377,7 +391,7 @@
 					//刷新单选按钮
 					form.render('radio');
 					//添加mobile框
-					$('input[name="sex"]').parents('.layui-form-item').after('<div class="layui-form-item"><label class="layui-form-label"><sup>*</sup>手机号码</label><div class="layui-input-block"><input type="tel" name="mobile" value="'+(d.mobile||'')+'" lay-verify="required|phone" placeholder="请输入手机号码" class="layui-input"></div></div>');
+//					$('input[name="sex"]').parents('.layui-form-item').after('<div class="layui-form-item"><label class="layui-form-label"><sup>*</sup>手机号码</label><div class="layui-input-block"><input type="tel" name="mobile" value="'+(d.mobile||'')+'" lay-verify="required|phone" placeholder="请输入手机号码" class="layui-input"></div></div>');
 					//去掉密码
 					$('input[type="password"]').parents('.layui-form-item').remove();
 					//去掉推荐人

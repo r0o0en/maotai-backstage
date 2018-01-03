@@ -139,10 +139,11 @@ if(/\/index\.html$/ig.test(location.pathname) && document.querySelector('#home')
 			});
 			ul.children().last().click();
 		} else {
-			console.log('替换旧iframe');
+			console.log('切换到已有iframe');
 			ul.children().filter('[lay-id="' + thispage.id + '"]').click();
 			//一打开的页面中有
 			if(thispage.url != url) {
+				console.log('替换旧iframe');
 				$('#' + thispage.id).attr('src', url);
 			}
 		}
@@ -424,7 +425,7 @@ function restoreDate(time) {//将yyyy-mm-ss 解析为秒单位时间戳
 	if(!time){
 		return '';
 	}else{
-		var t = time.replace('-','/');
+		var t = time.replace(/\-/ig,'/');
 		return Date.parse(new Date(t))/1000;		
 	}
 }
