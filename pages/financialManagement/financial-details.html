@@ -31,8 +31,8 @@
 				
 				<div class="layui-input-inline">
 			        <select name="seekType">
-			          <option value="orderId">订单ID</option>
-			          <option value="userId">用户ID</option>
+			        	<option value="userName">会员账号</option>
+			        	<option value="orderId">订单ID</option>
 			        </select>
 			    </div>
 				<div class="layui-input-inline">
@@ -88,6 +88,7 @@
 		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
 		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			layui.use([], function() {
 				//开始时间
@@ -99,26 +100,20 @@
 				    elem: '#dateEnd'
 				});
 				
-				table.render({
-				    elem: '#list'
-				    ,url:  getAjaxOrigin() + '/api/finance/bonus/query'
+				listTable = table.render({
+				   	url:  getAjaxOrigin() + '/api/finance/bonus/query'
 				    ,method:'post'
-				    ,where:{}
-				    ,response: {
-					  statusCode: 200 //成功的状态码，默认：0
-					}
-				    ,page:true
 				    ,cols: [[
 //				      {type:'checkbox'},//开启复选
 //					  {field:'id',  title: 'ID'}
-				      {field:'userId',  title: '用户ID'}
-				      ,{field:'orderId',  title: '订单ID'}
-				      ,{field:'money',  title: '金额'}
-				      ,{field:'bonusType',  title: '收入支出的类型',templet:'<div>{{bonusType[d.bonusType]}}</div>'}
-				      ,{field:'frezzeState',  title: '是否冻结',templet:'<div>{{frezzeState[d.frezzeState]}}</div>'}
-				      ,{field:'memo',  title: '说明'}
-				      ,{field:'moneyType',  title: '钱包类型',templet:'<div>{{moneyType[d.frezzeState]}}</div>'}
-				      ,{field:'addTime',  title: '添加时间',templet:'<div>{{ parseDate(d.addTime) }}</div>'}
+				      {field:'userId',width:80,  title: '用户ID'}
+				      ,{field:'orderId',width:120,  title: '订单ID'}
+				      ,{field:'money',width:160,  title: '金额'}
+				      ,{field:'bonusType',width:120,  title: '收入支出的类型',templet:'<div>{{bonusType[d.bonusType]}}</div>'}
+				      ,{field:'frezzeState',width:100,  title: '是否冻结',templet:'<div>{{frezzeState[d.frezzeState]}}</div>'}
+				      ,{field:'memo',width:300,  title: '说明'}
+				      ,{field:'moneyType',width:100,  title: '钱包类型',templet:'<div>{{moneyType[d.frezzeState]}}</div>'}
+				      ,{field:'addTime',width:120,  title: '添加时间',templet:'<div>{{ parseDate(d.addTime) }}</div>'}
 //				      ,{field:'paymentTime',  title: '付款时间',templet:'<div>{{ parseDate(d.paymentTime) }}</div>'}
 //				      ,{field:' ',  title: 'dai'}
 //				      ,{field:'fromId',  title: '来源的用户ID'}
@@ -143,28 +138,11 @@
 				
 				
 				//监听提交
-				form.on('submit(seek)', function(data){
-					var field = data.field;
-					if(field.beginTime){
-//						field.beginTime = Date.parse(new Date(field.beginTime));
-						field.beginTime = restoreDate(field.beginTime);
-					}
-					if(field.endTime){
-//						field.endTime = Date.parse(new Date(field.endTime));
-						field.endTime = restoreDateEnd(field.endTime);
-					}
-					//拼接相关数据
-					if(field.seekType){
-						field[field.seekType] = field.seekVal;						
-					}
-					delete field.seekType;
-					delete field.seekVal;
-					//执行重载
-				   	table.reload('list', {
-					  where: field
-					});
-					return false;
-				});
+//				form.on('submit(seek)', function(data){
+//					var field = data.field;
+//					filterSeekData(field);
+//					return false;
+//				});
 				
 				
 

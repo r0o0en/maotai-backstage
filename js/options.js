@@ -1,31 +1,31 @@
 //项目名称
 var workspace= 'maotai-backstage';
 
-window.getAjaxOrigin = function(){//返回请求接口的 origin
-	var fun;
-	if(location.origin == "http://192.168.1.188"){
-		fun = function(){ 
-			return 'http://maotai.hmsh.com';
-		//	return 'http://192.168.1.245:8085';//甘佳
-		//	return 'http://192.168.1.124:8085';//雷超
+if(location.host == '192.168.1.188'){/*如果是测试连接*/
+	
+	function getAjaxOrigin(){//返回请求接口的 origin
+		return 'http://maotai.hmsh.com';
+	};
+	function loginPage(){//跳转登录页
+		if(/(index)\.html/ig.test(location.pathname)){
+			location.href = './login.html';		
+		}else{
+			location.href = '../../login.html';
 		}
-	}else if(location.origin == "http://hs1006.22ip.net:5555"){ 
-		fun = function(){ return 'http://hs1006.22ip.net:2222';}
-	}else{
-		fun = function(){ return 'http://maotai.hmsh.com';}
 	}
-	return fun;
-}();
+	
+}else{
+	function getAjaxOrigin(){//返回请求接口的 origin
+		return '';
+	};
+	function loginPage(){//跳转登录页
+		location.href = '/admin/login';
+	}
+}
 function getOrigin() {//返回项目所在的 origin
 	return location.origin;
 }
-function loginPage(){//跳转登录页
-	if(/(index)\.html/ig.test(location.pathname)){
-		location.href = './login.html';		
-	}else{
-		location.href = '../../login.html';
-	}
-}
+
 
 /*
  登录验证

@@ -32,7 +32,7 @@
 				
 				<div class="layui-input-inline">
 			        <select name="seekType">
-			          <option value="">请选择搜索项</option>
+			          <!--<option value="">请选择搜索项</option>-->
 			          <option value="userName">会员账号</option>
 			          <option value="trueName">会员昵称</option>
 			        </select>
@@ -110,6 +110,7 @@
 		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
 		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			//会员充值接口POST 
 			var url_recharge = getAjaxOrigin() + '/api/finance/recharge/add'
@@ -123,14 +124,10 @@
 				laydate.render({
 				    elem: '#dateEnd'
 				});
-				table.render({
-				    elem: '#list'
-				    ,url:  getAjaxOrigin() + '/api/finance/recharge/query'
+				
+				listTable = table.render({
+				    url:  getAjaxOrigin() + '/api/finance/recharge/query'
 				    ,method:'post'
-				    ,response: {
-					  statusCode: 200 //成功的状态码，默认：0
-					}
-				    ,page:true
 				    ,cols: [[
 //				       {field:'id',  title: 'ID'}
 				      {field:'userId',width:80,title: '用户ID'}//充值人id
@@ -149,28 +146,11 @@
 				
 				
 				//监听提交
-				form.on('submit(seek)', function(data){
-					var field = data.field;
-					if(field.beginTime){
-//						field.beginTime = Date.parse(new Date(field.beginTime));
-						field.beginTime = restoreDate(field.beginTime);
-					}
-					if(field.endTime){
-//						field.endTime = Date.parse(new Date(field.endTime));
-						field.endTime = restoreDateEnd(field.endTime);
-					}
-					//拼接相关数据
-					if(field.seekType){
-						field[field.seekType] = field.seekVal;						
-					}
-					delete field.seekType;
-					delete field.seekVal;
-					//执行重载
-				   	table.reload('list', {
-					  where: field
-					});
-					return false;
-				});
+//				form.on('submit(seek)', function(data){
+//					var field = data.field;
+//					filterSeekData(field);
+//					return false;
+//				});
 			})
 
 			

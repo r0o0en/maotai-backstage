@@ -80,6 +80,7 @@
 		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
 		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			layui.use(['laydate','table'], function() {
 				var laydate = layui.laydate;
@@ -93,17 +94,11 @@
 				    elem: '#dateEnd'
 				});
 				
-				
-				var table = layui.table;
-			
-				table.render({
-				    elem: '#list'
-				    ,url:getAjaxOrigin() + '/api/admin/bonusManage/querySum'
+				listTable = table.render({
+					
+				    url:getAjaxOrigin() + '/api/admin/bonusManage/querySum'
 				    ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-				    ,page: true //开启分页
-					,response: {
-						statusCode: 200 //成功的状态码，默认：0
-					} 
+				    
 				    ,cols: [[
 				      {field:'userName',  title: '会员账号'}
 				      ,{field:'trueName',  title: '会员昵称', sort: true}
@@ -122,22 +117,11 @@
 				});
 				
 				//监听提交
-				form.on('submit(seek)', function(data){
-					var field = data.field;
-					if(field.beginTime.length>0){
-						field.beginTime = Date.parse(new Date(field.beginTime))/1000;
-					}
-					if(field.endTime){
-						var da = new Date(field.endTime).format("yyyy-MM-dd") + " 23:59:59";
-						field.endTime = Date.parse(new Date(da))/1000;
-					}
-					//field[field.seekType] = field.seekVal;
-					//执行重载
-				   	table.reload('list', {
-					  where: field
-					});
-					return false;
-				});
+//				form.on('submit(seek)', function(data){
+//					var field = data.field;
+//					filterSeekData(field);
+//					return false;
+//				});
 			})
 		</script>
 

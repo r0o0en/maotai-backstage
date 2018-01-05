@@ -31,9 +31,9 @@
 			    
 			    <div class="layui-input-inline">
 			        <select name="seekType">
-			        	<option value="">搜索类型</option>
+			        	<!--<option value="">搜索类型</option>-->
 			        	<option value="userName">会员账号</option>
-			        	<option value="trueName">会员昵称(暂时无效)</option>
+			        	<!--<option value="trueName">会员昵称(暂时无效)</option>-->
 			        </select>
 			    </div>
 				<div class="layui-input-inline">
@@ -112,14 +112,8 @@
 				});
 					
 				listTable = table.render({
-				    elem: '#list'
-				    ,url:  getAjaxOrigin() + '/api/finance/withdrawals/query'
+				    url:  getAjaxOrigin() + '/api/finance/withdrawals/query'
 				    ,method:'post'
-				    ,where:{}
-				    ,response: {
-					  statusCode: 200 //成功的状态码，默认：0
-					}
-					,page:true
 				    ,cols: [[
 //				      {type:'checkbox'},//开启复选
 					  {field:'id',title: 'ID',width:50}
@@ -159,28 +153,11 @@
 				});	
 				
 				//监听提交
-				form.on('submit(seek)', function(data){
-					var field = data.field;
-					if(field.beginTime){
-//						field.beginTime = Date.parse(new Date(field.beginTime));
-						field.beginTime = restoreDate(field.beginTime);
-					}
-					if(field.endTime){
-//						field.endTime = Date.parse(new Date(field.endTime));
-						field.endTime = restoreDateEnd(field.endTime);
-					}
-					//拼接相关数据
-					if(field.seekType){
-						field[field.seekType] = field.seekVal;						
-					}
-					delete field.seekType;
-					delete field.seekVal;
-					//执行重载
-				   	table.reload('list', {
-					  where: field
-					});
-					return false;
-				});
+//				form.on('submit(seek)', function(data){
+//					var field = data.field;
+//					filterSeekData(field);
+//					return false;
+//				});
 				
 				function payOrReject(data,i){ //["默认","支付完成","拒绝"]
 					if(i === 2){

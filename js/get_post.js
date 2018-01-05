@@ -3,7 +3,7 @@ var url_getArea = getAjaxOrigin() + "/api/admin/config/queryArea";
 //获取会员等级列表
 var url_menberGrade = getAjaxOrigin() + '/api/admin/config/queryMemberLevel';
 //获取会员职级列表
-var url_MenberPosition = getAjaxOrigin() + '/api/admin/config/queryRank';
+var url_MenberPosition = getAjaxOrigin() + '/api/admin/config/queryIdentity';
 
 function getProvince(fun) { //获取省份
 	ajax({
@@ -296,6 +296,7 @@ function eachNullEmpty(o) {
 			delete o[i];
 		}
 	});
+	console.log(o);
 }
 
 /*

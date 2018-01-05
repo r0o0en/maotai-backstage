@@ -35,7 +35,6 @@
 				<!--<label class="layui-form-label"></label>-->
 				<div class="layui-input-inline">
 			        <select name="seekType">
-			          <option value="">搜索类型</option>
 			          <option value="userName">会员账号</option>
 			          <option value="trueName">会员昵称</option>
 			          <option value="mobile">手机号码</option>
@@ -165,22 +164,9 @@
 				laydate.render({
 				    elem: '#dateEnd'
 				});
-				//获取职级列表
 				
-				
-				var table = layui.table;
-			
 				listTable = table.render({
-				    elem: '#list'
-				    ,url: url_getMemberList
-				    ,page: true //开启分页
-				    ,request: {
-//					  pageName: 'pageNow' //页码的参数名称，默认：page
-//					  ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
-					}  
-					,response: {
-						statusCode: 200 //成功的状态码，默认：0
-					} 
+				    url: url_getMemberList
 				    ,cols: [[
 //				      {type:'checkbox'}//开启复选
 				      {field:'id', width:80,title: 'ID', sort: true}
@@ -203,10 +189,7 @@
 				    ]]
 				    
 				});
-				//监听表格复选框选择
-//				table.on('checkbox(demo)', function(obj){
-//				   console.log(obj)
-//				});
+				
 				//监听列表工具条
 				table.on('tool(listDemo)', function(obj){
 				    var data = obj.data;
@@ -231,28 +214,12 @@
 				});
 				
 				//监听提交
-				form.on('submit(seek)', function(data){
-					var field = data.field;
-					if(field.beginTime){
-//						field.beginTime = Date.parse(new Date(field.beginTime));
-						field.beginTime = restoreDate(field.beginTime);
-					}
-					if(field.endTime){
-//						field.endTime = Date.parse(new Date(field.endTime));
-						field.endTime = restoreDateEnd(field.endTime);
-					}
-					//拼接相关数据
-					if(field.seekType){
-						field[field.seekType] = field.seekVal;						
-					}
-					delete field.seekType;
-					delete field.seekVal;
-					//执行重载
-				   	table.reload('list', {
-					  where: field
-					});
-					return false;
-				});
+//				form.on('submit(seek)', function(data){
+//					var field = data.field;
+//					filterSeekData(field);
+//					return false;
+//				});
+				
 			})
 
 		</script>

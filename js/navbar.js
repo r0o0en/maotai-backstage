@@ -150,8 +150,10 @@ if(/\/index\.html$/ig.test(location.pathname) && document.querySelector('#home')
 		console.log(keys);
 	}
 	window.closeIframe = function(url){
+		var iframeid;
 		$('iframe').each(function (i,e) {//循环删除选项卡
 			if($(e).attr('src') == url){
+				iframeid = $(e).attr('id');
 				element.tabDelete('' + tabfilter + '',$(e).attr('id'));
 			} 
 		})
@@ -162,6 +164,7 @@ if(/\/index\.html$/ig.test(location.pathname) && document.querySelector('#home')
 		} else {
 			path = url.match(/[\d\D]+\.html/ig)[0];
 		}
+		console.log('closeIframe关闭',iframeid,url);
 		$.each(keys, function(i,e) {
 			if(e.url == url || e.path == path){
 				keys.splice(i,1);	
@@ -436,4 +439,64 @@ function restoreDateEnd(time) {//将yyyy-mm-ss 解析为当天最后一秒的时
 		var da = new Date(time).format("yyyy-MM-dd") + " 23:59:59";
 		return Date.parse(new Date(da))/1000;		
 	}
+}
+/*
+ 表格
+ * 
+ * */
+table.set({
+	elem: '#list'
+	,method:'get'
+	,response: {
+		statusCode: 200 //成功的状态码，默认：0
+	}
+	,page:true
+	,request: {
+		//pageName: 'pageNow' //页码的参数名称，默认：page
+		//,limitName: 'pageSize' //每页数据量的参数名，默认：limit
+	}  
+});
+
+//监听提交
+form.on('submit(seek)', function(data){
+	var field = data.field;
+	filterSeekData(field);
+	return false;
+});
+
+
+function filterSeekData(field) {
+	if(!!!field) {
+		var field = {};
+	}
+	if(field.beginTime) {
+		//field.beginTime = Date.parse(new Date(field.beginTime));
+		field.beginTime = restoreDate(field.beginTime);
+	}
+	if(field.endTime) {
+		//field.endTime = Date.parse(new Date(field.endTime));
+		field.endTime = restoreDateEnd(field.endTime);
+	}
+	
+	//拼接相关数据 - 之前搜索的设空
+//	$('select[name="seekType"] option').each(function(i, e) {
+//		if(!!$(e).attr('value') && $(e).attr('value') != field.seekType) {
+//			field[$(e).attr('value')] = '';
+//		}
+//	})
+	//拼接相关数据 -- 当前搜索的参数
+	if(field.seekType) {
+		field[field.seekType] = field.seekVal;
+//		delete field.seekType;
+//		delete field.seekVal;
+	}
+	eachNullEmpty(field);
+//	//执行重载
+	listTable.reload({
+		where: field
+		,page: {
+		    curr: 1 //重新从第 1 页开始
+		}
+	});
+	return field;
 }

@@ -202,6 +202,8 @@
 						$('#imgUpLoad').val('');
 						$('#imgDemo').attr('src',' ');
 						$('input[name="id"]').remove();
+						addClassForm.find('input[name="categoryName"]').attr('value','');
+						addClassForm.find('input[name="sort"]').attr('value','');
 					}
 				});
 				
@@ -278,15 +280,22 @@
 					//编辑，改变默认val
 					
 					$('form').prepend('<input value="'+data.id+'" type="hidden" name="id"/>');
-					addClassForm.find('input[name="categoryName"]').val(data.categoryName);
-					addClassForm.find('input[name="sort"]').val(data.sort);
+					addClassForm.find('input[name="categoryName"]').attr('value',data.categoryName);
+					addClassForm.find('input[name="sort"]').attr('value',data.sort);
 					$('#imgDemo').attr('src',data.icon);
 					$('#iconSrc').val(data.icon);
 					$('input[name="isShow"]').each(function (i,e) {
+//						if($(e).val() == data.isShow){
+//							$(e).click();
+//						}
 						if($(e).val() == data.isShow){
-							$(e).click();
+							$(e).attr('checked','checked');
+						}else{
+							$(e).removeAttr('checked');
 						}
+						
 					})
+					form.render('radio');
 				}
 			}
 			function addTwoClassHtml(parent,parentData) {

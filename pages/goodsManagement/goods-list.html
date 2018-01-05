@@ -143,7 +143,7 @@
 //					,data:{page:1}
 					,url:url_getGoodsClassAll
 					,success:function(data){
-						var lis = '<option value="">全部</option>';
+						var lis = '<option value="">全部分类</option>';
 						goodsclasslist = data.data;
 						data.data.forEach(function (val,i,arr) {
 							lis +='<option value="'+val.id+'">'+val.categoryName+'</option>';
@@ -159,15 +159,7 @@
 				
 				//列表加载
 				listTable = table.render({
-				    elem: '#list'
-				    ,url: url_getGoodsList
-				    ,method:'get'
-				    ,where:{
-				    }
-				    ,response: {
-					  statusCode: 200 //成功的状态码，默认：0
-					}
-				    ,page:true
+				    url: url_getGoodsList
 				    ,cols: [[
 //				      {type:'checkbox'},//开启复选
 					  {field:'id', width:80,title: 'ID'}
@@ -209,7 +201,10 @@
 					}
 					//执行重载
 				   	listTable.reload({
-					  where: field
+				   		page: {
+					        curr: 1 //重新从第 1 页开始
+					    },
+					  	where: field
 					});
 				});
 				

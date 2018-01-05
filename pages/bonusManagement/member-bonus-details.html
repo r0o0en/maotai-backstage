@@ -31,9 +31,9 @@
 		<form class="layui-form" action="">
 			<div class="layui-form-item layui-form-height-auto">
 				<div class="layui-input-inline">
-			        <select name="quiz">
-			          <option value="1">奖金期数</option>
-					  <option value="2">会员账号</option>
+			        <select name="seekType">
+			          <option value="periods">奖金期数</option>
+					  <option value="userName">会员账号</option>
 			          <!--
 					  <optgroup label="城市记忆">
 			            <option value="你工作的第一个城市">你工作的第一个城市</option>
@@ -47,7 +47,7 @@
 			    </div>
 			    
 			    <div class="layui-input-inline">
-			    	<input type="tel" name="other" lay-verify="" placeholder="搜索相关数据" class="layui-input">
+			    	<input type="tel" name="seekVal" lay-verify="" placeholder="搜索相关数据" class="layui-input">
 			    </div>
 			    <!--
 				<div class="layui-input-inline">
@@ -98,7 +98,7 @@
 		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
 		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
-		
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			layui.use(['laydate','table'], function() {
 				var laydate = layui.laydate;
@@ -112,18 +112,9 @@
 				    elem: '#dateEnd'
 				});
 				
-				
-				var table = layui.table;
-			
-				table.render({
-				    elem: '#list'
-				    ,url:getAjaxOrigin() + '/api/admin/bonusManage/query'
+				listTable = table.render({
+				    url:getAjaxOrigin() + '/api/admin/bonusManage/query'
 				    ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-				    ,page: true //开启分页
-					,method:'get'
-					,response: {
-						statusCode: 200 //成功的状态码，默认：0
-					} 
 				    ,cols: [[
 				      {field:'periods',  title: '期数', sort: true}
 				      ,{field:'userName',  title: '会员账号'}
@@ -141,29 +132,11 @@
 				});
 				
 				//监听提交
-				form.on('submit(seek)', function(data){
-					var field = data.field;
-					if(field.beginTime.length>0){
-						field.beginTime = Date.parse(new Date(field.beginTime))/1000;
-					}
-					if(field.endTime){
-						var da = new Date(field.endTime).format("yyyy-MM-dd") + " 23:59:59";
-						field.endTime = Date.parse(new Date(da))/1000;
-					}
-					if(field.quiz){
-						if(field.quiz == 1){
-							field.periods = field.other;
-						}else if(field.quiz == 2){
-							field.userName = field.other;
-						}
-					}
-
-					table.reload('list', {
-					  where: field
-					});
-
-					return false;
-				});
+//				form.on('submit(seek)', function(data){
+//					var field = data.field;
+//					filterSeekData(field);
+//					return false;
+//				});
 			})
 		</script>
 

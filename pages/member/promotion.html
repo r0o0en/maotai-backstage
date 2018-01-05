@@ -36,9 +36,8 @@
 				<!--<label class="layui-form-label"></label>-->
 				<div class="layui-input-inline">
 			        <select name="seekType">
-			          <option value="">搜索类型</option>
 			          <option value="userName">会员账号</option>
-			          <option value="realName">会员昵称</option>
+			          <!--<option value="realName">会员昵称</option>-->
 			        </select>
 			   </div>
 				<div class="layui-input-inline">
@@ -52,8 +51,8 @@
 			        <input type="text" class="layui-input" name="endTime"  id="dateEnd"  placeholder="结束注册时间" >
 			    </div>
 			    <div class="layui-input-inline">
-			        <select name="rank" class="select-rank">
-			          <option value="">请选择会员级别</option>
+			        <select name="newIdentity" class="select-rank">
+			          <option value="">请选择晋升明细</option>
 			        </select>
 			    </div>
 			    
@@ -89,16 +88,13 @@
 			{{#
 				var name = '';
 				var dj = d.oldIdentity;
-				if(dj>0 && dj<=10 ){
-					name = '会员';	
-				}else if( dj>10 && menberGrade){
-					$.each(menberGrade,function(i,e){
-						$.each(Object.keys(e),function(j,v){
-							if(v==dj){
-								name = e[v];
-							}
-						})
-					})
+				if(!!menberPosition){
+					$.each(menberPosition,function(i,e){
+						if(i==dj){
+							name = e ;
+							return false;
+						}
+					});
 				}
 				return name ;
 			}}
@@ -108,16 +104,13 @@
 			{{#
 				var name = '';
 				var dj = d.newIdentity;
-				if(dj>0 && dj<=10 ){
-					name = '会员';	
-				}else if( dj>10 && menberGrade){
-					$.each(menberGrade,function(i,e){
-						$.each(Object.keys(e),function(j,v){
-							if(v==dj){
-								name = e[v] ;
-							}
-						})
-					})
+				if(!!menberPosition){
+					$.each(menberPosition,function(i,e){
+						if(i==dj){
+							name = e ;
+							return false;
+						}
+					});
 				}
 				return name ;
 			}}
@@ -138,6 +131,7 @@
 				return d ;
 			}}
 		</script>
+		
 		<!--推荐人-->
 		<script type="text/html" id="templet-pid">
 			{{# return  d.pid == 0 ? "" : ("【"+ d.pid +"】"+ d.pidMobile) }}
@@ -152,25 +146,31 @@
 			var url_getMemberList = getAjaxOrigin() + '/api/admin/user/queryUserUpgradeIdentityList';
 			
 			// 存储会员星级/级别
-			var menberGrade ;
-			getMenberGrade(function(data){
-				menberGrade =  data;
+//			var menberGrade ;
+//			getMenberGrade(function(data){
+//				menberGrade =  data;
+//				listTable.reload();
+//				var str = '<option value="">请选择会员级别</option>';
+//				$.each(data, function(i,e) {
+//					$.each(Object.keys(e),function(j,v){
+//						str += '<option value="'+v+'">'+e[v]+'</option>';
+//					})
+//				});
+//				$('.select-rank').html(str);
+//				form.render('select');
+//			});
+			// 存储会员职级
+			var menberPosition;
+			getMenberPosition(function(data){
+				menberPosition =  data;
 				listTable.reload();
-				var str = '<option value="">请选择会员级别</option>';
+				var str = '<option value="">请选择晋升等级</option>';
 				$.each(data, function(i,e) {
-					$.each(Object.keys(e),function(j,v){
-						str += '<option value="'+v+'">'+e[v]+'</option>';
-					})
+					str += '<option value="'+i+'">'+e+'</option>';
 				});
 				$('.select-rank').html(str);
 				form.render('select');
 			});
-			// 存储会员职级
-//			var menberPosition;
-//			getMenberPosition(function(data){
-//				menberPosition =  data;
-//				listTable.reload();
-//			});
 			
 			layui.use([], function() {
 				//开始时间
@@ -186,16 +186,7 @@
 				var table = layui.table;
 			
 				listTable = table.render({
-				    elem: '#list'
-				    ,url: url_getMemberList
-				    ,page: true //开启分页
-				    ,request: {
-//					  pageName: 'pageNow' //页码的参数名称，默认：page
-//					  ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
-					}  
-					,response: {
-						statusCode: 200 //成功的状态码，默认：0
-					} 
+				    url: url_getMemberList
 				    ,cols: [[
 //				    	{field:'id',  title: 'ID'},
 						{field:'userId',  width:80, title: '会员ID'}
@@ -240,28 +231,11 @@
 				});
 				
 				//监听提交
-				form.on('submit(seek)', function(data){
-					var field = data.field;
-					if(field.beginTime){
-//						field.beginTime = Date.parse(new Date(field.beginTime));
-						field.beginTime = restoreDate(field.beginTime);
-					}
-					if(field.endTime){
-//						field.endTime = Date.parse(new Date(field.endTime));
-						field.endTime = restoreDateEnd(field.endTime);
-					}
-					//拼接相关数据
-					if(field.seekType){
-						field[field.seekType] = field.seekVal;						
-					}
-					delete field.seekType;
-					delete field.seekVal;
-					//执行重载
-				   	table.reload('list', {
-					  where: field
-					});
-					return false;
-				});
+//				form.on('submit(seek)', function(data){
+//					var field = data.field;
+//					filterSeekData(field);
+//					return false;
+//				});
 			})
 
 		</script>
