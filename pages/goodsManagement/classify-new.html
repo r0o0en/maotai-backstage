@@ -25,297 +25,352 @@
 
 	<body>
 		<blockquote class="layui-elem-quote layui-text">
-		   <a href="" target="_blank">操作提示</a>
+			<a href="" target="_blank">操作提示</a>
 		</blockquote>
-		
+
 		<div class="layui-tab" lay-filter="test1">
-		  <ul class="layui-tab-title">
-		    <li lay-id='list' class="list layui-this">分类列表</li>
-		  	<li lay-id='add'>添加分类</li>
-		  </ul>
-		  <div class="layui-tab-content">
-		  	<!--分类列表 start-->
-		    <div class="layui-tab-item layui-show">
-		    	<div >
-		    		<a class="layui-btn refresh-form">刷新</a>
-		    	</div>
-		    	<table class="layui-hide" id="list" lay-filter="listDemo"></table>
-		    </div>
-		    <!--分类列表 end-->
-		    
-		    <!--添加分类 star-->
-		    <div class="layui-tab-item">
-		    	<form class="layui-form" id="addClassForm">
-					<div class="layui-form-item">
-				 		<div class="layui-inline">
-					    	<label class="layui-form-label">父级分类</label>
-						    <div class="layui-input-inline">
-						      <input type="text" disabled name="pname"  placeholder="无" class="layui-input layui-disabled" style="background-color: #E6E6E6;">
-						      <input type="hidden" disabled name="pid" value="0"  placeholder="父级分类ID" class="layui-input layui-disabled">
-							</div>
-				 		</div>
-				 	</div>
-				 	<div class="layui-form-item">
-				 		<div class="layui-inline">
-					    	<label class="layui-form-label">分类标题</label>
-						    <div class="layui-input-inline">
-						      <input type="text" name="categoryName" lay-verify="required|goodsClassName"  placeholder="请输入标题" class="layui-input">
-							</div>
-				 		</div>
+			<ul class="layui-tab-title">
+				<li lay-id='list' class="list layui-this">分类列表</li>
+				<li lay-id='add'>添加分类</li>
+			</ul>
+			<div class="layui-tab-content">
+				<!--分类列表 start-->
+				<div class="layui-tab-item layui-show">
+					<div>
+						<a class="layui-btn refresh-form">刷新</a>
 					</div>
-				 	<div class="layui-form-item">
-				 		<div class="layui-inline">
-					    	<label class="layui-form-label">排序规则</label>
-						    <div class="layui-input-inline">
-						      <input type="text" value="0"  name="sort"  placeholder="排序规则" class="layui-input" lay-verify="required|goodsClassSort">
-							</div>
-						    <div class="layui-form-mid layui-word-aux">商品的排序，显示的时候越大的显示在前面，0-100</div>
-				 		</div>
-				 	</div>
-					<div class="layui-form-item">
-					    <label class="layui-form-label">是否显示</label>
-					    <div class="layui-input-block">
-					      <input type="radio" name="isShow" value="1" title="显示" checked="">
-					      <input type="radio" name="isShow" value="0" title="隐藏">
-					    </div>
-					</div>
-					
-				 	<div class="layui-form-item layui-form-height-auto">
-				 		<div class="layui-inline">
-					    	<label class="layui-form-label">分类图片</label>
-						    <div class="layui-input-inline">
-						    	<input type="hidden" name="icon" id='iconSrc'>
-						      	<div class="layui-upload">
-								  <button type="button" class="layui-btn" id="imgUpLoad">上传图片</button>
-								  <div class="layui-upload-list">
-								    <img class="layui-upload-img" id="imgDemo">
-								    <p id="demoText"></p>
-								  </div>
-								</div>  
-							</div>
-				 		</div>
-					</div>
-					
-					<!-- 提交 -->
-					<div class="layui-form-item">
-						<label class="layui-form-label"></label>
-						<div class="layui-input-inline">
-							<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-							<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					<table class="layui-hide" id="list" lay-filter="listDemo"></table>
+				</div>
+				<!--分类列表 end-->
+
+				<!--添加分类 star-->
+				<div class="layui-tab-item">
+					<form class="layui-form" id="addClassForm">
+						<div id="addClassifyView">
+							<!--<div class="layui-form-item">
+					 		<div class="layui-inline">
+						    	<label class="layui-form-label">父级分类</label>
+							    <div class="layui-input-inline">
+							      <input type="text" disabled name="pname"  placeholder="无" class="layui-input layui-disabled" style="background-color: #E6E6E6;">
+							      <input type="hidden" disabled name="pid" value="0"  placeholder="父级分类ID" class="layui-input layui-disabled">
+								</div>
+					 		</div>
+					 	</div>
+					 	<div class="layui-form-item">
+					 		<div class="layui-inline">
+						    	<label class="layui-form-label">分类标题</label>
+							    <div class="layui-input-inline">
+							      <input type="text" name="categoryName" lay-verify="required|goodsClassName"  placeholder="请输入标题" class="layui-input">
+								</div>
+					 		</div>
 						</div>
-					</div>
-		
-				</form>
-		    </div>
-		    <!--添加分类 end-->
-		    
-		  </div>
+					 	<div class="layui-form-item">
+					 		<div class="layui-inline">
+						    	<label class="layui-form-label">排序规则</label>
+							    <div class="layui-input-inline">
+							      <input type="text" value="0"  name="sort"  placeholder="排序规则" class="layui-input" lay-verify="required|goodsClassSort">
+								</div>
+							    <div class="layui-form-mid layui-word-aux">商品的排序，显示的时候越大的显示在前面，0-100</div>
+					 		</div>
+					 	</div>
+						<div class="layui-form-item">
+						    <label class="layui-form-label">是否显示</label>
+						    <div class="layui-input-block">
+						      <input type="radio" name="isShow" value="1" title="显示" checked="">
+						      <input type="radio" name="isShow" value="0" title="隐藏">
+						    </div>
+						</div>-->
+						</div>
+						<div class="layui-form-item layui-form-height-auto">
+							<div class="layui-inline">
+								<label class="layui-form-label">分类图片</label>
+								<div class="layui-input-inline">
+									<input type="hidden" name="icon" id='iconSrc'>
+									<div class="layui-upload">
+										<button type="button" class="layui-btn" id="imgUpLoad">上传图片</button>
+										<div class="layui-upload-list">
+											<img class="layui-upload-img" id="imgDemo">
+											<p id="demoText"></p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- 提交 -->
+						<div class="layui-form-item">
+							<label class="layui-form-label"></label>
+							<div class="layui-input-inline">
+								<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+								<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+							</div>
+						</div>
+
+					</form>
+				</div>
+				<!--添加分类 end-->
+
+			</div>
 		</div>
-		
-		
+
 		<script type="text/html" id="template-active">
-			<a class="layui-btn layui-btn-xs" lay-event="edit" >编辑</a>
-			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete" >删除</a>
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+		</script>
+
+		<script type="text/html" id="templateAddClassify">
+			{{#console.log('渲染参数',d);}}
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">父级分类</label>
+					<div class="layui-input-inline">
+						{{# if( !!d.pid || typeof d.pid =='number' ){}}
+							<input type="text" disabled  placeholder="有父级分类" value="{{d.pid}}" class="layui-input layui-disabled" style="background-color: #E6E6E6;">
+							<input type="hidden" disabled name="pid" value="{{d.pid}}" placeholder="父级分类ID" class="layui-input layui-disabled">
+						{{# }else{ }}
+							<input type="text" disabled placeholder="无父级分类" class="layui-input layui-disabled" style="background-color: #E6E6E6;">
+							<input type="hidden" disabled name="pid" value="0" placeholder="父级分类ID" class="layui-input layui-disabled">
+						{{# } }}
+						
+						{{# if( !!d.id || typeof d.id =='number' ){}}
+							<input type="hidden" disabled name="id" value="{{d.id}}" placeholder="分类ID（编辑）" class="layui-input layui-disabled">
+						{{# } }}
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">分类标题</label>
+					<div class="layui-input-inline">
+						{{# if( !!d.categoryName || typeof d.categoryName =='string' ){ }}
+							<input type="text" name="categoryName" lay-verify="required|goodsClassName" value="{{d.categoryName}}" placeholder="请输入标题" class="layui-input">
+						{{# }else{ }}
+							<input type="text" name="categoryName" lay-verify="required|goodsClassName" placeholder="请输入标题" class="layui-input">
+						{{# } }}
+					</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">排序规则</label>
+					<div class="layui-input-inline">
+						<input type="text" value="{{ !!d.sort ? d.sort : 0 }}" name="sort" placeholder="排序规则" class="layui-input" lay-verify="required|goodsClassSort">
+					</div>
+					<div class="layui-form-mid layui-word-aux">商品的排序，显示的时候越大的显示在前面，0-100</div>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否显示</label>
+				<div class="layui-input-block">
+					{{# if( typeof d.isShow =='number' && d.isShow === 0 ){ }}
+						<input type="radio" name="isShow" value="1" title="显示">
+						<input type="radio" name="isShow" value="0" title="隐藏" checked="">
+					{{# }else{ }}
+						<input type="radio" name="isShow" value="1" title="显示" checked="">
+						<input type="radio" name="isShow" value="0" title="隐藏">
+					{{# } }}
+				</div>
+			</div>
+			
 		</script>
 
 		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
 		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
-		
+
 		<script>
-			
-			
 			//上传图片url
-			var  url_upLoadImg  = getAjaxOrigin()+'/upload/ueUpLoad' ;
+			var url_upLoadImg = getAjaxOrigin() + '/upload/ueUpLoad';
 			//添加分类url
-			var  url_addClass  = getAjaxOrigin()+'/api/admin/goods/category/addOrMod' ;
+			var url_addClass = getAjaxOrigin() + '/api/admin/goods/category/addOrMod';
 			//删除分类url
-			var  url_deleteClass  = getAjaxOrigin()+'/api/admin/goods/category/del' ;
+			var url_deleteClass = getAjaxOrigin() + '/api/admin/goods/category/del';
 			//获取商品分类列表
-			var  url_getGoodsClassList = getAjaxOrigin() + '/api/admin/goods/category/query';
+			var url_getGoodsClassList = getAjaxOrigin() + '/api/admin/goods/category/query';
 			//获取所有商品分类
-			var  url_getGoodsClassAll = getAjaxOrigin() + '/api/admin/goods/category/list';
-			
+			var url_getGoodsClassAll = getAjaxOrigin() + '/api/admin/goods/category/list';
+
 			layui.use([], function() {
-				 //普通图片上传
+				
+				//普通图片上传
 				var uploadInst = upload.render({
-				    elem: '#imgUpLoad'
-				    ,url: url_upLoadImg
-				    ,field:"upfile"
-				    ,before: function(obj){
-				      //预读本地文件示例，不支持ie8
-				      obj.preview(function(index, file, result){
-				        $('#imgDemo').attr('src', result); //图片链接（base64）
-				      });
-				    }
-				    ,done: function(res){
-				      //如果上传失败
-				      if(res.code > 0){
-				        return layer.msg('上传失败');
-				      }
-				      //上传成功
-				      $('#iconSrc').val(res.url);
-				    }
-				    ,error: function(){
-				      //演示失败状态，并实现重传
-				      var demoText = $('#demoText');
-				      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
-				      demoText.find('.demo-reload').on('click', function(){
-				        uploadInst.upload();
-				      });
-				    }
+					elem: '#imgUpLoad',
+					url: url_upLoadImg,
+					field: "upfile",
+					before: function(obj) {
+						//预读本地文件示例，不支持ie8
+						obj.preview(function(index, file, result) {
+							$('#imgDemo').attr('src', result); //图片链接（base64）
+						});
+					},
+					done: function(res) {
+						//如果上传失败
+						if(res.code > 0) {
+							return layer.msg('上传失败');
+						}
+						//上传成功
+						$('#iconSrc').val(res.url);
+					},
+					error: function() {
+						//显示失败状态，并实现重传
+						var demoText = $('#demoText');
+						demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+						demoText.find('.demo-reload').on('click', function() {
+							uploadInst.upload();
+						});
+					}
 				});
+				
 				
 				//监听提交
 				form.on('submit(formDemo)', function(data) {
 					var d = data.field;
-					if(d.icon.length<=0){
+					if(d.icon.length <= 0) {
 						layer.msg('请选择上传图片');
 						return false;
 					}
 					delete d.upfile;
 					ajax({
-						info:'添加/修改分类',
-						infosuccess:true,
-						type:'get',
+						info: '添加/修改分类',
+						infosuccess: true,
+						type: 'get',
 						url: url_addClass,
 						data: d,
 						success: function(data) {
-							// 重置
-							$('button[type="reset"]').trigger('click');
-							$('#imgUpLoad').val('');
-							$('#imgDemo').attr('src',' ');
-							$('input[name="id"]').remove();
+							// 切换选项卡+重置table
 							element.tabChange('test1', 'list');
 							listTable.reload();
 						}
 					})
 					return false;
 				});
-			
 				
-				 //监听Tab切换，以改变地址hash值
-				element.on('tab(test1)', function(o){
-					if(o.index != 1){
-						//切换到非添加分类时 重置
-						$('button[type="reset"]').trigger('click');
-						$('#imgUpLoad').val('');
-						$('#imgDemo').attr('src',' ');
-						$('input[name="id"]').remove();
-						addClassForm.find('input[name="categoryName"]').attr('value','');
-						addClassForm.find('input[name="sort"]').attr('value','');
+				//先渲染一次添加分类表单
+				alterAddClassForm({});
+				//监听Tab切换，
+				element.on('tab(test1)', function(o) {
+					
+					if(o.index != 1) {
+						//切换到非添加分类时 清空图片，重新渲染表单
+						alterAddClassForm({});
 					}
+					
 				});
-				
+
 				//列表加载
-				listTable= table.render({
-				    elem: '#list'
-				    ,url:  url_getGoodsClassList 
-				    ,method:'get'
-				    ,where:{
-				    	state:0
-				    }
-				    ,response: {
-					  statusCode: 200 //成功的状态码，默认：0
-					}
-				    ,page:true
-				    ,cols: [[
-				      //{type:'checkbox'},//开启复选
-					  {field:'id', width:60,  title: 'ID'}
-					  ,{field:'icon', width:100,title: 'icon',templet:'<div><img class="layui-table-icon" src="{{d.icon}}"/></div>'}
-					  ,{field:'categoryName',  title: '分类标题'}
-					  ,{field:'sort',  title: '排序规则'}
-					  ,{field:'isShow',  title: '是否显示',templet:'<div>{{isShow[d.isShow]}}</div>'}
-					  ,{field:'', title: '操作',templet:'#template-active'}
-				    ]]
+				listTable = table.render({
+					elem: '#list',
+					url: url_getGoodsClassList,
+					method: 'get',
+					where: {
+						state: 0
+					},
+					response: {
+						statusCode: 200 //成功的状态码，默认：0
+					},
+					page: true,
+					cols: [
+						[
+							//{type:'checkbox'},//开启复选
+							{
+								field: 'id',
+								width: 60,
+								title: 'ID'
+							}, {
+								field: 'icon',
+								width: 100,
+								title: 'icon',
+								templet: '<div><img class="layui-table-icon" src="{{d.icon}}"/></div>'
+							}, {
+								field: 'categoryName',
+								title: '分类标题'
+							}, {
+								field: 'sort',
+								title: '排序规则'
+							}, {
+								field: 'isShow',
+								title: '是否显示',
+								templet: '<div>{{isShow[d.isShow]}}</div>'
+							}, {
+								field: '',
+								title: '操作',
+								templet: '#template-active'
+							}
+						]
+					]
 				});
 				//刷新按钮
-				$('.refresh-form').on('click',function (e) {
+				$('.refresh-form').on('click', function(e) {
 					listTable.reload();
 				})
 				//监听列表工具条
-				table.on('tool(listDemo)', function(obj){
-				    var data = obj.data;
-				    if(obj.event == 'delete'){
-				    	//删除
-				    	deleteClass(data);
-				    }else if(obj.event == 'edit'){
-				    	//编辑操作 
-				    	alterAddClassForm(data);
-				    }
+				table.on('tool(listDemo)', function(obj) {
+					var data = obj.data;
+					if(obj.event == 'delete') {
+						//删除
+						deleteClass(data);
+					} else if(obj.event == 'edit') {//编辑操作
+						//跳转到 添加分类
+						element.tabChange("test1", "add");
+						//根据参数渲染
+						alterAddClassForm(data);
+					}
 				});
-				
+
 			})
 			var addClassForm = $('#addClassForm');
-			function deleteClass(data){
+
+			function deleteClass(data) {
 				//删除
 				layer.open({
-				    		content:'真的删除分类【'+data.categoryName	+'】么'
-				    		,btn:['删除','取消']
-				    		,yes:function(index,layero){
-				    			ajax({
-				    				type:'get'
-				    				,info:'删除商品分类'
-				    				,infosuccess:true
-				    				,url:url_deleteClass
-				    				,data:{
-				    					id:data.id
-				    				}
-				    				,success:function(){
-				    					listTable.reload();
-				    				}
-				    			})
-				    			layer.close(index);	
-				    		}
+					content: '真的删除分类【' + data.categoryName + '】么',
+					btn: ['删除', '取消'],
+					yes: function(index, layero) {
+						ajax({
+							type: 'get',
+							info: '删除商品分类',
+							infosuccess: true,
+							url: url_deleteClass,
+							data: {
+								id: data.id
+							},
+							success: function() {
+								listTable.reload();
+							}
+						})
+						layer.close(index);
+					}
 				});
 			}
-			function alterAddClassForm(data){
-				//跳转到 添加分类
-				element.tabChange("test1", "add");
-				if(data.pid){
-					//如果有父级id ,是添加二级
-					addClassForm.find('input[name="pname"]').val(data.pid);
-					addClassForm.find('input[name="pid"]').val(data.pid);
-				}else{
-					//编辑，改变默认val
+
+			function alterAddClassForm(data) {
+				var getTpl = templateAddClassify.innerHTML
+					,view = document.getElementById('addClassifyView');
 					
-					$('form').prepend('<input value="'+data.id+'" type="hidden" name="id"/>');
-					addClassForm.find('input[name="categoryName"]').attr('value',data.categoryName);
-					addClassForm.find('input[name="sort"]').attr('value',data.sort);
-					$('#imgDemo').attr('src',data.icon);
-					$('#iconSrc').val(data.icon);
-					$('input[name="isShow"]').each(function (i,e) {
-//						if($(e).val() == data.isShow){
-//							$(e).click();
-//						}
-						if($(e).val() == data.isShow){
-							$(e).attr('checked','checked');
-						}else{
-							$(e).removeAttr('checked');
-						}
-						
-					})
+				laytpl(getTpl).render(data, function(html){
+					view.innerHTML = html;
 					form.render('radio');
-				}
+				});
+				
+				$('#iconSrc').val(data.icon||'');			
+				$('#imgDemo').attr('src', data.icon||'');
 			}
-			function addTwoClassHtml(parent,parentData) {
+
+			function addTwoClassHtml(parent, parentData) {
 				ajax({
-					info:'请求二级分类列表'
-					,infosuccess:true
-					,type:'get'
-					,url:url_getClassList
-					,data:{
-						pid:parentData.id
-					}
-					,success:function(data){
-						layer.msg('成功');	
+					info: '请求二级分类列表',
+					infosuccess: true,
+					type: 'get',
+					url: url_getClassList,
+					data: {
+						pid: parentData.id
+					},
+					success: function(data) {
+						layer.msg('成功');
 					}
 				})
-				
+
 			}
-			
-			
-		
 		</script>
 
 	</body>

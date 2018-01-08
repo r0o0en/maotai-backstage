@@ -51,7 +51,7 @@
 			        <input type="text" class="layui-input" name="endTime"  id="dateEnd"  placeholder="结束注册时间" >
 			    </div>
 			    <div class="layui-input-inline">
-			        <select name="rank" class="select-rank">
+			        <select name="newRank" class="select-rank">
 			          <option value="">请选择会员级别</option>
 			        </select>
 			    </div>
@@ -158,6 +158,7 @@
 				var str = '<option value="">请选择会员级别</option>';
 				$.each(data, function(i,e) {
 					$.each(Object.keys(e),function(j,v){
+						if(v==0){return false;}
 						str += '<option value="'+v+'">'+e[v]+'</option>';
 					})
 				});

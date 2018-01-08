@@ -85,6 +85,7 @@
 			
 							<div class="layui-input-inline">
 								<select name="seekType">
+									<option value="buyerName">会员账号</option>
 									<option value="orderSn">订单编号</option>
 								</select>
 							</div>
@@ -342,9 +343,11 @@
 				table.on('tool(listDemo)', function(obj) {
 					var data = obj.data;
 					if(obj.event == 'delete') {
+						console.log("obj.event == 'delete'");
 						//取消订单
 						deleteOrder(data);
 					} else if(obj.event == 'payment') {
+						console.log("obj.event == 'payment'");
 						//付款
 						paymentOrder(data);
 					} else if(obj.event == 'delivery') {
@@ -364,6 +367,7 @@
 			})
 
 			function deleteOrder(data) {
+				console.log('取消',data);
 				//取消
 				layer.open({
 					content: '真的取消订单【' + data.orderSn + '】么?',
@@ -386,7 +390,31 @@
 					}
 				});
 			}
+//			function deleteOrder(data) {
+//				//取消
+//				layer.open({
+//					content: '确认订单【' + data.orderSn + '】已收货?',
+//					btn: ['确认', '取消'],
+//					yes: function(index, layero) {
+//						ajax({
+//							type: 'get',
+//							info: '确认订单已收货',
+//							infosuccess: true,
+//							url: url_deleteOrder,
+//							data: {
+//								orderId: data.id,
+//								userId: data.userId
+//							},
+//							success: function() {
+//								listTable.reload();
+//							}
+//						})
+//						layer.close(index);
+//					}
+//				});
+//			}
 			function paymentOrder(data) {
+				console.log('付款',data);
 				//付款
 				layer.open({
 					content: '确认订单【' + data.orderSn + '】付款?',
@@ -410,9 +438,9 @@
 				});
 			}
 			function comfirmOrder(data) {
-				//确认收款
+				//确认收货
 				layer.open({
-					content: '确认订单【' + data.orderSn + '】收货?',
+					content: '确认订单【' + data.orderSn + '】已收货?',
 					btn: ['确认', '取消'],
 					yes: function(index, layero) {
 						ajax({
@@ -432,29 +460,7 @@
 					}
 				});
 			}
-			function deleteOrder(data) {
-				//取消
-				layer.open({
-					content: '确认订单【' + data.orderSn + '】已收货?',
-					btn: ['确认', '取消'],
-					yes: function(index, layero) {
-						ajax({
-							type: 'get',
-							info: '确认订单已收货',
-							infosuccess: true,
-							url: url_deleteOrder,
-							data: {
-								orderId: data.id,
-								userId: data.userId
-							},
-							success: function() {
-								listTable.reload();
-							}
-						})
-						layer.close(index);
-					}
-				});
-			}
+
 			function deliveryOrder(data) {
 				//确认发货弹窗
 				layer.open({
