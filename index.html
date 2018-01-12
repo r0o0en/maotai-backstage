@@ -63,7 +63,7 @@
 			        <dl	 class="layui-nav-child">
 			          <!--<dd><a href="">基本资料</a></dd>
 			          <dd><a href="">安全设置</a></dd>-->
-			          <dd><a onclick="logout()">安全退出</a></dd>
+			          <dd><a onclick="logout()" style="cursor: pointer;">安全退出</a></dd>
 			        </dl>
 			      </li>
 			    </ul>
@@ -185,13 +185,25 @@
 		
 		<script>
 			layui.use([],function () {
+				
 //				//渲染 菜单模板
+				$('.power').text(Cookies.get(tokenPowerName));
 				var getTpl = templateNavs.innerHTML
 					,view = document.getElementById('navs');
-				laytpl(getTpl).render(navs, function(html){
-					view.innerHTML = html;
-					layui.element.render('nav');
-				});
+					
+				if(Cookies.get(tokenAdminName) == 'admin'){
+					laytpl(getTpl).render(navs, function(html){
+						view.innerHTML = html;
+						layui.element.render('nav');
+					});	
+				}else{//财务
+					laytpl(getTpl).render(navs_caiwu, function(html){
+						view.innerHTML = html;
+						layui.element.render('nav');
+					});
+				}
+				
+				
 				
 				
 				
@@ -247,12 +259,18 @@
 				
 			});
 			function logout(){
+				var url_logout = getAjaxOrigin() + '/api/admin/logout';
 				ajax({
-					url:getAjaxOrigin() + '/api/admin/logout',
+					info:'安全退出',
+					infosuccess:true,
+					url:url_logout,
 					success:function(data){
-						
+						Cookies.set(tokenname,'');
+						Cookies.set(tokenAdminName,'');
+						Cookies.set(tokenPowerName,'');
+						location.href = 'login.html';
 					}
-				});
+				})
 			}
 		</script>
 

@@ -1,8 +1,6 @@
-//项目名称
-var workspace= 'maotai-backstage';
-
 if(location.host == '192.168.1.188'){/*如果是测试连接*/
-	
+	//项目名称
+	var workspace= 'maotai-backstage';	
 	function getAjaxOrigin(){//返回请求接口的 origin
 		return 'http://maotai.hmsh.com';
 	};
@@ -13,8 +11,8 @@ if(location.host == '192.168.1.188'){/*如果是测试连接*/
 			location.href = '../../login.html';
 		}
 	}
-	
 }else{
+	var workspace= '';
 	function getAjaxOrigin(){//返回请求接口的 origin
 		return '';
 	};
@@ -38,6 +36,8 @@ var cookiesOptions = {
 	expires: 60*30
 };
 var tokenname = 'tokenPC';
+var tokenAdminName = 'adminNamePC';
+var tokenPowerName = 'powerNamePC';
 //是否为不需要验证的页面
 var isLoginPage = /(login)\.html/ig.test(location.pathname);
 //是否存在cookies
@@ -80,16 +80,16 @@ function toLoginPage(info) {//登录过期，1s自动跳转登录页/按钮立�
 }
 function delayedToken(){//延长token
 	Cookies.set(tokenname, isToken,cookiesOptions);
-	Cookies.set('name', Cookies.get('name'),cookiesOptions);
-	Cookies.set('power', Cookies.get('power'),cookiesOptions);
+	Cookies.set(tokenAdminName, Cookies.get(tokenAdminName),cookiesOptions);
+	Cookies.set(tokenPowerName, Cookies.get(tokenPowerName),cookiesOptions);
 }
 function loginSaveToken(data) {//登录记录token
-	if(/login\.html/ig.test(location.href)){
+//	if(/login\.html/ig.test(location.href)){
 		//登录页
 		Cookies.set(tokenname,data.data.token,cookiesOptions);
-		Cookies.set('name',data.data.name,cookiesOptions);
-		Cookies.set('power',data.data.power,cookiesOptions);
-	}
+		Cookies.set(tokenAdminName,data.data.adminName,cookiesOptions);
+		Cookies.set(tokenPowerName,data.data.powerName,cookiesOptions);
+//	}
 }
 
 //首页导航菜单
@@ -172,6 +172,48 @@ var  navs = [
 				name:'新增商品',
 				url:'pages/goodsManagement/goods-edit.html'
 			},
+			{
+				name:'订单管理',
+				url:'pages/goodsManagement/order-list.html'
+			}
+		]
+	}
+]
+
+var  navs_caiwu = [
+	{
+		name:'财务管理',
+		childs:[
+			{
+				name:'会员充值管理',
+				url:'pages/financialManagement/menber-prepaid.html'
+			},
+			{
+				name:'会员提现管理',
+				url:'pages/financialManagement/menber-withdrawal.html'
+			},
+			{
+				name:'财务明细管理',
+				url:'pages/financialManagement/financial-details.html'
+			}
+		]
+	},
+	{
+		name:'奖金管理',
+		childs:[
+			{
+				name:'会员奖金明细',
+				url:'pages/bonusManagement/member-bonus-details.html'
+			},
+			{
+				name:'会员奖金汇总',
+				url:'pages/bonusManagement/member-bonus-summary.html'
+			}
+		]
+	},
+	{
+		name:'商品管理',
+		childs:[
 			{
 				name:'订单管理',
 				url:'pages/goodsManagement/order-list.html'

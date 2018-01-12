@@ -41,6 +41,7 @@ function mySuccessCallback(n,data){
 		}
 		return false;
 	}
+	delayedToken();
 }
 function myCompleteCallback(n){
 	tableLoadClose();
