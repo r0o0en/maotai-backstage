@@ -25,9 +25,10 @@
 	<body>
 		<blockquote class="layui-elem-quote layui-text">
 		   <button class="layui-btn" onclick="goRecharge()">充值</button>
+		   <button class="layui-btn" lay-submit lay-filter="exp">导出</button>
 		</blockquote>
 		
-		<form class="layui-form" >
+		<form class="layui-form" method="post" target="_blank">
 			<div class="layui-form-item layui-form-height-auto">
 				
 				<div class="layui-input-inline">
@@ -180,7 +181,12 @@
 					}
 				});
 				return false;
-			})	
+			})
+			form.on('submit(exp)', function(data){
+				$('form').attr('action', getAjaxOrigin() + '/api/finance/withdrawals/export')
+		        $("form")[0].submit();
+				return false;
+			});
 		</script>
 
 	</body>

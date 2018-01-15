@@ -132,12 +132,11 @@ if(/\/index\.html$/ig.test(location.pathname) && document.querySelector('#home')
 			keys.push(thispage);
 			//新增tab
 			layui.element.tabAdd(tabfilter, {
-				title: thispage.name,
-				content: '<iframe src="' + url + '" id="' + thispage.id + '"></iframe>' //支持传入html
-					,
-				id: thispage.id
+				title: thispage.name
+				,content: '<iframe src="' + url + '" id="' + thispage.id + '"></iframe>' //支持传入html
+				,id: thispage.id
 			});
-			ul.children().last().click();
+			ul.children().not('span').last().click();
 		} else {
 			console.log('切换到已有iframe');
 			ul.children().filter('[lay-id="' + thispage.id + '"]').click();
