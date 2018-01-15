@@ -61,7 +61,7 @@ if(typeof layui == 'object'){
 		},
 		price:function(val,_this){
 			if(parseFloat(val)<0){
-				return $(_this).attr('placeholder')+'不能小于0';
+				return $(_this).attr('placeholdzer')+'不能小于0';
 			}else if(!/^\d+(\.\d+)?$/ig.test(val)){
 				return $(_this).attr('placeholder') + '只能包含数字和小数点';
 			}
@@ -205,7 +205,8 @@ function ajax(opt) {
 	var o = $.extend(true, {
 			type: 'post',
 			dataType: 'json',
-			infosuccess: false
+			infosuccess:false,//显示提示
+			errorCallback:false,//返回结果为 code!=200 code ==403 等结果也将执行回调函数 
 		}, opt),
 		before = $.extend({}, opt);
 	//加载遮罩
@@ -248,6 +249,9 @@ function ajax(opt) {
 				toLoginPage();
 			} else {
 				layer.msg(data.msg ? '提示：' + data.msg : '请求失败，稍后重试');
+			}
+			if(before.errorCallback && before.success instanceof Function ){
+				before.success(data, status, xhr);
 			}
 			return false;
 		}

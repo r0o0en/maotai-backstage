@@ -272,6 +272,11 @@
 						layer.msg("不存在邀请人");
 						return false;
 					}
+					console.log(d);
+					if(d.pusername == d.userName){
+						layer.msg("自己不能作为邀请人");
+						return false;
+					}
 					ajax({
 						url:url_newMenber
 						,type:'get'
@@ -334,16 +339,18 @@
 						type:'get',
 						data:{userName:val},
 						url:url_judgeReferrer,
+						errorCallback:true,
 						success:function(data){
-							if(data.data){
-								$('input[name="pid"]').val(data.data.id);
-								_this.css({'borderColor':'#D2D2D2'});
-								judge_inviter = true;
+							if(data.code == 200){
+								if(data.data){
+									$('input[name="pid"]').val(data.data.id);
+									_this.css({'borderColor':'#D2D2D2'});
+									judge_inviter = true;
+								}										
 							}else{
-								layer.msg("不存在邀请人");
 								$('input[name="pid"]').val('');
 								_this.css({'borderColor':'#ff0000'});
-								judge_inviter = false;
+								judge_inviter = false;								
 							}
 						}
 					})

@@ -210,28 +210,35 @@
 				//左导航收缩
 			    $('.admin-side-toggle').on('click', function () {
 			        var sideWidth = $('#admin-side').width();
-			        if (sideWidth === 200) {
-			            $('#admin-body').animate({
-			                left: '0'
-			            }); //admin-footer
-			            $('#admin-footer').animate({
-			                left: '0'
-			            });
-			            $('#admin-side').animate({
-			                width: '0'
-			            });
+			        console.log($('.layui-layout-body').hasClass('hide-nav'));
+			        if ($('.layui-layout-body').hasClass('hide-nav')) {
+			        	$('.layui-layout-body').removeClass('hide-nav');
+//			            $('#admin-body').animate({
+//			                left: '0'
+//			            }); //admin-footer
+//			            $('#admin-footer').animate({
+//			                left: '0'
+//			            });
+//			            $('#admin-side').animate({
+//			                width: '0'
+//			            });
 			        } else {
-			            $('#admin-body').animate({
-			                left: '200px'
-			            });
-			            $('#admin-footer').animate({
-			                left: '200px'
-			            });
-			            $('#admin-side').animate({
-			                width: '200px'
-			            });
+			        	$('.layui-layout-body').addClass('hide-nav');
+//			            $('#admin-body').animate({
+//			                left: '200px'
+//			            });
+//			            $('#admin-footer').animate({
+//			                left: '200px'
+//			            });
+//			            $('#admin-side').animate({
+//			                width: '200px'
+//			            });
 			        }
 			    });
+			    //移动端点击收起左导航
+			    $('#admin-side').on('click','.layui-nav-child',function (e) {
+			    	$('.layui-layout-body').removeClass('hide-nav');
+			    })
 			     //全屏
 			    $('.admin-side-full').on('click', function () {
 			        var docElm = document.documentElement;

@@ -1,5 +1,8 @@
 html,body,.layui-layout-admin{
-    min-width: 900px;
+//  min-width: 900px;
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 /*
   首页 如果 没有固定顶部、底部， 就给 body、left占据顶部、底部面积 
@@ -31,6 +34,73 @@ html,body,.layui-layout-admin{
     }
 }
 
+//pc下收起导航
+#admin-header,
+#admin-body,
+#admin-footer,
+#admin-side{
+    -webkit-transition: 0.4s ease;
+    -moz-transition: 0.4s ease;
+    -ms-transition: 0.4s ease;
+    -o-transition: 0.4s ease;
+    transition: 0.4s ease;        
+}
+#admin-side{
+    left: 0;
+}
+.hide-nav(){
+    #admin-body{
+        left: 0;
+    }
+    #admin-footer{
+        left: 0;
+    }
+    #admin-side{
+        width: 0;
+    }
+}
+@media screen and (min-width: 900px) {
+    .layui-layout-body.hide-nav{
+        .hide-nav();
+    }    
+}
+@media screen and (max-width: 899px) {
+    @header-h:50px;//头部高度
+//  .layui-layout-body{
+        #admin-header{
+            height: @header-h;
+            .layui-logo,
+            .layui-nav-item{
+                line-height: @header-h;
+            }
+            .layui-layout-right{
+                display: none;
+            }
+            .layui-layout-left{
+                right: 0;left: auto;
+                .layui-nav-item:not(:first-child){
+                    display: none;
+                }
+            }
+        }
+        #admin-side{
+            left: -210px;
+            top: @header-h;
+            z-index: 3;
+//          height: 0px;
+        }
+        #admin-body{
+            top: @header-h;
+            left: 0;
+        }
+        
+//  }
+    .layui-layout-body.hide-nav{
+        #admin-side{
+            left: 0;
+        }
+    }
+}
 
 ///* 顶部 */
 //.layui-layout-admin .layui-header {
