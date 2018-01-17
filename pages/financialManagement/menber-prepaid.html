@@ -25,10 +25,9 @@
 	<body>
 		<blockquote class="layui-elem-quote layui-text">
 		   <button class="layui-btn" onclick="goRecharge()">充值</button>
-		   <button class="layui-btn" lay-submit lay-filter="exp">导出</button>
 		</blockquote>
 		
-		<form class="layui-form" method="post" target="_blank">
+		<form class="layui-form">
 			<div class="layui-form-item layui-form-height-auto">
 				
 				<div class="layui-input-inline">
@@ -132,16 +131,16 @@
 				    ,cols: [[
 //				       {field:'id',  title: 'ID'}
 				      {field:'userId',width:80,title: '用户ID'}//充值人id
-				      ,{field:'rechargeSn',  title: '充值单号'}
-				      ,{field:'userName',  title: '会员账号'}
-				      ,{field:'trueName',  title: '会员昵称'}
-				      ,{field:'money',  title: '充值金额'}
-				      ,{field:'moneyType',  title: '充值金额类型',templet:'<div>{{moneyType[d.moneyType]}}</div>'}
-				      ,{field:'rechargeType',  title: '充值类型',templet:'<div>{{rechargeType[d.rechargeType]}}</div>'}
-				      ,{field:'status', title: '审核状态',templet:'<div>{{auditStatus[d.status]}}</div>'}
-				      ,{field:'addTime',  title: '充值时间',templet:'<div>{{ parseDate(d.addTime) }}</div>'}
-				      ,{field:'checkTime',  title: '处理时间',templet:'<div>{{ parseDate(d.checkTime) }}</div>'}
-				      ,{field:'memo',  title: '备注'}
+				      ,{field:'rechargeSn',width:160,  title: '充值单号'}
+				      ,{field:'userName',width:120,  title: '会员账号'}
+				      ,{field:'trueName',width:120,  title: '会员昵称'}
+				      ,{field:'money',width:120,  title: '充值金额'}
+				      ,{field:'moneyType',width:100,  title: '充值金额类型',templet:'<div>{{moneyType[d.moneyType]}}</div>'}
+				      ,{field:'rechargeType',width:100,  title: '充值类型',templet:'<div>{{rechargeType[d.rechargeType]}}</div>'}
+				      ,{field:'status',width:100, title: '审核状态',templet:'<div>{{auditStatus[d.status]}}</div>'}
+				      ,{field:'addTime',width:120,  title: '充值时间',templet:'<div>{{ parseDate(d.addTime) }}</div>'}
+				      ,{field:'checkTime',width:120,  title: '处理时间',templet:'<div>{{ parseDate(d.checkTime) }}</div>'}
+				      ,{field:'memo',width:200,  title: '备注'}
 				    ]]
 				});
 				
@@ -182,11 +181,7 @@
 				});
 				return false;
 			})
-			form.on('submit(exp)', function(data){
-				$('form').attr('action', getAjaxOrigin() + '/api/finance/withdrawals/export')
-		        $("form")[0].submit();
-				return false;
-			});
+			
 		</script>
 
 	</body>

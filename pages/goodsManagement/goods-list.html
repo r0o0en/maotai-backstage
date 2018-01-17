@@ -123,6 +123,8 @@
 			var  url_getGoodsClassList = getAjaxOrigin() + '/api/admin/goods/category/query';
 			//获取所有商品分类
 			var  url_getGoodsClassAll = getAjaxOrigin() + '/api/admin/goods/category/list';
+			//获取会员列表
+			var url_getMemberList = getAjaxOrigin() + '/api/admin/user/query'
 			//录单
 			var url_newOrder = getAjaxOrigin() + '/api/admin/order/offlineDealOrder';
 			
@@ -193,20 +195,21 @@
 				});
 				
 				//监听提交
-				form.on('submit(seek)', function(data){
-					event.preventDefault();
-					var field = data.field;
-					if(!field.goodsName){
-						delete field.goodsName;
-					}
-					//执行重载
-				   	listTable.reload({
-				   		page: {
-					        curr: 1 //重新从第 1 页开始
-					    },
-					  	where: field
-					});
-				});
+//				form.on('submit(seek)', function(data){
+//					event.preventDefault();
+//					var field = data.field;
+//					if(!field.goodsName){
+//						delete field.goodsName;
+//					}
+//					//执行重载
+//				   	listTable.reload({
+//				   		page: {
+//					        curr: 1 //重新从第 1 页开始
+//					    },
+//					  	where: field
+//					});
+//					return false;
+//				});
 				
 				
 				//监听列表工具条
@@ -276,7 +279,40 @@
 				var field = data.field;
 				console.log(field);
 				ajax({
-					ifno: '线下录单',
+					info:'查询邀请人',
+					type:'get',
+					url: url_getMemberList,
+					data: {
+						page:1,
+						limit:10,
+						mobile:field.mobile
+					},
+					success:function(da){
+						if(!!!da.data || !!da.data && da.data.length<=0){
+							layer.msg('用户【'+field.mobile+'】不存在');
+							return false;
+						}
+						if(!!!da.data[0].pid){
+							layer.msg('用户【'+field.mobile+'】没有邀请人，不允许下单');
+							return false;
+						}
+						ajax({
+							info: '线下录单',
+							type:'get',
+							url: url_newOrder,
+							data: field,
+							success: function(d) {
+								layer.msg('录单成功！');
+								layer.close($(data.form).parents('.layui-layer').attr('times'));
+							}
+						});
+//						luDan(field,data);	
+					}
+				})
+			})
+			function luDan(field,data) {
+				ajax({
+					info: '线下录单',
 					type:'get',
 					url: url_newOrder,
 					data: field,
@@ -285,7 +321,7 @@
 						layer.close($(data.form).parents('.layui-layer').attr('times'));
 					}
 				});
-			})
+			}
 		</script>
 
 	</body>

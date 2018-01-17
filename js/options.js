@@ -8,14 +8,19 @@ if(location.host == '192.168.1.188'){/*如果是测试连接*/
 //	function loginPage(){
 //		location.href = location.origin +'/'+ workspace +'/login.html'; 
 //	}
-	if(parent!=self){
+	console.log(/(index)\.html/ig.test(self.location.pathname)+'|'+/(index)\.html/ig.test(parent.location.pathname) );
+	if(/(index)\.html/ig.test(self.location.pathname)){
 		function loginPage(){
 			location.href = './login.html'; 
+		}
+	}else if( /(index)\.html/ig.test(parent.location.pathname) ){
+		function loginPage(){
+			parent.location.href = '../../login.html'; 
 		}
 	}else{
 		function loginPage(){
 			location.href = '../../login.html'; 
-		}		
+		}
 	}
 }else{
 	var workspace= '';
@@ -183,7 +188,7 @@ var  navs = [
 		]
 	}
 ]
-
+//财务
 var  navs_caiwu = [
 	{
 		name:'财务管理',
@@ -225,7 +230,38 @@ var  navs_caiwu = [
 		]
 	}
 ]
-
+//采购
+var  navs_caigou = [
+	{
+		name:'商品管理',
+		childs:[
+			{
+				name:'分类管理',
+				url:'pages/goodsManagement/classify-new.html'
+			},
+			{
+				name:'商品列表',
+				url:'pages/goodsManagement/goods-list.html'
+			},
+			{
+				name:'新增商品',
+				url:'pages/goodsManagement/goods-edit.html'
+			}
+		]
+	}
+]
+//采购
+var  navs_wuliu = [
+	{
+		name:'商品管理',
+		childs:[
+			{
+				name:'订单管理',
+				url:'pages/goodsManagement/order-list.html'
+			}
+		]
+	}
+]
 
 /*
  各种参数
@@ -233,6 +269,7 @@ var  navs_caiwu = [
 //支付方式
 var arr_pay_type = ['未支付','余额支付', '积分支付','粮票支付'];
 arr_pay_type[11]='支付宝';
+arr_pay_type[13]='快钱支付';
 //发货状态
 var shipments_type = ['待付款', '待发货', '待收货', '完成', '订单已取消', '退货'];
 //审核状态 
@@ -250,6 +287,7 @@ bonusType[1] = '余额提现';
 bonusType[2] = '余额奖金';
 bonusType[3] = '余额充值';
 bonusType[4] = '余额购物';
+bonusType[5] = '提现拒绝';
 bonusType[12] = '积分奖金';
 bonusType[13] = '积分充值';
 bonusType[14] = '积分购物';

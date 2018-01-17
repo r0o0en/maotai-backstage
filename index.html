@@ -191,22 +191,28 @@
 				var getTpl = templateNavs.innerHTML
 					,view = document.getElementById('navs');
 					
-				if(Cookies.get(tokenAdminName) == 'admin'){
+				if(Cookies.get(tokenPowerName) == '总管'){
 					laytpl(getTpl).render(navs, function(html){
 						view.innerHTML = html;
 						layui.element.render('nav');
 					});	
-				}else{//财务
+				}else if(Cookies.get(tokenPowerName) == '财务'){//财务
 					laytpl(getTpl).render(navs_caiwu, function(html){
 						view.innerHTML = html;
 						layui.element.render('nav');
 					});
+				}else if(Cookies.get(tokenPowerName) == '采购'){//caigou
+					laytpl(getTpl).render(navs_caigou, function(html){
+						view.innerHTML = html;
+						layui.element.render('nav');
+					});
+				}else if(Cookies.get(tokenPowerName) == '物流'){//wuliu
+					laytpl(getTpl).render(navs_wuliu, function(html){
+						view.innerHTML = html;
+						layui.element.render('nav');
+					});
 				}
-				
-				
-				
-				
-				
+
 				//左导航收缩
 			    $('.admin-side-toggle').on('click', function () {
 			        var sideWidth = $('#admin-side').width();

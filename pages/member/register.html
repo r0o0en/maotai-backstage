@@ -81,10 +81,12 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label"><sup>*</sup>推荐人</label>
 				<div class="layui-input-block">
-					<div class="layui-input-inline">
+					<input type="tel" name="pusername"  lay-verify="required|phone"  placeholder="请输入推荐人编号" class="layui-input">
+					<input type="hidden" name="pid" class="layui-input" />
+					<!--<div class="layui-input-inline">
 						<input type="tel" name="pusername"  lay-verify="required|phone"  placeholder="请输入推荐人编号" class="layui-input">
 					</div>
-					<div class="layui-input-inline"><input type="hidden" name="pid" class="layui-input" /></div>
+					<div class="layui-input-inline"><input type="hidden" name="pid" class="layui-input" /></div>-->
 					
 				</div>
 			</div>
@@ -332,6 +334,13 @@
 						$('input[name="pid"]').val('');
 						_this.css({'borderColor':'#D2D2D2'});
 						judge_inviter = true;
+						return false;
+					}
+					if($('input[name="userName"]').val() == $('input[name="pusername"]').val()){
+						$('input[name="pid"]').val('');
+						_this.css({'borderColor':'#D2D2D2'});
+						judge_inviter = true;
+						layer.msg('不能使用自己作为邀请人');
 						return false;
 					}
 					ajax({

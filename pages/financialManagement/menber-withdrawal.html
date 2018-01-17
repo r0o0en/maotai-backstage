@@ -23,10 +23,10 @@
 
 	<body>
 		<blockquote class="layui-elem-quote layui-text">
-		   <a href="" target="_blank">操作提示</a>
+		   <button class="layui-btn" lay-submit lay-filter="exp">导出</button>
 		</blockquote>
 		
-		<form class="layui-form" >
+		<form class="layui-form"  method="post" target="_blank">
 			<div class="layui-form-item layui-form-height-auto">
 			    
 			    <div class="layui-input-inline">
@@ -151,7 +151,11 @@
 				    	payOrReject(data,0);
 				    }
 				});	
-				
+				form.on('submit(exp)', function(data){
+					$('form').attr('action', getAjaxOrigin() + '/api/finance/withdrawals/export')
+			        $("form")[0].submit();
+					return false;
+				});
 				//监听提交
 //				form.on('submit(seek)', function(data){
 //					var field = data.field;

@@ -294,8 +294,9 @@
 					height: "700px",
 					cols: [[
 							//				      {type:'checkbox'},//开启复选
-							{width:80,field:'id', title: 'ID'},
-							{width: 200,field: 'orderSn',title: '订单编号'}
+//							{width:80,field:'id', title: 'ID'},
+							{width: 160,field: 'orderSn',title: '订单编号'}
+							, {width: 120,field: 'buyerName',title: '会员账号'}
 							,{width: 400,field: '',title: '购买商品',templet: '#goodsList'}
 							,{width: 100,field: 'orderAmount',title: '订单金额'}
 							,{width: 100,field: 'payType',title: '支付方式',templet: '<div>{{ arr_pay_type[d.payType]}}</div>'}
@@ -333,12 +334,13 @@
 				});
 
 				//监听提交
-				form.on('submit(seek)', function(data) {
-					event.preventDefault();
-					var field = data.field;
-					filterSeekData(field);
-					return false;
-				});
+//				form.on('submit(seek)', function(data) {
+//					event.preventDefault();
+//					var field = data.field;
+//					filterSeekData(field);
+//					return false;
+//				});
+
 				//监听列表工具条
 				table.on('tool(listDemo)', function(obj) {
 					var data = obj.data;
