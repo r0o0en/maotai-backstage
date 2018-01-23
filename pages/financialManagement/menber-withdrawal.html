@@ -30,14 +30,14 @@
 			<div class="layui-form-item layui-form-height-auto">
 			    
 			    <div class="layui-input-inline">
-			        <select name="seekType">
+			        <select name="seekType"  lay-filter="seek-select-option" class="seek-select-option">
 			        	<!--<option value="">搜索类型</option>-->
 			        	<option value="userName">会员账号</option>
 			        	<!--<option value="trueName">会员昵称(暂时无效)</option>-->
 			        </select>
 			    </div>
 				<div class="layui-input-inline">
-			    	<input type="text" name="seekVal" placeholder="相关数据" class="layui-input">
+			    	<input type="tel" name="seekVal" placeholder="相关数据" class="layui-input seek-select-val">
 			    </div>
 			    
 			    <div class="layui-input-inline">
@@ -151,9 +151,10 @@
 				    	payOrReject(data,0);
 				    }
 				});	
+				//导出
 				form.on('submit(exp)', function(data){
 					$('form').attr('action', getAjaxOrigin() + '/api/finance/withdrawals/export')
-			        $("form")[0].submit();
+					$("form")[0].submit();
 					return false;
 				});
 				//监听提交

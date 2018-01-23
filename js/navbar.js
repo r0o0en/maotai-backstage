@@ -440,7 +440,7 @@ function restoreDateEnd(time) {//将yyyy-mm-ss 解析为当天最后一秒的时
 		return '';
 	}else{
 		var da = new Date(time).format("yyyy-MM-dd") + " 23:59:59";
-		return Date.parse(new Date(da))/1000;		
+		return Date.parse(new Date(da))/1000;	
 	}
 }
 /*
@@ -460,12 +460,22 @@ table.set({
 	}  
 });
 
+
+//监听搜索选项
+$('.seek-select-val').attr('name',$('.seek-select-option').val());
+form.on('select(seek-select-option)', function(data){
+	//console.log(data.elem); //得到select原始DOM对象
+	//console.log(data.value); //得到被选中的值
+	//console.log(data.othis); //得到美化后的DOM对象
+	$('.seek-select-val').attr('name',data.value);
+}); 
 //监听提交
 form.on('submit(seek)', function(data){
 	var field = data.field;
 	filterSeekData(field);
 	return false;
 });
+
 
 
 function filterSeekData(field) {
@@ -488,11 +498,11 @@ function filterSeekData(field) {
 //		}
 //	})
 	//拼接相关数据 -- 当前搜索的参数
-	if(field.seekType) {
-		field[field.seekType] = field.seekVal;
-//		delete field.seekType;
-//		delete field.seekVal;
-	}
+//	if(field.seekType) {
+//		field[field.seekType] = field.seekVal;
+////		delete field.seekType;
+////		delete field.seekVal;
+//	}
 	eachNullEmpty(field);
 //	//执行重载
 	listTable.reload({

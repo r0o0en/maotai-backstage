@@ -31,7 +31,7 @@
 		<form class="layui-form" action="">
 			<div class="layui-form-item layui-form-height-auto">
 				<div class="layui-input-inline">
-			        <select name="seekType">
+			        <select name="seekType"  lay-filter="seek-select-option" class="seek-select-option">
 			          <option value="periods">奖金期数</option>
 					  <option value="userName">会员账号</option>
 			          <!--
@@ -47,7 +47,7 @@
 			    </div>
 			    
 			    <div class="layui-input-inline">
-			    	<input type="tel" name="seekVal" lay-verify="" placeholder="搜索相关数据" class="layui-input">
+			    	<input type="tel" name="seekVal" placeholder="相关数据" class="layui-input seek-select-val">
 			    </div>
 			    <!--
 				<div class="layui-input-inline">

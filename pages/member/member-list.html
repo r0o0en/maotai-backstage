@@ -35,14 +35,14 @@
 			<div class="layui-form-item layui-form-height-auto">
 				<!--<label class="layui-form-label"></label>-->
 				<div class="layui-input-inline">
-			        <select name="seekType">
+			        <select name="seekType"  lay-filter="seek-select-option" class="seek-select-option">
 			          <option value="userName">会员账号</option>
 			          <option value="trueName">会员昵称</option>
 			          <option value="mobile">手机号码</option>
 			        </select>
 			   	</div>
 				<div class="layui-input-inline">
-			    	<input type="text" name="seekVal" placeholder="相关数据" class="layui-input">
+			    	<input type="tel" name="seekVal" placeholder="相关数据" class="layui-input seek-select-val">
 			    </div>
 			    
 			    <div class="layui-input-inline">
@@ -222,7 +222,53 @@
 //				});
 				
 			})
-
+			
+			function jishi(s) {//计时秒
+//				var t = new Date(time) || new Date("2018/01/19 18:00:00");
+				var t = new Date().getTime() + s*1000;
+				console.log('过期时间：',t.format('yyyy-MM-dd hh:mm:ss'));
+				var js_s = 1000;//除以秒
+				var js_m = js_s*60;//除以分
+				var js_h = js_m*60;//除以小时
+				djs =  setInterval(function () {
+					var now = new Date();
+					now = now.getTime();
+					if(t<=now){
+						alert('过期');
+						clearInterval(djs);
+						return false;
+					}
+					//时间戳差距
+					var gap = t - now;
+					
+					//计算小时
+					var h = gap/js_h;
+					if(h<1){
+						h=0;
+					}else{
+						h = parseInt(h);
+						gap -= h*js_h;
+					}
+					//计算分钟
+					var m = gap/js_m;
+					if(m<1){
+						m = 0;
+					}else{
+						m = parseInt(m);
+						gap -= m*js_m;
+					}
+					//计算秒
+					var s = gap/js_s;
+					if(s<1){
+						s = 0;
+					}else{
+						s = parseInt(s);
+						gap -= s*js_s;
+					}
+					console.log('还有',h,'小时',m,'分钟',s,'秒');
+				},1000);
+				
+			}
 		</script>
 
 	</body>

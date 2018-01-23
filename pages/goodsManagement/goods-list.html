@@ -306,22 +306,9 @@
 								layer.close($(data.form).parents('.layui-layer').attr('times'));
 							}
 						});
-//						luDan(field,data);	
 					}
 				})
 			})
-			function luDan(field,data) {
-				ajax({
-					info: '线下录单',
-					type:'get',
-					url: url_newOrder,
-					data: field,
-					success: function(d) {
-						layer.msg('录单成功！');
-						layer.close($(data.form).parents('.layui-layer').attr('times'));
-					}
-				});
-			}
 		</script>
 
 	</body>
