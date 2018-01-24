@@ -31,9 +31,7 @@
 			<div class="layui-form-item layui-form-height-auto">
 			    
 			    <div class="layui-input-inline">
-			        <select name="categoryId">
-			        	
-			        </select>
+			        <select name="categoryId" title="存储ajax获取的商品分类"></select>
 			    </div>
 
 				<div class="layui-input-inline">
@@ -130,15 +128,7 @@
 			
 			//存储 商品分类列表
 			var goodsclasslist = [];
-			layui.use([], function() {
-				//开始时间
-				laydate.render({
-				    elem: '#dateStart'
-				});
-				//结束时间
-				laydate.render({
-				    elem: '#datend'
-				});			
+			layui.use([], function() {		
 				//获取商品分类列表
 				ajax({
 					type:'get'
@@ -225,7 +215,7 @@
 				    	//录单操作 
 				    	newOrder(data);
 				    }
-				});	
+				});
 			})
 			function alterAddGoods(data) {}
 			function deleteGoods(data){

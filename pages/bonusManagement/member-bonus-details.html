@@ -31,49 +31,24 @@
 		<form class="layui-form" action="">
 			<div class="layui-form-item layui-form-height-auto">
 				<div class="layui-input-inline">
-			        <select name="seekType"  lay-filter="seek-select-option" class="seek-select-option">
-			          <option value="periods">奖金期数</option>
-					  <option value="userName">会员账号</option>
-			          <!--
-					  <optgroup label="城市记忆">
-			            <option value="你工作的第一个城市">你工作的第一个城市</option>
-			          </optgroup>
-			          <optgroup label="学生时代">
-			            <option value="你的工号">你的工号</option>
-			            <option value="你最喜欢的老师">你最喜欢的老师</option>
-			          </optgroup>
-					  -->
+			        <select lay-filter="seek-select-option" class="seek-select-option">
+			        	<option value="userName">会员账号</option>
+			        	<option value="periods">奖金期数</option>
 			        </select>
 			    </div>
-			    
 			    <div class="layui-input-inline">
-			    	<input type="tel" name="seekVal" placeholder="相关数据" class="layui-input seek-select-val">
-			    </div>
-			    <!--
+					<input type="tel" placeholder="相关数据" class="layui-input seek-select-val">
+				</div>
+				
 				<div class="layui-input-inline">
-			    	<input type="tel" name="phone" lay-verify="" placeholder="推荐人编号" class="layui-input">
-			    </div>
-			    -->
-			    <div class="layui-input-inline">
-			        <input type="text" class="layui-input" name="beginTime" id="dateStart"  placeholder="开始时间" >
-			    </div>
-			    <div class="layui-input-inline">
-			        <input type="text" class="layui-input" name="endTime" id="dateEnd"  placeholder="结束时间" >
-			    </div>
-			    <!--
+					<input type="text" id="dateStart" class="layui-input" placeholder="开始时间">
+					<input type="text" name="beginTime" placeholder="开始时间戳" class="beginTime timestamp">
+				</div>
 				<div class="layui-input-inline">
-			        <select name="quiz">
-			          <option value="">全部</option>
-			          <optgroup label="城市记忆">
-			            <option value="你工作的第一个城市">你工作的第一个城市</option>
-			          </optgroup>
-			          <optgroup label="学生时代">
-			            <option value="你的工号">你的工号</option>
-			            <option value="你最喜欢的老师">你最喜欢的老师</option>
-			          </optgroup>
-			        </select>
-			    </div>
-				-->
+					<input type="text" id="dateEnd" class="layui-input" placeholder="结束时间">
+					<input type="text" name="endTime" placeholder="结束时间戳" class="endTime timestamp">
+				</div>
+				<!-- 提交 -->
 			    <div class="layui-input-inline">
 					<button type="submit" class="layui-btn" lay-submit="" lay-filter="seek">立即提交</button>
 					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
@@ -100,17 +75,7 @@
 		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
 		<script>
-			layui.use(['laydate','table'], function() {
-				var laydate = layui.laydate;
-
-				//开始时间
-				laydate.render({
-				    elem: '#dateStart'
-				});
-				//结束时间
-				laydate.render({
-				    elem: '#dateEnd'
-				});
+			layui.use([], function() {
 				
 				listTable = table.render({
 				    url:getAjaxOrigin() + '/api/admin/bonusManage/query'
@@ -131,12 +96,6 @@
 				    ]]
 				});
 				
-				//监听提交
-//				form.on('submit(seek)', function(data){
-//					var field = data.field;
-//					filterSeekData(field);
-//					return false;
-//				});
 			})
 		</script>
 

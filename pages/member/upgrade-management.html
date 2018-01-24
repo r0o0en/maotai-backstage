@@ -35,23 +35,25 @@
 			<div class="layui-form-item layui-form-height-auto">
 				<!--<label class="layui-form-label"></label>-->
 				<div class="layui-input-inline">
-			        <select name="seekType"  lay-filter="seek-select-option" class="seek-select-option">
+			        <select lay-filter="seek-select-option" class="seek-select-option">
 			          <option value="userName">会员账号</option>
 			          <!--<option value="realName">会员昵称</option>-->
 			        </select>
-			   </div>
+			   	</div>
 				<div class="layui-input-inline">
-			    	<input type="tel" name="seekVal" placeholder="相关数据" class="layui-input seek-select-val">
-			    </div>
-			    
+					<input type="tel" placeholder="相关数据" class="layui-input seek-select-val">
+				</div>
+				<div class="layui-input-inline">
+					<input type="text" id="dateStart" class="layui-input" placeholder="开始时间">
+					<input type="text" name="beginTime" placeholder="开始时间戳" class="beginTime timestamp">
+				</div>
+				<div class="layui-input-inline">
+					<input type="text" id="dateEnd" class="layui-input" placeholder="结束时间">
+					<input type="text" name="endTime" placeholder="结束时间戳" class="endTime timestamp">
+				</div>
+				
 			    <div class="layui-input-inline">
-			        <input type="text" class="layui-input" name="beginTime" id="dateStart"  placeholder="起始注册时间" >
-			    </div>
-			    <div class="layui-input-inline">
-			        <input type="text" class="layui-input" name="endTime"  id="dateEnd"  placeholder="结束注册时间" >
-			    </div>
-			    <div class="layui-input-inline">
-			        <select name="newRank" class="select-rank">
+			        <select name="newRank" class="select-rank" title="存储ajax数据">
 			          <option value="">请选择会员级别</option>
 			        </select>
 			    </div>
@@ -173,16 +175,8 @@
 //			});
 			
 			layui.use([], function() {
-				//开始时间
-				laydate.render({
-				    elem: '#dateStart'
-				});
-				//结束时间
-				laydate.render({
-				    elem: '#dateEnd'
-				});
-				//获取职级列表
 				
+				//获取职级列表
 				var table = layui.table;
 			
 				listTable = table.render({
@@ -229,12 +223,6 @@
 				    }
 				});
 				
-				//监听提交
-//				form.on('submit(seek)', function(data){
-//					var field = data.field;
-//					filterSeekData(field);
-//					return false;
-//				});
 			})
 
 		</script>

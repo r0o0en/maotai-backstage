@@ -87,21 +87,22 @@
 						<div class="layui-form-item layui-form-height-auto">
 			
 							<div class="layui-input-inline">
-								<select name="seekType"  lay-filter="seek-select-option" class="seek-select-option">
-									<option value="">请选择搜索项</option>
+								<select lay-filter="seek-select-option" class="seek-select-option">
 									<option value="buyerName">会员账号</option>
 									<option value="orderSn">订单编号</option>
 								</select>
 							</div>
 							<div class="layui-input-inline">
-								<input type="tel" name="seekVal" placeholder="相关数据" class="layui-input seek-select-val">
+								<input type="tel" placeholder="相关数据" class="layui-input seek-select-val">
 							</div>
 							
 							<div class="layui-input-inline">
-						        <input type="text" name="beginTime" id="dateStart" class="layui-input" placeholder="开始时间" >
+						        <input type="text" id="dateStart" class="layui-input" placeholder="开始时间" >
+						        <input type="text" name="beginTime" placeholder="开始时间戳" class="beginTime timestamp">
 						    </div>
 						    <div class="layui-input-inline">
-						        <input type="text" name="endTime" id="dateEnd" class="layui-input"  placeholder="结束时间" >
+						        <input type="text" id="dateEnd" class="layui-input"  placeholder="结束时间" >
+						        <input type="text" name="endTime" placeholder="结束时间戳" class="endTime timestamp">
 						    </div>
 							
 							<div class="layui-input-inline">
@@ -286,18 +287,10 @@
 			var shipments_type = ['待付款', '待发货', '待收货', '完成', '订单已取消', '退货'];
 			var arr_order_type_class = ['', 'cl-00c', 'cl-blue', 'cl-green', 'cl-orange', 'cl-red'];
 			layui.use([], function() {
-				//开始时间
-				laydate.render({
-					elem: '#dateStart'
-				});
-				//结束时间
-				laydate.render({
-					elem: '#dateEnd'
-				});
+				
 				//列表加载
 				listTable = table.render({
 					url: url_getOrderList,
-					height: "700px",
 					cols: [[
 							//				      {type:'checkbox'},//开启复选
 //							{width:80,field:'id', title: 'ID'},
@@ -338,14 +331,6 @@
 						]
 					]
 				});
-
-				//监听提交
-//				form.on('submit(seek)', function(data) {
-//					event.preventDefault();
-//					var field = data.field;
-//					filterSeekData(field);
-//					return false;
-//				});
 
 				//监听列表工具条
 				table.on('tool(listDemo)', function(obj) {
