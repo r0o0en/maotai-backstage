@@ -4,23 +4,14 @@ if(location.host == '192.168.1.188'){/*如果是测试连接*/
 	function getAjaxOrigin(){//返回请求接口的 origin
 		return 'http://maotai.hmsh.com';
 	};
-	console.log(/(index)\.html/ig.test(self.location.pathname),self.location.pathname);
-//	function loginPage(){
-//		location.href = location.origin +'/'+ workspace +'/login.html'; 
-//	}
-	console.log(/(index)\.html/ig.test(self.location.pathname)+'|'+/(index)\.html/ig.test(parent.location.pathname) );
-	if(/(index)\.html/ig.test(self.location.pathname)){
-		function loginPage(){
-			location.href = './login.html'; 
-		}
-	}else if( /(index)\.html/ig.test(parent.location.pathname) ){
-		function loginPage(){
-			parent.location.href = '../../login.html'; 
-		}
-	}else{
-		function loginPage(){
-			location.href = '../../login.html'; 
-		}
+	function loginPage(){
+		//通过项目名称变量 拼接正则
+		var x = workspace.replace(/\-/ig,'\\-').replace(/\_/ig,'\\_');
+		var r = RegExp(x,'ig');
+		//截取拼接href直到根目录
+		var h = location.href;
+		var q = h.split(r)[0] + workspace + '/login.html';
+		parent.location.href = q; 
 	}
 }else{
 	var workspace= '';

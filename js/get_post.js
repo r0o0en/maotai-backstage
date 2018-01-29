@@ -90,7 +90,7 @@ function getArea(pid, fun) { //获取县区
 
 function getAreaOption(parent, pid, val) { //设置县区
 	getArea(pid, function(data) {
-		var str = '<option value="">请选择城市</option>';
+		var str = '<option value="">请选择区县</option>';
 		if(val) {
 			$.each(data, function(i, e) {
 				str += '<option value="' + e.id + '" ' + (e.id == val ? 'selected' : '') + '>' + e.areaName + '</option>'

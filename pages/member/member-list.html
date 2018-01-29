@@ -76,6 +76,7 @@
 		  <a class="layui-btn  layui-btn-xs" lay-event="edit" href="register.html?id={{d.id}}" onclick="openPage('编辑会员','pages/member/register.html?id={{d.id}}',event)">编辑</a>
 		  <!--<a class="layui-btn layui-btn-xs {{d.canCash ==1 ? 'layui-btn-danger':''}}" lay-event="canCash">{{d.canCash ==1 ? '禁止提现':'允许提现'}}</a>-->
 		  <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>-->
+		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="grade">会员等级</a>
 		</script>
 		
 		<!--允许提现-->
@@ -84,7 +85,6 @@
 			<!--<span class="{{d.canCash ==1 ? 'cl-blue':'cl-red'}}">{{d.canCash ==1 ? '是':'否'}}</span>-->
 			<!--<a class="layui-btn layui-btn-xs {{d.canCash ==1 ? 'layui-btn-danger':''}}" lay-event="canCash">{{d.canCash ==1 ? '禁止':'运行'}}</a>-->
 			<!--<input type="checkbox" name="canCash" value="{{d.canCash}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo" {{ d.canCash == 1 ? 'checked' : '' }}>-->
-		  	
 		</script>
 		<!--会员星级-->
 		<script type="text/html" id="templet-ceoRank">
@@ -124,6 +124,67 @@
 		<script type="text/html" id="templet-pid">
 			{{# return  d.pid == 0 ? "" : ("【"+ d.pidTrueName +"】<br/>"+ d.pidMobile) }}
 		</script>
+		
+		<!--修改会员等级-->
+		<script type="text/html" id="templetAlterGrade">
+			{{# var d = arguments[0]; }}
+			<!--会员账号-->
+			{{# if(d.data && d.data.userName){
+					var userName = d.data.userName;
+					var userId = d.data.id;
+				}else {
+					var userName = ''; 					
+					var userId = '';
+				}
+			}} 
+			<!--会员等级-->
+			{{# if(d.data && d.data.rank){ 
+					var rank = d.data.rank;
+				}else{
+					var rank = 0;
+				}
+			}}
+			<form class="layui-form templet-recharge" style="padding: 10px;height: 100%;box-sizing: border-box;">
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>会员账号</label>
+					<div class="layui-input-block">
+						<input type="text" name="userName" placeholder="会员账号" {{userName ? "disabled":""}} value="{{userName}}" class="layui-input" lay-verify="required|user"/>	
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>会员ID</label>
+					<div class="layui-input-block">
+						<input type="text" name="userId" placeholder="会员ID" {{ userId ? "disabled":""}} value="{{userId}}" class="layui-input" lay-verify="required"/>	
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>会员等级</label>
+					<div class="layui-input-block">
+						<select name="gradeId" lay-verify="required">
+							{{# if(d.grades && d.grades.length>0){ }}
+								{{#	$.each(d.grades,function(i,e){ }}
+									{{#	$.each(e,function(j,v){ }}
+										<option value="{{j}}" {{ j<=rank ? 'disabled' :''}} {{ j==rank ? 'checked' :''}} >{{v}}</option>
+									{{# }); }}
+								{{# }); }}
+							{{# }else { }}
+								<option value="">请选择会员等级</option>
+							{{# } }}	
+						</select>
+					</div>
+				</div>
+				
+				<br />
+				<!-- 提交 -->
+				<div class="layui-form-item text-center">				
+					<a class="layui-btn recharge" lay-submit lay-filter="alterGrade">立即提交</a>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				<br />
+				<br />
+			</form>
+		</script>
+		
 		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
 		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
@@ -135,7 +196,9 @@
 			//修改会员、新增会员
 			var url_newMenber = getAjaxOrigin() + '/api/admin/user/addOrMod';
 			//删除会员
-			var url_deleteMember = getAjaxOrigin() + '/api/admin/user/query'
+			var url_deleteMember = getAjaxOrigin() + '/api/admin/user/query';
+			//修改会员等级
+			var url_alterGrade = getAjaxOrigin() + '/api/admin/user/modUserGrade';
 			
 			// 存储会员星级/级别
 			var menberGrade ;
@@ -205,10 +268,52 @@
 				    }else if(obj.event == 'edit'){
 				    	//编辑操作 
 //				    	openPage('编辑会员','pages/member/register.html?id='+data.id+'&canCash'+data.canCash);
+				    }else if(obj.event == 'grade'){ //修改会员等级
+				    	alterGrade(data);
 				    }
 				});
 				
 			})
+			
+			function alterGrade(data) {
+				//修改会员等级弹窗
+				layer.open({
+					title:'修改会员等级',
+					type:"1",
+					area:['100%','100%'],
+					content:function () {
+						var getTpl = templetAlterGrade.innerHTML;
+						laytpl(getTpl).render({data:data,grades:menberGrade}, function(html){
+							getTpl = html;
+						});
+						return getTpl;
+					}(),
+					btn:[],
+					id:'gradeWp',
+					yes:function(i,o){},
+					success:function(i,o){
+						form.render('select');
+						form.render('radio');
+						
+					}
+				})
+			}
+			//修改会员等级表单
+			form.on('submit(alterGrade)', function(data){
+				var field = data.field;
+				ajax({
+					ifno:'修改会员等级',
+					type:"get",
+					url:url_alterGrade,
+					data:field,
+					success:function(d){
+						layer.close($(data.form).parents('.layui-layer').attr('times'));
+						listTable.reload();
+					}
+				});
+				return false;
+			})	
+			
 			
 			function jishi(s) {//计时秒
 //				var t = new Date(time) || new Date("2018/01/19 18:00:00");

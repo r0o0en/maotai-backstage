@@ -472,8 +472,6 @@
 			}
 			//确认发货表单
 			form.on('submit(delivery)', function(data){
-				event.preventDefault();
-				event.stopPropagation();
 				var field = data.field;
 				console.log(field);
 				ajax({
@@ -486,6 +484,7 @@
 						listTable.reload();
 					}
 				});
+				return false;
 			})	
 			//发货输入表单 监听 下拉
 			form.on('select(selectDelivery)', function(data){
