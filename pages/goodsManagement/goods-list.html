@@ -156,7 +156,7 @@
 //				      {type:'checkbox'},//开启复选
 					  {field:'id', width:80,title: 'ID'}
 //					  {field:'goodsId',  title: '商品ID'}
-					  ,{field:'goodsPics', width:100,  title: '商品图片',templet:'<div><img class="goods-img" src="{{getImgurl(d.goodsPics)[0]}}" /></div>'}
+					  ,{field:'goodsPics', width:100,  title: '商品图片',templet:'<div><img class="goods-img" src="{{ getImgurlFirst(d.goodsPics)[0] }}" /></div>'}
 				      ,{field:'goodsName', minWidth:200,  title: '商品名称'}
 				      ,{field:'categoryId', width:100,  title: '分类',templet:'#templet-goods-class'}
 				      ,{field:'addTime', minWidth:120,  title: '添加时间',templet:'<div>{{ parseDate(d.addTime)  }}</div>'}

@@ -113,7 +113,7 @@
 			</fieldset>
 
 			<div class="layui-form-item">
-				<label class="layui-form-label">首页图片</label>
+				<label class="layui-form-label"><sup>*</sup>首页图片</label>
 				<div class="layui-input-block">
 					<div class="layui-upload-drag" id="test10">
 						<i class="layui-icon"></i>
@@ -363,6 +363,10 @@
 				form.on('submit(formSubmit)', function(data) {
 					var d = data.field;
 					//获取上传成功列表,拼接字符串
+					if($('.upload-succeed img').length<=0){
+						layer.msg('请传入一张首页图片!');
+						return false;
+					}
 					var imgstr = '';
 					$('.upload-succeed img').each(function (i,e) {
 						if(i!=0){

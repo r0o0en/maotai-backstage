@@ -85,9 +85,9 @@
   				<div class="layui-tab-item layui-show">
 					<form class="layui-form" method="post" target="_blank">
 						<div class="layui-form-item layui-form-height-auto">
-			
 							<div class="layui-input-inline">
 								<select lay-filter="seek-select-option" class="seek-select-option">
+									<option value="">请选择搜索项</option>
 									<option value="buyerName">会员账号</option>
 									<option value="orderSn">订单编号</option>
 								</select>
@@ -191,11 +191,11 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label"><sup>*</sup>快递公司</label>
 					<div class="layui-input-block">
-						<select name='deliveryName' lay-filter="selectDelivery"  placeholder="充值类型">							
+						<select name='deliveryCode' lay-filter="selectDelivery"  placeholder="充值类型">							
 							<option value="" >请选择快递公司</option>
-							<option value="顺丰快递" data-deliveryCode="sf">顺丰快递</option>
-	                        <option value="中通快递" data-deliveryCode="zt">中通快递</option>
-	                        <option value="圆通快递" data-deliveryCode="yt">圆通快递</option>
+							{{# console.log(logisticslist);for(var i = 0;i<logisticslist.length;i++){ }}
+								<option value="{{logisticslist[i].code}}" data-deliveryCode="sf">{{logisticslist[i].company}}</option>	
+							{{# } }}
 						</select>
 					</div>
 				</div>
@@ -280,19 +280,30 @@
 			var url_deliveryOrder = getAjaxOrigin() + '/api/admin/order/orderAwaitingDelivery';
 			//订单收货
 			var url_comfirmOrder = getAjaxOrigin() + '/api/admin/order/orderWaitForReceiving';
-			//订单收货
+			//订单导出
 			var url_orderExport= getAjaxOrigin() + '/api/admin/order/export';
+			//订单导出
+			var url_logisticsList= getAjaxOrigin() + '/api/admin/order/logisticsList';
 			
 			//订单状态
 			var shipments_type = ['待付款', '待发货', '待收货', '完成', '订单已取消', '退货'];
 			var arr_order_type_class = ['', 'cl-00c', 'cl-blue', 'cl-green', 'cl-orange', 'cl-red'];
+			
+			//物流列表
+			var logisticslist = [];
 			layui.use([], function() {
-				
+				ajax({
+					type:'get',
+					url:url_logisticsList,
+					success:function(data){
+						logisticslist =  data.data;
+					}
+				});
 				//列表加载
 				listTable = table.render({
 					url: url_getOrderList,
 					cols: [[
-							//				      {type:'checkbox'},//开启复选
+							//{type:'checkbox'},//开启复选
 //							{width:80,field:'id', title: 'ID'},
 							{width: 160,field: 'orderSn',title: '订单编号'}
 							, {width: 120,field: 'buyerName',title: '会员账号'}
@@ -459,7 +470,15 @@
 				layer.open({
 					title:'确认发货',
 					type:"1",
-					content:templetDelivery.innerHTML,
+					//content:templetDelivery.innerHTML,
+					content:function(){
+						var getTpl = templetDelivery.innerHTML,
+							str ='';
+						laytpl(getTpl).render(data||{}, function(html){
+							str = html;
+						});
+						return str;
+					}(),
 					btn:[],
 					id:'recharge',
 					yes:function(i,o){},
@@ -473,6 +492,7 @@
 			//确认发货表单
 			form.on('submit(delivery)', function(data){
 				var field = data.field;
+				
 				console.log(field);
 				ajax({
 					ifno:'确认发货',
@@ -488,8 +508,9 @@
 			})	
 			//发货输入表单 监听 下拉
 			form.on('select(selectDelivery)', function(data){
-				var opt = $(data.elem).parents('form').find('option[value="'+data.value+'"]');
-				$('#deliveryCode').val(opt.attr('data-deliveryCode'));
+				console.log(data);
+//				var opt = $(data.elem).parents('form').find('option[value="'+data.value+'"]');
+//				$('#deliveryCode').val(opt.attr('data-deliveryCode'));
 //			  console.log(data.elem); //得到select原始DOM对象
 //			  console.log(data.value); //得到被选中的值
 //			  console.log(data.othis); //得到美化后的DOM对象

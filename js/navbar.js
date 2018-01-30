@@ -389,8 +389,22 @@ function getImgurl(str) {
 		if(reg.test(str)) {
 			return str.match(reg);
 		} else {
-			return false;
+			return [];
 		}
+	}else{
+		return [];
+	}
+}
+function getImgurlFirst(str) {
+	if(typeof str == 'string' && str.length > 0) {
+		var reg = /http:[/]{2}[a-zA-Z0-9.%=/_\-]{1,}[.](jpg|jpeg|png)/ig;
+		if(reg.test(str)) {
+			return str.match(reg);
+		} else {
+			return [''];
+		}
+	}else{
+		return [''];
 	}
 }
 

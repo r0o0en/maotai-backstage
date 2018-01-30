@@ -94,6 +94,15 @@ function loginSaveToken(data) {//登录记录token
 
 //首页导航菜单
 var  navs = [
+//	{
+//		name:'系统',
+//		childs:[
+//			{
+//				name:'后台系统菜单',
+//				url:'pages/system/menu.html?__hbt=1517217704191'
+//			}
+//		]
+//	},
 	{
 		name:'会员管理',
 		childs:[
@@ -289,3 +298,8 @@ bonusType[23] = '粮票充值';
 var isShow = ['隐藏','显示'];
 //审核状态
 //var status = ["未审核","审核通过","拒绝"];
+
+//菜单管理
+//菜单类型
+var menuType = ['目录','菜单','按钮'];
+//菜单是否显示

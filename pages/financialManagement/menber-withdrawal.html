@@ -146,7 +146,7 @@
 				});	
 				//导出
 				form.on('submit(exp)', function(data){
-					$('form').attr('action', getAjaxOrigin() + '/api/finance/withdrawals/export')
+					$('form').attr('action', getAjaxOrigin() + '/api/finance/withdrawals/export');
 					$("form")[0].submit();
 					return false;
 				});
