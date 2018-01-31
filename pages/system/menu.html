@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>菜单管理</title>
+		<meta name="author" content="" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="Pragma" content="no-cache" />
+
+		<link rel="stylesheet" href="../../plugins/layui/css/layui.css" media="all">
+		<link rel="stylesheet" type="text/css" href="../../plugins/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/lib.css" />
+		<!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+	</head>
+
+	<body>
+
+		<blockquote class="layui-elem-quote layui-text">
+			<a class="layui-btn" onclick="newOrder()" style="font-size: 40px;">+</a>
+		</blockquote>
+
+		<form class="layui-form">
+			<div class="layui-form-item layui-form-height-auto">
+
+				<div class="layui-input-inline">
+					<input type="tel" name="menuname" lay-verify="" placeholder="菜单名称" class="layui-input">
+				</div>
+
+				<div class="layui-input-inline">
+					<button type="submit" class="layui-btn" lay-submit="" lay-filter="seek">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+
+			</div>
+		</form>
+
+		<ul id="treeList" class="ztree"></ul>
+
+		<table class="layui-hide" id="list" lay-filter="listDemo"></table>
+
+		<!--菜单启用/禁用-->
+		<script type="text/html" id="templetMenuOpen">
+			{{# if(d.open){ }}
+			<span class="cl-blue">展开</span> {{# }else { }}
+			<span class="cl-red">收起</span> {{# } }}
+		</script>
+		<!--表格操作按钮-->
+		<script type="text/html" id="templetBarDemo">
+			{{# var open_type = typeof d.open != 'undefined' && !!d.open; }}
+			<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="open">{{ open_type ? '收起':'展开'}}</a>
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			<a class="layui-btn layui-btn-xs" lay-event="newSon">新增子级</a>
+			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
+		</script>
+
+		<!--树形菜单模板-->
+		<script type="text/html" lay-filter="templetTreeMenuList">
+			<ul>
+				<li>Root node 1
+					<ul>
+						<li>Child node 1</li>
+						<li>Child node 2</li>
+					</ul>
+				</li>
+				<li>Root node 2</li>
+			</ul>
+
+		</script>
+
+		<!--新增/编辑菜单模板-->
+		<script type="text/html" id="templetNewMenu">
+			{{# console.log(d); var menu_default = typeof d.type != 'undefined' ? d.type:0; console.log(menu_default); var menu_open = typeof d.open == 'undefined' ? true : d.open; }}
+			<form class="layui-form templet-new-order" style="padding: 10px;overflow-y: hidden;">
+				<input type="hidden" name="parentId" value="{{ typeof d.parentId != 'undefined' ? d.parentId :0}}" /> {{# if(typeof d.menuId != "undefined"){ }}
+				<input type="hidden" name="menuId" value="{{d.menuId}}" /> {{# } }}
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>菜单类型</label>
+					<div class="layui-input-block">
+						<select name="type">
+							{{# for(var i =0;i
+							<menuType.length;i++){}} <option value="{{i}}" {{ i==m enu_default ? 'selected': '' }}>{{menuType[i]}}</option>
+								{{# } }}
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>菜单名称</label>
+					<div class="layui-input-block">
+						<input type="text" name="name" value="{{  typeof d.name != " undefined " ? d.name : ''}}" lay-verify="required" placeholder="菜单名称" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">页面地址</label>
+					<div class="layui-input-block">
+						<input type="text" name="url" value="{{  typeof d.url != " undefined " ? d.url : ''}}" lay-verify="" placeholder="页面地址" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">样式类名</label>
+					<div class="layui-input-block">
+						<input type="text" name="icon" value="{{  typeof d.icon != " undefined " ? d.icon : ''}}" lay-verify="" placeholder="样式类名" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label"><sup>*</sup>菜单排序</label>
+					<div class="layui-input-block">
+						<input type="tel" name="orderNum" value="{{  typeof d.orderNum != " undefined " ? d.orderNum : 0}}" lay-verify="" placeholder="菜单排序" value="0" class="layui-input">
+					</div>
+				</div>
+
+				<!--<div class="layui-form-item">
+            <label class="layui-form-label">展开状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="open" value="true" title="打开" {{ menu_open ? 'checked' :''}}>
+                <input type="radio" name="open" value="false" title="关闭"  {{ !menu_open ? 'checked' :''}}>
+            </div>
+        </div>-->
+				<!-- 提交 -->
+				<div class="layui-form-item text-center">
+					<a class="layui-btn recharge" lay-submit lay-filter="submit_newMenu">立即提交</a>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+				<br />
+				<br />
+			</form>
+
+		</script>
+
+		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
+		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			/*
+			 	公用属性、方法
+			 * */
+
+			//删除菜单
+			var url_menuDelete = getAjaxOrigin() + '/api/admin/menu/delete';
+			//菜单详情
+			var url_menuInfo = getAjaxOrigin() + '/api/admin/menu/info';
+			//菜单列表
+			var url_menuList = getAjaxOrigin() + '/api/admin/menu/list';
+			//保存菜单
+			var url_menuSave = getAjaxOrigin() + '/api/admin/menu/save';
+			//保存菜单
+			var url_menuSave = getAjaxOrigin() + '/api/admin/menu/save';
+			//修改菜单
+			var url_menuUpdate = getAjaxOrigin() + '/api/admin/menu/update';
+			//据说可以返回所有的 菜单列表
+			var url_menuSelect = getAjaxOrigin() + '/api/admin/menu/select';
+			
+
+			layui.use([], function() {
+
+				listTable = table.render({
+					url: url_menuList,
+					cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+						,
+					cols: [
+						[{
+								field: 'menuId',
+								width: 80,
+								title: 'ID'
+							}, {
+								field: 'icon',
+								width: 120,
+								title: '图标'
+							}, {
+								field: 'name',
+								width: 160,
+								title: '菜单名称'
+							}, {
+								field: 'url',
+								width: 260,
+								title: 'url'
+							}
+							//,{field:'perms', width:160, title: '授权'}
+							, {
+								field: 'type',
+								width: 100,
+								title: '类型',
+								templet: '<div>{{menuType[d.type]}}</div>'
+							}, {
+								field: 'orderNum',
+								width: 80,
+								title: '排序'
+							}, {
+								field: 'open',
+								width: 200,
+								title: '操作',
+								templet: '#templetBarDemo'
+							}
+						]
+					]
+				});
+
+				//监听列表工具条
+				table.on('tool(listDemo)', function(obj) {
+					var data = obj.data;
+					if(obj.event == 'delete') {
+						console.log("obj.event == 'delete'");
+						//删除菜单
+						deleteMenu(data);
+					} else if(obj.event == 'open') {
+						console.log("obj.event == 'open'");
+						//展开/收起菜单
+						layer.msg('展开/收起功能暂未实现!');
+					} else if(obj.event == 'edit') {
+						console.log("obj.event == 'edit'");
+						//编辑菜单
+						newOrder(data);
+					} else if(obj.event == 'newSon') {
+						console.log("obj.event == 'newSon'");
+						//新增子级菜单
+						newOrder({
+							parentId: data.menuId,
+							type: 1
+						});
+					}
+				});
+
+			})
+
+			/*
+			 
+			 layui 模态框、模板、表单提交、刷新
+			 * */
+			
+			//编辑、新增、删除等操作后的刷新操作
+			function activeRefresh() {
+				if(typeof listTable == 'object') {
+					listTable.reload();
+				}
+			}
+			
+			//新增菜单
+			function newOrder(data) {
+				console.log(data);
+				layer.open({
+					title: '新增与编辑',
+					type: "1",
+					content: function() {
+						var getTpl = templetNewMenu.innerHTML,
+							str = '';
+						laytpl(getTpl).render(data || {}, function(html) {
+							str = html;
+						});
+						return str;
+					}(),
+					btn: [],
+					id: 'newOrderWp',
+					yes: function(i, o) {
+
+					},
+					success: function(i, o) {
+						form.render('select');
+						form.render('radio');
+					}
+				})
+			}
+
+			//新增菜单提交
+			form.on('submit(submit_newMenu)', function(data) {
+				var field = data.field;
+				if(field.url) {
+					console.log(encodeURI(field.url));
+				}
+				ajax({
+					info: typeof field.menuId == 'undefined' ? '新增菜单' : '保存更新',
+					url: typeof field.menuId == 'undefined' ? url_menuSave : url_menuUpdate,
+					data: field,
+					success: function(d) {
+						layer.close($(data.form).parents('.layui-layer').attr('times'));
+						activeRefresh();
+					}
+				})
+				return false;
+			})
+
+			//删除菜单
+			function deleteMenu(d) {
+				var arr = "[" + d.menuId + "]";
+				console.log(arr);
+				layer.open({
+					title: '确认删除',
+					content: '确认删除<span class="cl-red">【' + d.name + '】</span>' + menuType[d.type] + '项?',
+					btn: ['删除', "取消"],
+					yes: function() {
+						ajax({
+							type: 'get',
+							info: '删除<span class="cl-red">【' + d.name + '】</span>' + menuType[d.type] + '项  ',
+							url: url_menuDelete,
+							data: {
+								menuIds: arr
+							},
+							success: function() {
+								activeRefresh();
+							}
+						})
+					}
+				});
+			}
+		</script>
+
+	</body>
+
+</html>
