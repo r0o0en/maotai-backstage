@@ -10,7 +10,7 @@ if(isTestLocalhost) {
 };
 /* 通配符*/
 if(typeof layui == 'object'){
-	var $ = layui.jquery,
+	var $ = jQuery = layui.jquery,
 		form = layui.form,
 		table = layui.table,
 		element = layui.element,
@@ -368,8 +368,8 @@ var HtmlUtil = {
       	return output;
     }
 };
-
-function getQueryData() { //获取参数
+//获取参数
+function getQueryData() { 
 	var url = location.search; //获取url中"?"符后的字串
 	var theRequest = new Object();
 	if(url.indexOf("?") != -1) {

@@ -23,7 +23,6 @@
 			td {
 				vertical-align: top;
 			}
-			
 			.goods-list {
 				padding: 0;
 				margin: 0;
@@ -394,29 +393,6 @@
 					}
 				});
 			}
-//			function deleteOrder(data) {
-//				//取消
-//				layer.open({
-//					content: '确认订单【' + data.orderSn + '】已收货?',
-//					btn: ['确认', '取消'],
-//					yes: function(index, layero) {
-//						ajax({
-//							type: 'get',
-//							info: '确认订单已收货',
-//							infosuccess: true,
-//							url: url_deleteOrder,
-//							data: {
-//								orderId: data.id,
-//								userId: data.userId
-//							},
-//							success: function() {
-//								listTable.reload();
-//							}
-//						})
-//						layer.close(index);
-//					}
-//				});
-//			}
 			function paymentOrder(data) {
 				console.log('付款',data);
 				//付款
@@ -441,30 +417,7 @@
 					}
 				});
 			}
-			function comfirmOrder(data) {
-				//确认收货
-				layer.open({
-					content: '确认订单【' + data.orderSn + '】已收货?',
-					btn: ['确认', '取消'],
-					yes: function(index, layero) {
-						ajax({
-							type: 'get',
-							info: '订单收货',
-							infosuccess: true,
-							url: url_comfirmOrder,
-							data: {
-								orderId: data.id,
-								userId: data.userId
-							},
-							success: function() {
-								listTable.reload();
-							}
-						})
-						layer.close(index);
-					}
-				});
-			}
-
+		
 			function deliveryOrder(data) {
 				//确认发货弹窗
 				layer.open({
@@ -488,6 +441,29 @@
 						$('#userId').val(data.userId);
 					}
 				})
+			}
+			function comfirmOrder(data) {
+				//确认收货
+				layer.open({
+					content: '确认订单【' + data.orderSn + '】已收货?',
+					btn: ['确认', '取消'],
+					yes: function(index, layero) {
+						ajax({
+							type: 'get',
+							info: '订单收货',
+							infosuccess: true,
+							url: url_comfirmOrder,
+							data: {
+								orderId: data.id,
+								userId: data.userId
+							},
+							success: function() {
+								listTable.reload();
+							}
+						})
+						layer.close(index);
+					}
+				});
 			}
 			//确认发货表单
 			form.on('submit(delivery)', function(data){
