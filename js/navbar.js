@@ -85,7 +85,7 @@ function openPage(name,url,eve) {
 		}
 	} else {
 		console.error(url, '没有父级窗口可用,请配置 href=url');
-		var topage = getOrigin() + '/' +workspace +'/' + url;
+		var topage = getOrigin()||'' + '/' +workspace +'/' + url;
 		location.href = topage;
 	}
 }
@@ -513,6 +513,9 @@ form.on('select(seek-select-option)', function(data){
 form.on('submit(seek)', function(data){
 	var field = data.field;
 	eachNullEmpty(field);
+	if(typeof listTable == 'undefined'){
+		return false;
+	}
 	//执行重载
 	listTable.reload({
 		where: field

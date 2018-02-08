@@ -1,10 +1,10 @@
 if(location.host == '192.168.1.188'){/*如果是测试连接*/
 	//项目名称
 	var workspace= 'maotai-backstage';	
-	function getAjaxOrigin(){//返回请求接口的 origin
+	var getAjaxOrigin = function getAjaxOrigin(){//返回请求接口的 origin
 		return 'http://maotai.hmsh.com';
 	};
-	function loginPage(){
+	var loginPage = function loginPage(){
 		//通过项目名称变量 拼接正则
 		var x = workspace.replace(/\-/ig,'\\-').replace(/\_/ig,'\\_');
 		var r = RegExp(x,'ig');
@@ -15,15 +15,15 @@ if(location.host == '192.168.1.188'){/*如果是测试连接*/
 	}
 }else{
 	var workspace= '';
-	function getAjaxOrigin(){//返回请求接口的 origin
+	var getAjaxOrigin = function getAjaxOrigin(){//返回请求接口的 origin
 		return '';
 	};
-	function loginPage(){//跳转登录页
+	var loginPage = function loginPage(){//跳转登录页
 		location.href = '/admin/login';
 	}
 }
 function getOrigin() {//返回项目所在的 origin
-	return location.origin;
+	return location.origin||location.host;
 }
 /*
  登录验证

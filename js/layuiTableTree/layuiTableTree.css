@@ -1,0 +1,40 @@
+.link-line {
+  text-decoration: underline;
+  color: #007DDB;
+}
+.layui-tree a {
+  min-width: 30%;
+}
+.layui-tree li .layui-tree-spread {
+  min-width: 22px;
+}
+.layui-tree li .layui-tree-spread.active ~ ul {
+  display: block;
+}
+.layui-icon-function {
+  display: none;
+  font-weight: 900;
+}
+.layui-tree a:active .layui-icon-function,
+.layui-tree a:focus .layui-icon-function,
+.layui-tree a:hover .layui-icon-function {
+  display: inline;
+}
+.layui-tree li .layui-icon-add:active,
+.layui-tree li .layui-icon-add:focus,
+.layui-tree li .layui-icon-add:hover {
+  color: #1E9FFF;
+}
+.layui-tree li .layui-icon-edit:active,
+.layui-tree li .layui-icon-edit:focus,
+.layui-tree li .layui-icon-edit:hover {
+  color: #009688;
+}
+.layui-tree li .layui-icon-delete:active,
+.layui-tree li .layui-icon-delete:focus,
+.layui-tree li .layui-icon-delete:hover {
+  color: #FF0000;
+}
+.layui-tree li .layui-tree-branch {
+  color: #FFB800;
+}

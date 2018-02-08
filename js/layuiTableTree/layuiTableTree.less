@@ -1,0 +1,51 @@
+.link-line{
+    text-decoration: underline;
+    color: #007DDB;
+}
+.layui-tree{
+    a{
+        min-width: 30%;
+    }
+}
+
+.layui-tree li .layui-tree-spread{
+    min-width: 22px;
+    &.active ~ ul{
+        display: block;
+    }
+}
+.layui-icon-function{
+    display: none;
+    font-weight: 900;
+    .layui-tree a:active &,
+    .layui-tree a:focus &,
+    .layui-tree a:hover &{
+        display: inline;
+    }
+}
+.layui-tree li{
+    .layui-icon-add{
+        &:active,
+        &:focus,
+        &:hover{
+            color: #1E9FFF;
+        }        
+    }
+    .layui-icon-edit{
+        &:active,
+        &:focus,
+        &:hover{
+            color: #009688;
+        }        
+    }
+    .layui-icon-delete{
+        &:active,
+        &:focus,
+        &:hover{
+            color: #FF0000;
+        }        
+    }
+    .layui-tree-branch{
+        color: #FFB800;
+    }
+}

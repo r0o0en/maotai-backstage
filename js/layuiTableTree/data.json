@@ -1,0 +1,105 @@
+{
+	"code": 200,
+	"data": [{
+		"iconClassName": "fa fa-cog",
+		"menuId": 1,
+		"name": "系统管理",
+		"orderNum": 0,
+		"parentId": 0,
+		"type": 0
+	}, {
+		"menuId": 46,
+		"name": "财务管理2",
+		"orderNum": 0,
+		"parentId": 0,
+		"type": 0
+	}, {
+		"menuId": 65,
+		"name": "测试",
+		"orderNum": 0,
+		"parentId": 46,
+		"type": 0
+	}, {
+		"iconClassName": "fa fa-user",
+		"menuId": 2,
+		"name": "管理员列表",
+		"orderNum": 1,
+		"parentId": 1,
+		"type": 1,
+		"url": "sys/user.html"
+	}, {
+		"iconClassName": "fa fa-user-secret",
+		"menuId": 3,
+		"name": "角色管理1",
+		"orderNum": 2,
+		"parentId": 1,
+		"type": 1,
+		"url": "sys/role.html"
+	}, {
+		"iconClassName": "fa fa-th-list",
+		"menuId": 4,
+		"name": "菜单管理",
+		"orderNum": 3,
+		"parentId": 1,
+		"type": 1,
+		"url": "sys/menu.html"
+	}, {
+		"iconClassName": "fa fa-bug",
+		"menuId": 5,
+		"name": "SQL监控",
+		"orderNum": 4,
+		"parentId": 1,
+		"type": 1,
+		"url": "druid/sql.html"
+	}, {
+		"iconClassName": "fa fa-tasks",
+		"menuId": 6,
+		"name": "定时任务",
+		"orderNum": 5,
+		"parentId": 1,
+		"type": 1,
+		"url": "sys/schedule.html"
+	}, {
+		"iconClassName": "fa fa-sun-o",
+		"menuId": 27,
+		"name": "参数管理",
+		"orderNum": 6,
+		"parentId": 1,
+		"perms": "sys:config:list,sys:config:info,sys:config:save,sys:config:update,sys:config:delete",
+		"type": 1,
+		"url": "sys/config.html"
+	}, {
+		"iconClassName": "fa fa-file-image-o",
+		"menuId": 30,
+		"name": "文件上传",
+		"orderNum": 6,
+		"parentId": 1,
+		"perms": "sys:oss:all",
+		"type": 1,
+		"url": "sys/oss.html"
+	}, {
+		"iconClassName": "fa fa-file-text-o",
+		"menuId": 29,
+		"name": "系统日志",
+		"orderNum": 7,
+		"parentId": 1,
+		"perms": "sys:log:list",
+		"type": 1,
+		"url": "sys/log.html"
+	}, {
+		"iconClassName": "fa fa-rocket",
+		"menuId": 28,
+		"name": "代码生成器",
+		"orderNum": 8,
+		"parentId": 1,
+		"perms": "sys:generator:list,sys:generator:code",
+		"type": 1,
+		"url": "sys/generator.html"
+	}, {
+		"menuId": 0,
+		"name": "一级菜单",
+		"open": true,
+		"parentId": -1
+	}],
+	"msg": "操作成功"
+}
