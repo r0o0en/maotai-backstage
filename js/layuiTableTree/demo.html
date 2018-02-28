@@ -35,7 +35,11 @@
 		<script src="../../js/layuiTableTree/layuiTableTree.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			layui.use([], function() {
-				menuTree = new MenuTree().init();
+				//据说可以返回所有的 菜单列表
+				var url_menuSelect = getAjaxOrigin() + '/api/admin/menu/select';
+				menuTree = new MenuTree({
+					url:url_menuSelect,
+				}).init();
 				
 			});
 		</script>

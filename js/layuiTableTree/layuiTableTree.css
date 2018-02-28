@@ -38,3 +38,8 @@
 .layui-tree li .layui-tree-branch {
   color: #FFB800;
 }
+.layui-icon-select.active,
+.layui-icon-select.half {
+  color: #007DDB;
+  font-weight: 900;
+}

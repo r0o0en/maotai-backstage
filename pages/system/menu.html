@@ -138,12 +138,9 @@
 					<a class="layui-btn recharge" lay-submit lay-filter="submit_newMenu">立即提交</a>
 					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 				</div>
-				<br />
-				<br />
 			</form>
-			
 		</script>
-
+		
 		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
 		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
@@ -162,23 +159,16 @@
 			var url_menuList = getAjaxOrigin() + '/api/admin/menu/list';
 			//保存菜单
 			var url_menuSave = getAjaxOrigin() + '/api/admin/menu/save';
-			//保存菜单
-			var url_menuSave = getAjaxOrigin() + '/api/admin/menu/save';
 			//修改菜单
 			var url_menuUpdate = getAjaxOrigin() + '/api/admin/menu/update';
 			//据说可以返回所有的 菜单列表
 			var url_menuSelect = getAjaxOrigin() + '/api/admin/menu/select';
 			
 			layui.use([], function() {
-				menuTree = new MenuTree($.extend({},menuTreeManage,{url:url_menuSelect})).init();
-//				menuTree.init(function () {
-//					layui.tree({
-//						elem: '#treeMenu' //传入元素选择器
-//						,nodes:menuTree.menu
-//					});
-//					console.log(menuTree,menuTree.menulv.length);
-//				});
-				console.log(menuTree);
+				menuTree = new MenuTree($.extend({},{
+					url:url_menuSelect,
+					openButton:true
+				})).init();
 				
 				listTable = table.render({
 					url: url_menuList,
@@ -214,7 +204,7 @@
 								title: '排序'
 							}, {
 								field: 'open',
-								width: 200,
+								width: 250,
 								title: '操作',
 								templet: '#templetBarDemo'
 							}
@@ -241,6 +231,7 @@
 						console.log("obj.event == 'newSon'");
 						//新增子级菜单
 						newOrder({
+							parentName:data.name,
 							parentId: data.menuId,
 							type: 1
 						});
@@ -260,15 +251,22 @@
 					listTable.reload();
 				}
 				if(typeof menuTree == 'object') {
-					console.log('menu.html p292');
 					menuTree.refresh();
 				}
 			}
 			
 			//新增菜单
 			function newOrder(data) {
+				var title  = '';
+				if(typeof data != 'object'){
+					title = '新增菜单';
+				}else if( data.parentId){
+					title = '新增【' + data.parentName + '】下级菜单' ;
+				}else if(data.menuId){
+					title = '编辑【' + data.name + '】' ;
+				}
 				layer.open({
-					title: '新增与编辑',
+					title: title,
 					type: "1",
 					content: function() {
 						var getTpl = templetNewMenu.innerHTML,
@@ -280,9 +278,7 @@
 					}(),
 					btn: [],
 					id: 'newOrderWp',
-					yes: function(i, o) {
-
-					},
+					//yes: function(i, o) {},
 					success: function(i, o) {
 						form.render('select');
 						form.render('radio');
@@ -309,7 +305,7 @@
 			})
 
 			//删除菜单
-			function deleteMenu(d,btn,data) {
+			function deleteMenu(d,btn) {
 				if(typeof d == 'undefined'){
 					return false;
 					layer.msg('deleteMenu(d) d is undefined or null ！');
@@ -320,7 +316,7 @@
 				}
 				//var arr = "[" + d.menuId + "]";
 				layer.open({
-					title: '确认删除',
+					title: '确认删除【'+d.name+'】',
 					content: '确认删除<span class="cl-red">【' + d.name + '】</span>' + (menuType[d.type]||'') + '项?',
 					btn: ['删除', "取消"],
 					yes: function(index, layero) {
@@ -337,6 +333,9 @@
 								activeRefresh();
 							}
 						})
+					},
+					success:function($box,i){
+						$box.addClass('layui-layer-delete');
 					}
 				});
 			}

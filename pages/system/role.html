@@ -28,7 +28,7 @@
 	<body>
 
 		<blockquote class="layui-elem-quote layui-text">
-			<a class="layui-btn" onclick="newRole()">新增</a>
+			<a class="layui-btn" onclick="newOrder()">新增角色</a>
 		</blockquote>
 
 		<form class="layui-form">
@@ -44,10 +44,7 @@
 				</div>
 
 			</div>
-		</form>
-		
-		
-		<ul id="treeMenu"></ul>  
+		</form>  
 		
 		<table class="layui-hide" id="list" lay-filter="listDemo"></table>
 
@@ -59,10 +56,8 @@
 		</script>
 		<!--表格操作按钮-->
 		<script type="text/html" id="templetBarDemo">
-			{{# var open_type = typeof d.open != 'undefined' && !!d.open; }}
-			<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="open">{{ open_type ? '收起':'展开'}}</a>
 			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-			<a class="layui-btn layui-btn-xs" lay-event="newSon">新增子级</a>
+			<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="selectMenu">菜单</a>
 			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>
 		</script>
 		
@@ -81,73 +76,57 @@
 		</script>
 
 		<!--新增/编辑菜单模板-->
-		<script type="text/html" id="templetNewMenu">
+		<script type="text/html" id="templetNewRole">
 			{{#
-				var menu_default = typeof d.type != 'undefined' ? d.type:0;
-				var menu_open = typeof d.open == 'undefined' ? false : d.open;
+				console.log('新增/编辑菜单模板',d);
 			}}
 			<form class="layui-form templet-new-order" style="padding: 10px;overflow-y: hidden;">
-				<input type="hidden" name="parentId" value="{{ typeof d.parentId != 'undefined' ? d.parentId :0}}" />	
-				{{# if(typeof d.menuId != "undefined"){ }}
-					<input type="hidden" name="menuId" value="{{d.menuId}}" />
-				{{# } }}
+				{{#	if( typeof d.roleId != "undefined" ){	}}
+					<input type="hidden" name="roleId" value="{{d.roleId}}" />	
+				{{#	}	}}
 				<div class="layui-form-item">
-					<label class="layui-form-label"><sup>*</sup>菜单类型</label>
+					<label class="layui-form-label"><sup>*</sup>角色名称</label>
 					<div class="layui-input-block">
-						<select name="type">
-							{{# for(var i =0;i<menuType.length;i++){ }}
-								<option value="{{i}}"  {{ i == menu_default ? 'selected':'' }}>{{menuType[i]}}</option>
-							{{# } }}
-						</select>
+						<input type="text" name="roleName"  value="{{  typeof d.roleName != "undefined" ? d.roleName : ''}}"  lay-verify="required" placeholder="角色名称" class="layui-input">
 					</div>
 				</div>
 				<div class="layui-form-item">
-					<label class="layui-form-label"><sup>*</sup>菜单名称</label>
+					<label class="layui-form-label">备注</label>
 					<div class="layui-input-block">
-						<input type="text" name="name" value="{{  typeof d.name != "undefined" ? d.name : ''}}" lay-verify="required" placeholder="菜单名称" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">页面地址</label>
-					<div class="layui-input-block">
-						<input type="text" name="url" value="{{  typeof d.url != "undefined" ? d.url : ''}}" lay-verify="" placeholder="页面地址" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label">样式类名</label>
-					<div class="layui-input-block">
-						<input type="text" name="icon" value="{{  typeof d.icon != "undefined" ? d.icon : ''}}" lay-verify="" placeholder="样式类名" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label"><sup>*</sup>菜单排序</label>
-					<div class="layui-input-block">
-						<input type="tel" name="orderNum" value="{{  typeof d.orderNum != "undefined" ? d.orderNum : 0}}" lay-verify="" placeholder="菜单排序" value="0" class="layui-input">
-					</div>
-				</div>
-				
-				<div class="layui-form-item">
-					<label class="layui-form-label">展开状态</label>
-					<div class="layui-input-block">
-					    <input type="radio" name="open" value="true" title="打开" {{ menu_open ? 'checked' :''}}>
-					    <input type="radio" name="open" value="false" title="关闭"  {{ !menu_open ? 'checked' :''}}>
+						<input type="text" name="remark" value="{{  typeof d.remark != "undefined" ? d.remark : ''}}" lay-verify="" placeholder="备注" class="layui-input">
 					</div>
 				</div>
 				<!-- 提交 -->
 				<div class="layui-form-item text-center">				
-					<a class="layui-btn recharge" lay-submit lay-filter="submit_newMenu">立即提交</a>
+					<a class="layui-btn recharge" lay-submit lay-filter="submit_newRole">立即提交</a>
 					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 				</div>
-				<br />
-				<br />
 			</form>
-			
+		</script>
+		
+		<!--菜单权限 选择弹窗-->
+		<script type="text/html" id="templetRoleSelectMenu">
+			{{#
+				console.log('角色选择菜单弹窗',d);
+			}}
+			<form class="layui-form templet-new-order" style="padding: 10px;overflow-y: hidden;">
+				{{#	if( typeof d.roleId != "undefined" ){	}}
+					<input type="hidden" name="roleId" value="{{d.roleId}}" />	
+				{{#	}	}}
+				<ul id="treeMenu"></ul>
+				<!-- 提交 -->
+				<div class="layui-form-item text-center layui-hide">				
+					<a class="layui-btn form-subimt" lay-submit lay-filter="submit_selectMenu">立即提交</a>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</form>
 		</script>
 
 		<script src="../../plugins/layui/layui.all.js" charset="utf-8"></script>
 		<script src="../../js/options.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/navbar.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/get_post.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/layuiTableTree/layuiTableTree.js" type="text/javascript" charset="utf-8"></script>
 		<script>
 			/*
 			 	公用属性、方法
@@ -155,48 +134,56 @@
 			//获取分页列表
 			var url_roleList = getAjaxOrigin() + '/api/admin/role/list';
 			//新增
-			var url_roleAdd = getAjaxOrigin() + '/api/admin/role/save';
+			var url_roleSave = getAjaxOrigin() + '/api/admin/role/save';
+			//修改菜单
+			var url_roleUpdate = getAjaxOrigin() + '/api/admin/role/update';
+			//删除
+			var url_roleDelete = getAjaxOrigin() + '/api/admin/role/delete';
 			
+			//据说可以返回所有的 菜单列表
+			var url_menuSelect = getAjaxOrigin() + '/api/admin/menu/select';
 			
 			layui.use([], function() {
-				
+				menuTree = new MenuTree($.extend({},{
+					url:url_menuSelect,
+					openSelect:true,
+					hasRecordDown:false
+				}));
 				
 				listTable = table.render({
 					url: url_roleList,
 					cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
 					,cols: [
 						[{
-								field: 'menuId',
+								field: 'roleId',
 								width: 80,
 								title: 'ID'
-							}, {
-								field: 'icon',
+							},{
+								field: 'roleName',
 								width: 120,
-								title: '图标'
-							}, {
-								field: 'name',
-								width: 160,
 								title: '菜单名称'
-							}, {
-								field: 'url',
+							},{
+								field: 'remark',
 								width: 260,
-								title: 'url'
-							}
-							//,{field:'perms', width:160, title: '授权'}
-							, {
-								field: 'type',
+								title: '备注'
+							},{
+								field: 'createUserId',
 								width: 100,
-								title: '类型',
-								templet: '<div>{{menuType[d.type]}}</div>'
-							}, {
-								field: 'orderNum',
-								width: 80,
-								title: '排序'
-							}, {
+								title: '创建者ID'
+							},{
+								field: 'createTime',
+								width: 120,
+								title: '创建时间',
+								templet:'<div>{{ parseDate(d.createTime)}}</div>'
+							},{
 								field: 'open',
 								width: 200,
 								title: '操作',
 								templet: '#templetBarDemo'
+							},{
+								field: 'menuIdList',
+								width: 260,
+								title: 'menuIdList'
 							}
 						]
 					]
@@ -208,22 +195,15 @@
 					if(obj.event == 'delete') {
 						console.log("obj.event == 'delete'");
 						//删除菜单
-						deleteMenu(data);
-					} else if(obj.event == 'open') {
-						console.log("obj.event == 'open'");
-						//展开/收起菜单
-						layer.msg('展开/收起功能暂未实现!');
+						deleteRole(data);
 					} else if(obj.event == 'edit') {
 						console.log("obj.event == 'edit'");
 						//编辑菜单
 						newOrder(data);
-					} else if(obj.event == 'newSon') {
-						console.log("obj.event == 'newSon'");
-						//新增子级菜单
-						newOrder({
-							parentId: data.menuId,
-							type: 1
-						});
+					} else if(obj.event == 'selectMenu') {
+						console.log("obj.event == 'selectMenu'");
+						//编辑菜单
+						selectMenu(data);
 					}
 				});
 
@@ -239,19 +219,17 @@
 				if(typeof listTable == 'object') {
 					listTable.reload();
 				}
-				if(typeof menuTree == 'object') {
-					console.log('menu.html p292');
-					menuTree.refresh();
-				}
 			}
 			
 			//新增菜单
-			function newRole(data) {
+			function newOrder(data) {
+				var field = data || {};
+				var isSave = typeof field.roleId == 'undefined';
 				layer.open({
-					title: '新增与编辑',
+					title: isSave ? '新增角色' : '编辑<span class="cl-red">【'+field.roleName+'】</span>',
 					type: "1",
 					content: function() {
-						var getTpl = templetNewMenu.innerHTML,
+						var getTpl = templetNewRole.innerHTML,
 							str = '';
 						laytpl(getTpl).render(data||{}, function(html) {
 							str = html;
@@ -261,7 +239,6 @@
 					btn: [],
 					id: 'newOrderWp',
 					yes: function(i, o) {
-
 					},
 					success: function(i, o) {
 						form.render('select');
@@ -271,14 +248,12 @@
 			}
 
 			//新增菜单提交
-			form.on('submit(submit_newMenu)', function(data) {
+			form.on('submit(submit_newRole)', function(data) {
 				var field = data.field;
-				if(field.url) {
-					console.log(encodeURI(field.url));
-				}
+				var isSave = typeof field.roleId == 'undefined';
 				ajax({
-					info: typeof field.menuId == 'undefined' ? '新增菜单' : '保存更新',
-					url: typeof field.menuId == 'undefined' ? url_menuSave : url_menuUpdate,
+					info: isSave ? '新增角色' : '编辑角色',
+					url: isSave ? url_roleSave : url_roleUpdate ,
 					data: field,
 					success: function(d) {
 						layer.close($(data.form).parents('.layui-layer').attr('times'));
@@ -287,31 +262,76 @@
 				})
 				return false;
 			})
+			
+			//菜单选择
+			function selectMenu(data) {
+				var field = data || {};
+				layer.open({
+					title: '<span class="cl-red">【'+field.roleName+'】</span>菜单管理',
+					type: "1",
+					content: function() {
+						var getTpl = templetRoleSelectMenu.innerHTML,
+							str = '';
+						laytpl(getTpl).render(data||{}, function(html) {
+							str = html;
+						});
+						return str;
+					}(),
+					area: $(window).width() < 720 ? ['80%', '80%']:['500px', '60%'],
+					maxWidth:'360',
+					maxHeight:'360',
+					btn: ['提交','取消'],
+					btnAlign:'c',
+					id: 'selectMenu',
+					yes: function(i, o) {
+						//模拟触发表单提交
+						$('#selectMenu form .form-subimt').trigger('click');
+					},
+					success: function(i, o) {
+						//更新菜单列表
+						menuTree.opt.view = $('#treeMenu');
+						menuTree.init();
+						form.render('select');
+						form.render('radio');
+					}
+				})
+			}
+			
+			//菜单权限   表单提交
+			form.on('submit(submit_selectMenu)', function(data) {
+				var field = data.field;
+				var list = menuTree.getSelectMenuId().toString();
+				field.menuIdList = list;
+				console.log(field,list);
+				ajax({
+					info: '菜单权限修改',
+					url: url_roleUpdate ,
+					data: field,
+					success: function(d) {
+						//layer.close($(data.form).parents('.layui-layer').attr('times'));
+						activeRefresh();
+					}
+				})
+				return false;
+			})
 
 			//删除菜单
-			function deleteMenu(d,btn,data) {
-				if(typeof d == 'undefined'){
-					return false;
-					layer.msg('deleteMenu(d) d is undefined or null ！');
-				}else if(typeof d == 'string' || typeof d == 'number'){
-					var d = {
-						menuId:d
-					}
-				}
-				//var arr = "[" + d.menuId + "]";
+			function deleteRole(d,btn,data) {
+				console.log(d);
+				console.log(d.roleId);
 				layer.open({
 					title: '确认删除',
-					content: '确认删除<span class="cl-red">【' + d.name + '】</span>' + (menuType[d.type]||'') + '项?',
+					content: '确认删除角色<span class="cl-red">【' + d.roleName + '】</span>',
 					btn: ['删除', "取消"],
 					yes: function(index, layero) {
 						ajax({
 							//type: 'get',
-							info: '删除<span class="cl-red">【' + d.name + '】</span>' + (menuType[d.type]||'') + '项  ',
-							url: url_menuDelete,
+							info: '删除角色<span class="cl-red">【' + d.roleName + '】</span>',
+							url: url_roleDelete,
 							headers:{
 								"Content-Type":"application/json;charset=UTF-8"
 							},
-							data:JSON.stringify([d.menuId]),
+							data:JSON.stringify([d.roleId]),
 							success: function() {
 								layer.close(index);
 								activeRefresh();
@@ -320,6 +340,7 @@
 					}
 				});
 			}
+			
 		</script>
 
 	</body>
